@@ -19,14 +19,13 @@ namespace HideAndSeek{
             PlayerManager.seekers.Remove(playerInfo);
         }
 
-        public static void SetPlayerState(PlayerInfo playerInfo, PlayerState state){
-            //if (!PlayerManager.playerInfo.ContainsKey(playerInfo)){
-            //    PlayerManager.playerInfo.Add(playerInfo, new HideAndSeekInfo());
-            //}
+        public static void ResetAllPlayerStates() {
+            foreach (var info in playerInfo.Values) {
+                info.Reset();
+            }
+        }
 
-            if (playerInfo.IsLocalPlayer)
-                LocalPlayerState = state;
-            
+        public static void SetPlayerState(PlayerInfo playerInfo, PlayerState state){
             switch (state){
                 case PlayerState.Hiding:
                     hiders.Add(playerInfo);
@@ -53,32 +52,13 @@ namespace HideAndSeek{
         public static void SetupPlayer(PlayerInfo playerInfo){
             HideAndSeek.instance.ModHelper.Events.Unity.RunWhen(() => playerInfo.Body != null, () => {
                 Utils.WriteLine("Setting up " + playerInfo.Name + ": ", MessageType.Debug);
+                HideAndSeekInfo info = playerInfo.IsLocalPlayer ? new LocalInfo() : new RemoteInfo();
+                info.SetupInfo(playerInfo);
                 
                 if (!PlayerManager.playerInfo.ContainsKey(playerInfo)){
-                    //This part should only need to be ran once or when 
-                    HideAndSeekInfo info = playerInfo.IsLocalPlayer ? new LocalInfo() : new RemoteInfo();
-                    info.playerInfo = playerInfo;
-                    info.state = PlayerState.None;
-                    info.isSetup = true;
-
-                    PlayerManager.playerInfo.Add(playerInfo, info);
+                    PlayerManager.playerInfo[playerInfo] =  info;
                 }
                 
-                if (playerInfo.IsLocalPlayer){ //Technically Double check lol
-                    Utils.WriteLine("Local Player! Skipping Adding Audio Signal", MessageType.Info);
-                    return;
-                }
-                
-                //Everyone gets an audio signal
-                Utils.WriteLine("Adding Audio Signal", MessageType.Success);
-                AudioSignal signal = playerInfo.Body.AddComponent<AudioSignal>();
-                
-                Utils.WriteLine("Add the known signal for the local player", MessageType.Success);
-                signal._name = SignalName.RadioTower;
-                signal._frequency = SignalFrequency.HideAndSeek;
-
-                PlayerManager.playerInfo[playerInfo].signal = signal;
-
                 SetPlayerState(playerInfo, PlayerManager.playerInfo[playerInfo].state);
             });
         }
