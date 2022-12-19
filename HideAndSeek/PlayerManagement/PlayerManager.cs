@@ -11,9 +11,7 @@ namespace HideAndSeek{
         public static HashSet<PlayerInfo> spectators = new();
 
         public static Dictionary<PlayerInfo, HideAndSeekInfo> playerInfo = new();
-
-        public static PlayerState LocalPlayerState;
-
+        
         public static void RemovePlayer(PlayerInfo playerInfo){
             PlayerManager.playerInfo.Remove(playerInfo);
             PlayerManager.hiders.Remove(playerInfo);

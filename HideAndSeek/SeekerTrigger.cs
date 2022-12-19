@@ -21,7 +21,7 @@ namespace HideAndSeek{
         }
 
         private void ShapeTrigger_OnEntry(GameObject hitObj){
-            if (PlayerManager.LocalPlayerState != PlayerState.Hiding)
+            if (PlayerManager.playerInfo[QSBPlayerManager.LocalPlayer].State != PlayerState.Hiding)
                 return;
             
             if (hitObj.CompareTag("PlayerDetector"))
