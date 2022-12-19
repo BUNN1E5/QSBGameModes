@@ -2,6 +2,8 @@ using HideAndSeek.HidersAndSeekersSelection;
 using QSB.Player;
 using QSB.Messaging;
 using UnityEngine;
+using System.Collections;
+using HideAndSeek.ArbitraryLocaltionRespawnMessage;
 
 namespace HideAndSeek{
     public class SeekerTrigger : MonoBehaviour{
@@ -25,9 +27,16 @@ namespace HideAndSeek{
             if (hitObj.CompareTag("PlayerDetector"))
             {
                 Locator.GetDeathManager().KillPlayer(DeathType.CrushedByElevator);
-
                 new RoleChangeMessage(QSBPlayerManager.LocalPlayerId,PlayerState.Seeking).Send();
+                StartCoroutine(AutoRespawnWithDelay(5f));
             }
         }
+
+        IEnumerator AutoRespawnWithDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            new ArbitraryLocationPlayerRespawnMessage(QSBPlayerManager.LocalPlayerId, SpawnLocation.TimberHearth).Send();
+        }
+
     }
 }

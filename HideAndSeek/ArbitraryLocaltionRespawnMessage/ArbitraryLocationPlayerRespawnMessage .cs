@@ -40,6 +40,5 @@ namespace HideAndSeek.ArbitraryLocaltionRespawnMessage
 			PlayerCameraEffectController cameraEffectController = Locator.GetPlayerCamera().GetComponent<PlayerCameraEffectController>();
 			cameraEffectController.OpenEyes(1f, false);
 		}
-
 	}
 }

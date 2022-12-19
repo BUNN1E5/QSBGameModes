@@ -85,8 +85,6 @@ namespace HideAndSeek
                 var seekers = RoleSelector.SelectRoles(1);
                 new RolesSelectionMessage(seekers.ToArray()).Send();
             });
-
-
         }
     }
 }
