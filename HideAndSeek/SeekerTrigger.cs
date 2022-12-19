@@ -1,3 +1,6 @@
+using HideAndSeek.HidersAndSeekersSelection;
+using QSB.Player;
+using QSB.Messaging;
 using UnityEngine;
 
 namespace HideAndSeek{
@@ -20,6 +23,8 @@ namespace HideAndSeek{
             if (hitObj.CompareTag("PlayerDetector") && PlayerManager.LocalPlayerState == PlayerState.Hiding)
             {
                 Locator.GetDeathManager().KillPlayer(DeathType.CrushedByElevator);
+
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayerId,PlayerState.Seeking).Send();
             }
         }
     }
