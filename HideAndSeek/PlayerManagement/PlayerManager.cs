@@ -71,8 +71,9 @@ namespace HideAndSeek{
                 Utils.WriteLine("Add the known signal for the local player", MessageType.Success);
                 signal._name = SignalName.RadioTower;
                 signal._frequency = SignalFrequency.HideAndSeek;
-                
-                
+
+                PlayerManager.playerInfo[playerInfo].signal = signal;
+
                 SetPlayerState(playerInfo, PlayerManager.playerInfo[playerInfo].state);
             });
         }
