@@ -18,9 +18,11 @@ namespace HideAndSeek{
             triggerVolume.OnEntry += ShapeTrigger_OnEntry;
         }
 
-        private void ShapeTrigger_OnEntry(GameObject hitObj)
-        {
-            if (hitObj.CompareTag("PlayerDetector") && PlayerManager.LocalPlayerState == PlayerState.Hiding)
+        private void ShapeTrigger_OnEntry(GameObject hitObj){
+            if (PlayerManager.LocalPlayerState != PlayerState.Hiding)
+                return;
+            
+            if (hitObj.CompareTag("PlayerDetector"))
             {
                 Locator.GetDeathManager().KillPlayer(DeathType.CrushedByElevator);
 
