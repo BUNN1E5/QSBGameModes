@@ -35,6 +35,9 @@ namespace HideAndSeek
 
         public void SetupHideAndSeek(OWScene scene, OWScene loadScene){
             if (loadScene != OWScene.SolarSystem) return;
+            ModHelper.Console.WriteLine("Resetting All Player States");
+            PlayerManager.ResetAllPlayerStates();
+
             ModHelper.Console.WriteLine("Added the Hide and Seek Frequency");
             PlayerData.LearnFrequency(SignalFrequency.HideAndSeek);
             
