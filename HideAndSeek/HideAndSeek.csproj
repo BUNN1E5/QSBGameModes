@@ -27,8 +27,11 @@
     <Content Include="HideAndSeek.csproj.user" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Mirror">
+      <HintPath>..\..\..\..\AppData\Roaming\OuterWildsModManager\OWML\Mods\Raicuparta.QuantumSpaceBuddies\Mirror.dll</HintPath>
+    </Reference>
     <Reference Include="QSB">
-      <HintPath>..\..\..\Games\steam\steamapps\compatdata\3041664960\pfx\drive_c\users\steamuser\AppData\Roaming\OuterWildsModManager\OWML\Mods\Raicuparta.QuantumSpaceBuddies\QSB.dll</HintPath>
+      <HintPath>$(AppData)\OuterWildsModManager\OWML\Mods\Raicuparta.QuantumSpaceBuddies\QSB.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
