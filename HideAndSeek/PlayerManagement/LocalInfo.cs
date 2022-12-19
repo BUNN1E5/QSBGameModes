@@ -1,3 +1,4 @@
+using System.Linq;
 using OWML.Common;
 using QSB.Player;
 
@@ -8,11 +9,14 @@ namespace HideAndSeek{
                 return false;
 
             Utils.WriteLine("Local Player Is Now Hider", MessageType.Info);
-            Utils.WriteLine("Removing the HUD Markers", MessageType.Success);
-            foreach (PlayerInfo _info in QSBPlayerManager.PlayerList){
-                if (_info.Body != null){
-                    _info.MapMarker.enabled = false;
-                    _info.HudMarker.enabled = false;
+            Utils.WriteLine("Removing the All Markers", MessageType.Success);
+            foreach (PlayerInfo info in QSBPlayerManager.PlayerList) {
+                if (info.IsLocalPlayer)
+                    continue;
+                
+                if (info.Body != null){
+                    info.MapMarker.enabled = false;
+                    info.HudMarker.enabled = false;
                 }
             }
 
@@ -23,12 +27,27 @@ namespace HideAndSeek{
             if (!base.SetupSeeker()) //If the base func snagged out
                 return false;
             Utils.WriteLine("Local Player Is Now Seeker", MessageType.Info);
-            Utils.WriteLine("Adding the Seeker Markers", MessageType.Success);
-            foreach (PlayerInfo _info in PlayerManager.seekers) {
-                _info.HudMarker.enabled = true;
-                _info.MapMarker.enabled = true;
-            }
             
+            Utils.WriteLine("Removing the Hider Markers", MessageType.Success);
+            foreach (PlayerInfo info in PlayerManager.playerInfo.Keys.Except(PlayerManager.seekers)) {
+                if (info.IsLocalPlayer)
+                    continue;
+                
+                info.HudMarker.enabled = false;
+                info.MapMarker.enabled = false;
+
+                if (PlayerManager.spectators.Contains(info)) {
+                    //Turn off spectator just in case
+                    info.SetVisible(false);
+                }
+            } //Turn off markers for everyone excluding seekers
+            
+            Utils.WriteLine("Adding the Seeker Markers", MessageType.Success);
+            foreach (PlayerInfo info in PlayerManager.seekers) {
+                info.HudMarker.enabled = true;
+                info.MapMarker.enabled = true;
+            }
+
             return true;
         }
 
@@ -36,6 +55,16 @@ namespace HideAndSeek{
             if (!base.SetupSpectator()) //If the base func snagged out
                 return false;
             Utils.WriteLine("Local Player Is now Spectator", MessageType.Info);
+
+            //For now make spectators able to see all
+            foreach (PlayerInfo info in PlayerManager.playerInfo.Keys) {
+                if (info.IsLocalPlayer)
+                    continue;
+                info.HudMarker.enabled = true;
+                info.MapMarker.enabled = true;
+                Info.SetVisible(true);
+            }
+
             return true;
         }
     }

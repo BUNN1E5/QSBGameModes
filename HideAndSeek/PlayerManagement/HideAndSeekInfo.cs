@@ -4,49 +4,66 @@ using UnityEngine;
 
 namespace HideAndSeek{
     public class HideAndSeekInfo{
-        public PlayerInfo playerInfo;
-        public AudioSignal signal;
-        public PlayerState state;
+        public PlayerInfo Info;
+        public AudioSignal Signal;
+        public PlayerState State;
 
-        public bool isSetup;
+        private bool isReady {
+            get { return Info.Body != null; }
+        }
 
         public virtual bool SetupInfo(PlayerInfo playerInfo) {
-            this.playerInfo = playerInfo;
-            state = PlayerState.None;
+            this.Info = playerInfo;
+            State = PlayerState.None;
             return true;
         }
 
         public virtual bool Reset() {
-            state = PlayerState.None;
+            State = PlayerState.None;
             return true;
         }
-
+        
         public virtual bool SetupHider(){
-            if (this.state == PlayerState.Hiding){
-                Utils.WriteLine(this.playerInfo + " is already a Hider", MessageType.Info);
+            if (!isReady) { 
+                Utils.Unity.RunWhen(() => isReady, () => SetupHider());
                 return false;
             }
-            state = PlayerState.Hiding;
+
+            if (this.State == PlayerState.Hiding){
+                Utils.WriteLine(this.Info + " is already a Hider", MessageType.Info);
+                return false;
+            }
+            State = PlayerState.Hiding;
             
             return true;
         }
         
         public virtual bool SetupSeeker(){
-            if (this.state == PlayerState.Seeking){
-                Utils.WriteLine(this.playerInfo + " is already a Seeker", MessageType.Info);
+            if (!isReady) { 
+                Utils.Unity.RunWhen(() => isReady, () => SetupSeeker());
                 return false;
             }
-            state = PlayerState.Seeking;
+            
+            if (this.State == PlayerState.Seeking){
+                Utils.WriteLine(this.Info + " is already a Seeker", MessageType.Info);
+                return false;
+            }
+            State = PlayerState.Seeking;
             
             return true;
         }
 
         public virtual bool SetupSpectator(){
-            if (this.state == PlayerState.Spectating){
-                Utils.WriteLine(this.playerInfo + " is already a Spectator", MessageType.Info);
+            if (!isReady) { 
+                Utils.Unity.RunWhen(() => isReady, () => SetupSpectator());
                 return false;
             }
-            state = PlayerState.Spectating;
+            
+            if (this.State == PlayerState.Spectating){
+                Utils.WriteLine(this.Info + " is already a Spectator", MessageType.Info);
+                return false;
+            }
+            State = PlayerState.Spectating;
             
             return true;
         }

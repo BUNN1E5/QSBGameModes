@@ -8,6 +8,7 @@ namespace HideAndSeek{
 
         public static HashSet<PlayerInfo> hiders = new();
         public static HashSet<PlayerInfo> seekers = new();
+        public static HashSet<PlayerInfo> spectators = new();
 
         public static Dictionary<PlayerInfo, HideAndSeekInfo> playerInfo = new();
 
@@ -17,6 +18,7 @@ namespace HideAndSeek{
             PlayerManager.playerInfo.Remove(playerInfo);
             PlayerManager.hiders.Remove(playerInfo);
             PlayerManager.seekers.Remove(playerInfo);
+            PlayerManager.spectators.Remove(playerInfo);
         }
 
         public static void ResetAllPlayerStates() {
@@ -30,16 +32,19 @@ namespace HideAndSeek{
                 case PlayerState.Hiding:
                     hiders.Add(playerInfo);
                     seekers.Remove(playerInfo);
+                    spectators.Remove(playerInfo);
                     SetupHider(PlayerManager.playerInfo[playerInfo]);
                     break;
                 case PlayerState.Seeking:
                     hiders.Remove(playerInfo);
                     seekers.Add(playerInfo);
+                    spectators.Remove(playerInfo);
                     SetupSeeker(PlayerManager.playerInfo[playerInfo]);
                     break;
                 case  PlayerState.Spectating:
                     hiders.Remove(playerInfo);
                     seekers.Remove(playerInfo);
+                    spectators.Add(playerInfo);
                     SetupSeeker(PlayerManager.playerInfo[playerInfo]);
                     break;
                 case PlayerState.None:
@@ -59,7 +64,7 @@ namespace HideAndSeek{
                     PlayerManager.playerInfo[playerInfo] =  info;
                 }
                 
-                SetPlayerState(playerInfo, PlayerManager.playerInfo[playerInfo].state);
+                SetPlayerState(playerInfo, PlayerManager.playerInfo[playerInfo].State);
             });
         }
 

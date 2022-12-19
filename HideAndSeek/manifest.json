@@ -3,7 +3,7 @@
   "author": "BUNN1E5",
   "name": "Hide And Seek",
   "uniqueName": "BUNN1E5.HideAndSeek",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "owmlVersion": "2.7.3",
 
   "dependencies": [ "Raicuparta.QuantumSpaceBuddies" , "_nebula.MenuFramework"]

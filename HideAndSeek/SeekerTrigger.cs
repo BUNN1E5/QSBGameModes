@@ -26,6 +26,7 @@ namespace HideAndSeek{
             
             if (hitObj.CompareTag("PlayerDetector"))
             {
+                //TODO :: ADD CUSTOM DEATHTYPES
                 Locator.GetDeathManager().KillPlayer(DeathType.CrushedByElevator);
                 new RoleChangeMessage(QSBPlayerManager.LocalPlayerId,PlayerState.Seeking).Send();
                 StartCoroutine(AutoRespawnWithDelay(5f));
@@ -35,7 +36,7 @@ namespace HideAndSeek{
         IEnumerator AutoRespawnWithDelay(float delay)
         {
             yield return new WaitForSeconds(delay);
-            new ArbitraryLocationPlayerRespawnMessage(QSBPlayerManager.LocalPlayerId, SpawnLocation.TimberHearth).Send();
+            new LocationRespawnMessage(QSBPlayerManager.LocalPlayerId, SpawnLocation.TimberHearth).Send();
         }
 
     }

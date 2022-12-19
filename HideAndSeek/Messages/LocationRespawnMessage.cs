@@ -7,11 +7,11 @@ using QSB.RespawnSync;
 
 namespace HideAndSeek.ArbitraryLocaltionRespawnMessage
 {
-    public class ArbitraryLocationPlayerRespawnMessage : QSBMessage
+    public class LocationRespawnMessage : QSBMessage
 	{
 		uint playerId;
 		int spawnLocation;
-		public ArbitraryLocationPlayerRespawnMessage(uint playerId, SpawnLocation spawnLocation) 
+		public LocationRespawnMessage(uint playerId, SpawnLocation spawnLocation) 
 		{
 			this.playerId = playerId;
 			this.spawnLocation = (int)spawnLocation;
