@@ -56,8 +56,10 @@ namespace HideAndSeek{
                 Utils.WriteLine("Local Player Is Now Hider", MessageType.Info);
                 Utils.WriteLine("Removing the HUD Markers", MessageType.Success);
                 foreach (PlayerInfo _info in QSBPlayerManager.PlayerList){
-                    _info.MapMarker.enabled = false;
-                    _info.HudMarker.enabled = false;
+                    if (_info.Body != null){
+                        _info.MapMarker.enabled = false;
+                        _info.HudMarker.enabled = false;
+                    }
                 }
                 return;
             }
@@ -65,8 +67,8 @@ namespace HideAndSeek{
             this.signal._sourceRadius = 500; //Magic OoOOooOh (Around Timber Hearth Radius)
             Utils.WriteLine("Removing the HUD Marker", MessageType.Success);
 
-            this.playerInfo.HudMarker.enabled = false;
-            this.playerInfo.MapMarker.enabled = false;
+            //this.playerInfo.HudMarker.enabled = false;
+            //this.playerInfo.MapMarker.enabled = false;
         }
 
         public virtual void SetupSpectator(){
