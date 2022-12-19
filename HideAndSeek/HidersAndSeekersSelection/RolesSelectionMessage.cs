@@ -39,7 +39,7 @@ namespace HideAndSeek.HidersAndSeekersSelection
 					playerState = PlayerState.Seeking;
 				}
 
-				HideAndSeek.instance.playerManager.SetPlayerState(player, playerState);
+				PlayerManager.SetPlayerState(player, playerState);
 			}
 		}
 

@@ -35,7 +35,7 @@ namespace HideAndSeek.HidersAndSeekersSelection
 			if (QSBPlayerManager.PlayerExists(playerId))
 			{
 				var playerInfo = QSBPlayerManager.GetPlayer(playerId);
-				HideAndSeek.instance.playerManager.SetPlayerState(playerInfo, (PlayerState)newPlayerState);
+				PlayerManager.SetPlayerState(playerInfo, (PlayerState)newPlayerState);
 			}
 		}
 

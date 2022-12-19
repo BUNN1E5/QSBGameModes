@@ -18,22 +18,13 @@ namespace HideAndSeek
 {
     public class HideAndSeek : ModBehaviour{
         public static HideAndSeek instance;
-
-        public PlayerManager playerManager;
-
+        
         private void Start(){
             instance = this;
             ModHelper.Console.WriteLine($"{nameof(HideAndSeek)} is loaded!", MessageType.Success);
-            playerManager = new PlayerManager();
-
-            QSBPlayerManager.OnAddPlayer += (playerInfo) => ModHelper.Events.Unity.RunWhen(() => playerInfo.Body != null,
-                () =>
-                {
-                    playerManager.SetupPlayer(playerInfo);
-                });
-
-            QSBPlayerManager.OnRemovePlayer += playerManager.RemovePlayer;
-
+            
+            QSBPlayerManager.OnAddPlayer += PlayerManager.SetupPlayer;
+            QSBPlayerManager.OnRemovePlayer += PlayerManager.RemovePlayer;
 
             LoadManager.OnCompleteSceneLoad += (scene, loadScene) => {
                 ModHelper.Events.Unity.RunWhen(() => QSBWorldSync.AllObjectsReady, () => {
@@ -61,10 +52,7 @@ namespace HideAndSeek
 
             ModHelper.Console.WriteLine("Setting Up Settings for players", MessageType.Info);
             QSBPlayerManager.PlayerList.ForEach((playerInfo) => {
-                ModHelper.Events.Unity.RunWhen(() => playerInfo.Body != null, () => {
-                    ModHelper.Console.WriteLine("Setting up " + playerInfo.Name + ": ", MessageType.Debug);
-                    playerManager.SetupPlayer(playerInfo);
-                });
+                PlayerManager.SetupPlayer(playerInfo);
             });
 
 
@@ -75,7 +63,8 @@ namespace HideAndSeek
                 transmitter._targetReceiver._returnOnEntry = true;
                 transmitter._targetReceiver._returnGlowFadeController.FadeTo(0.5f, 5f);
             }
-
+            
+            //TODO :: Change to Pause menu button
             if (QSBCore.IsHost)
             {
                 StartCoroutine(SelectRoles());
