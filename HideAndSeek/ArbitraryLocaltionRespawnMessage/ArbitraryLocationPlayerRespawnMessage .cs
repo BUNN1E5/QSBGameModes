@@ -1,4 +1,4 @@
-﻿using QSB;
+﻿using Mirror;
 using QSB.ClientServerStateSync;
 using QSB.Messaging;
 using QSB.Patches;
@@ -15,6 +15,19 @@ namespace HideAndSeek.ArbitraryLocaltionRespawnMessage
 		{
 			this.playerId = playerId;
 			this.spawnLocation = (int)spawnLocation;
+		}
+		public override void Serialize(NetworkWriter writer)
+		{
+			base.Serialize(writer);
+			writer.Write(playerId);
+			writer.Write(spawnLocation);
+		}
+
+		public override void Deserialize(NetworkReader reader)
+		{
+			base.Deserialize(reader);
+			playerId = reader.Read<uint>();
+			spawnLocation = reader.Read<int>();
 		}
 
 		public override void OnReceiveLocal() => OnReceiveRemote();
