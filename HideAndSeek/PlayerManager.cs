@@ -11,6 +11,8 @@ namespace HideAndSeek{
 
         public Dictionary<PlayerInfo, HideAndSeekInfo> playerInfo;
 
+        public static PlayerState LocalPlayerState;
+
         public PlayerManager(){
             playerInfo = new Dictionary<PlayerInfo, HideAndSeekInfo>();
             hiders = new HashSet<PlayerInfo>();
@@ -38,6 +40,9 @@ namespace HideAndSeek{
                     SetupSeeker(this.playerInfo[playerInfo]);
                     break;
             }
+
+            if (playerInfo.IsLocalPlayer)
+                LocalPlayerState = state;
         }
 
         //This should run once every loop to initialize everything needed for Hide and Seek
@@ -87,9 +92,6 @@ namespace HideAndSeek{
                 return;
             }
 
-            //We are the local player at this point
-            //We want to add all the HUD markers
-            //of all the seekers
             GameObject seekerVolume = new("seeker_volume");
             seekerVolume.transform.parent = info.playerInfo.Body.transform;
             seekerVolume.transform.localPosition = Vector3.zero;
@@ -97,6 +99,10 @@ namespace HideAndSeek{
             seekerVolume.AddComponent<SeekerTrigger>();
             
             HideAndSeek.instance.ModHelper.Console.WriteLine("Adding the HUD Marker", MessageType.Success);
+
+            //We are the local player at this point
+            //We want to add all the HUD markers
+            //of all the seekers
             //foreach (var playerInfo in seekers){
             info.playerInfo.HudMarker.enabled = true;
             info.playerInfo.MapMarker.enabled = true;
