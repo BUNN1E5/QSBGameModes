@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using OWML.Common;
 using QSB.Player;
+using UnityEngine;
 
 namespace HideAndSeek{
     public class PlayerManager{
@@ -85,10 +86,15 @@ namespace HideAndSeek{
                 HideAndSeek.instance.ModHelper.Console.WriteLine("Local Player is a hider, dont add the HUD Markers", MessageType.Info);
                 return;
             }
-            
+
             //We are the local player at this point
             //We want to add all the HUD markers
             //of all the seekers
+            GameObject seekerVolume = new("seeker_volume");
+            seekerVolume.transform.parent = info.playerInfo.Body.transform;
+            seekerVolume.transform.localPosition = Vector3.zero;
+            seekerVolume.transform.localRotation = Quaternion.identity;
+            seekerVolume.AddComponent<SeekerTrigger>();
             
             HideAndSeek.instance.ModHelper.Console.WriteLine("Adding the HUD Marker", MessageType.Success);
             //foreach (var playerInfo in seekers){

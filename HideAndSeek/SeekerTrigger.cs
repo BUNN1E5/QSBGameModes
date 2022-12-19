@@ -1,8 +1,4 @@
-using System;
 using UnityEngine;
-using Unity;
-using QSB.Player;
-using QSB.Player.TransformSync;
 
 namespace HideAndSeek{
     public class SeekerTrigger : MonoBehaviour{
@@ -10,12 +6,12 @@ namespace HideAndSeek{
         private OWTriggerVolume triggerVolume;
 
         public void Start(){
-            CapsuleShape shapeTrigger = GetComponent<CapsuleShape>();
+            CapsuleShape shapeTrigger = gameObject.AddComponent<CapsuleShape>();
             shapeTrigger.radius = 0.5f;
             shapeTrigger.height = 2f;
             shapeTrigger.SetCollisionMode(Shape.CollisionMode.Volume);
 
-            triggerVolume = GetComponent<OWTriggerVolume>();
+            triggerVolume = gameObject.AddComponent<OWTriggerVolume>();
             triggerVolume.OnEntry += ShapeTrigger_OnEntry;
         }
 
