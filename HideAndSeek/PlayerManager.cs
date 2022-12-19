@@ -41,9 +41,11 @@ namespace HideAndSeek{
 
         //This should run once every loop to initialize everything needed for Hide and Seek
         public void SetupPlayer(PlayerInfo playerInfo){
-            HideAndSeekInfo info = new HideAndSeekInfo();
-            info.playerInfo = playerInfo;
-
+            HideAndSeekInfo info = new()
+            {
+                playerInfo = playerInfo
+            };
+            
             if (!playerInfo.IsLocalPlayer){
                 HideAndSeek.instance.ModHelper.Console.WriteLine("Adding Audio Signal", MessageType.Success);
                 AudioSignal signal = playerInfo.Body.AddComponent<AudioSignal>();
@@ -59,13 +61,26 @@ namespace HideAndSeek{
         }
 
         
-        private void SetupHider(HideAndSeekInfo info){
+        private void SetupHider(HideAndSeekInfo info)
+        {
+            if (info.playerInfo.IsLocalPlayer){
+                HideAndSeek.instance.ModHelper.Console.WriteLine("Local Player Is Hider", MessageType.Info);
+                return;
+            }
+
             info.signal._sourceRadius = 500; //Magic OoOOooOh (Around Timber Hearth Radius)
             HideAndSeek.instance.ModHelper.Console.WriteLine("Removing the HUD Marker", MessageType.Success);
+
             info.playerInfo.HudMarker.enabled = false;
+            info.playerInfo.MapMarker.enabled = false;
         }
         
         private void SetupSeeker(HideAndSeekInfo info){
+            if (info.playerInfo.IsLocalPlayer){
+                HideAndSeek.instance.ModHelper.Console.WriteLine("Local Player Is Seeker", MessageType.Info);
+                return;
+            }
+
             if (hiders.Contains(QSBPlayerManager.LocalPlayer)){
                 HideAndSeek.instance.ModHelper.Console.WriteLine("Local Player is a hider, dont add the HUD Markers", MessageType.Info);
                 return;
@@ -76,12 +91,21 @@ namespace HideAndSeek{
             //of all the seekers
             
             HideAndSeek.instance.ModHelper.Console.WriteLine("Adding the HUD Marker", MessageType.Success);
-            foreach (var playerInfo in seekers){
-                playerInfo.HudMarker.enabled = true;
-            }
+            //foreach (var playerInfo in seekers){
+            info.playerInfo.HudMarker.enabled = true;
+            info.playerInfo.MapMarker.enabled = true;
+            //}
+            //foreach (var playerInfo in hiders)
+            //{
+            //    playerInfo.HudMarker.enabled = false;
+            //    playerInfo.MapMarker.enabled = false;
+            //}
         }
         
-        private void SetupSpectator(HideAndSeekInfo info){
+        private void SetupSpectator(HideAndSeekInfo info)
+        {
+            if(info.playerInfo.IsLocalPlayer)
+                HideAndSeek.instance.ModHelper.Console.WriteLine("Local Player Is Spectator", MessageType.Info);
             //Does Nothing Rn
             //Heard QSB Is gonna add Spectating
         }
