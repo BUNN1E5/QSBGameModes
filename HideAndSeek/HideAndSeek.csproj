@@ -28,10 +28,10 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Mirror">
-      <HintPath>..\..\..\..\..\..\..\home\bunn\.steam\steam\steamapps\compatdata\3735435416\pfx\drive_c\users\steamuser\AppData\Roaming\OuterWildsModManager\OWML\Mods\Raicuparta.QuantumSpaceBuddies\Mirror.dll</HintPath>
+      <HintPath>..\lib\Mirror.dll</HintPath>
     </Reference>
     <Reference Include="QSB">
-      <HintPath>..\..\..\..\..\..\..\home\bunn\.steam\steam\steamapps\compatdata\3735435416\pfx\drive_c\users\steamuser\AppData\Roaming\OuterWildsModManager\OWML\Mods\Raicuparta.QuantumSpaceBuddies\QSB.dll</HintPath>
+      <HintPath>..\lib\QSB.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

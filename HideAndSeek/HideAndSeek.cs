@@ -51,9 +51,9 @@ namespace HideAndSeek
             // QSBWorldSync.GetUnityObjects<SandLevelController>().ForEach(controller => {});
 
             ModHelper.Console.WriteLine("Setting Up Settings for players", MessageType.Info);
-            QSBPlayerManager.PlayerList.ForEach((playerInfo) => {
-                PlayerManager.SetupPlayer(playerInfo);
-            });
+            //QSBPlayerManager.PlayerList.ForEach((playerInfo) => {
+            //    PlayerManager.SetupPlayer(playerInfo);
+            //});
 
 
             ModHelper.Console.WriteLine("Setting all return platforms to active", MessageType.Info);
@@ -85,8 +85,6 @@ namespace HideAndSeek
                 var seekers = RoleSelector.SelectRoles(1);
                 new RolesSelectionMessage(seekers.ToArray()).Send();
             });
-
-
         }
     }
 }

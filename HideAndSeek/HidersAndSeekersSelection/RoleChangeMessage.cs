@@ -30,23 +30,15 @@ namespace HideAndSeek.HidersAndSeekersSelection
 			newPlayerState = reader.Read<int>();
 		}
 
-		public void OnReceive()
+		public override void OnReceiveLocal() => OnReceiveRemote();
+
+		public override void OnReceiveRemote()
         {
 			if (QSBPlayerManager.PlayerExists(playerId))
 			{
 				var playerInfo = QSBPlayerManager.GetPlayer(playerId);
 				PlayerManager.SetPlayerState(playerInfo, (PlayerState)newPlayerState);
 			}
-		}
-
-        public override void OnReceiveLocal()
-        {
-			OnReceive();
-        }
-
-        public override void OnReceiveRemote()
-		{
-			OnReceive();
 		}
 	}
 }

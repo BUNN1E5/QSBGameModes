@@ -20,6 +20,10 @@ namespace HideAndSeek{
         }
 
         public static void SetPlayerState(PlayerInfo playerInfo, PlayerState state){
+            //if (!PlayerManager.playerInfo.ContainsKey(playerInfo)){
+            //    PlayerManager.playerInfo.Add(playerInfo, new HideAndSeekInfo());
+            //}
+
             if (playerInfo.IsLocalPlayer)
                 LocalPlayerState = state;
             
@@ -55,7 +59,8 @@ namespace HideAndSeek{
                     HideAndSeekInfo info = playerInfo.IsLocalPlayer ? new LocalInfo() : new RemoteInfo();
                     info.playerInfo = playerInfo;
                     info.state = PlayerState.None;
-                    
+                    info.isSetup = true;
+
                     PlayerManager.playerInfo.Add(playerInfo, info);
                 }
                 
@@ -71,8 +76,9 @@ namespace HideAndSeek{
                 Utils.WriteLine("Add the known signal for the local player", MessageType.Success);
                 signal._name = SignalName.RadioTower;
                 signal._frequency = SignalFrequency.HideAndSeek;
-                
-                
+
+                PlayerManager.playerInfo[playerInfo].signal = signal;
+
                 SetPlayerState(playerInfo, PlayerManager.playerInfo[playerInfo].state);
             });
         }
