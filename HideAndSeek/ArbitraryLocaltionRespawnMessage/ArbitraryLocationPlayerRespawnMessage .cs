@@ -1,16 +1,20 @@
 ﻿using QSB;
 using QSB.ClientServerStateSync;
 using QSB.Messaging;
+using QSB.Patches;
 using QSB.Player;
+using QSB.RespawnSync;
 
 namespace HideAndSeek.ArbitraryLocaltionRespawnMessage
 {
     public class ArbitraryLocationPlayerRespawnMessage : QSBMessage
 	{
 		uint playerId;
-		public ArbitraryLocationPlayerRespawnMessage(uint playerId) 
+		int spawnLocation;
+		public ArbitraryLocationPlayerRespawnMessage(uint playerId, SpawnLocation spawnLocation) 
 		{
 			this.playerId = playerId;
+			this.spawnLocation = (int)spawnLocation;
 		}
 
 		public override void OnReceiveLocal() => OnReceiveRemote();
@@ -19,39 +23,23 @@ namespace HideAndSeek.ArbitraryLocaltionRespawnMessage
 		{
 			if (playerId == QSBPlayerManager.LocalPlayerId)
 			{
-				RespawnManager.Instance.Respawn();
+				Respawn((SpawnLocation)spawnLocation);
 				ClientStateManager.Instance.OnRespawn();
 			}
 
-			RespawnManager.Instance.OnPlayerRespawn(QSBPlayerManager.GetPlayer(Data));
+			RespawnManager.Instance.OnPlayerRespawn(QSBPlayerManager.GetPlayer(playerId));
 		}
 
-		public static void ClientStateManagerOnRespawn() 
+		public static void Respawn(SpawnLocation spawnLocation)
 		{
-			OWScene currentScene = QSBSceneManager.CurrentScene;
-			if (currentScene == OWScene.SolarSystem)
-			{
-				DebugLog.DebugWrite("RESPAWN!");
-				new ClientStateMessage(ClientState.AliveInSolarSystem).Send();
-			}
-			else
-			{
-				DebugLog.ToConsole($"Error - Player tried to respawn in scene {currentScene}", MessageType.Error);
-			}
+			MapController mapController = UnityEngine.Object.FindObjectOfType<MapController>();
+			QSBPatchManager.DoUnpatchType(QSBPatchTypes.RespawnTime);
+			PlayerSpawner playerSpawner = UnityEngine.Object.FindObjectOfType<PlayerSpawner>();
+			playerSpawner.DebugWarp(playerSpawner.GetSpawnPoint(spawnLocation));
+			mapController.ExitMapView();
+			PlayerCameraEffectController cameraEffectController = Locator.GetPlayerCamera().GetComponent<PlayerCameraEffectController>();
+			cameraEffectController.OpenEyes(1f, false);
 		}
 
-		public static void ClientStateManagerOnRespawn()
-		{
-			OWScene currentScene = QSBSceneManager.CurrentScene;
-			if (currentScene == OWScene.SolarSystem)
-			{
-				DebugLog.DebugWrite("RESPAWN!");
-				new ClientStateMessage(ClientState.AliveInSolarSystem).Send();
-			}
-			else
-			{
-				DebugLog.ToConsole($"Error - Player tried to respawn in scene {currentScene}", MessageType.Error);
-			}
-		}
 	}
 }
