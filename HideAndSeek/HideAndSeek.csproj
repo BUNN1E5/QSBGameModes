@@ -28,10 +28,10 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Mirror">
-      <HintPath>$(AppData)\OuterWildsModManager\OWML\Mods\Raicuparta.QuantumSpaceBuddies\Mirror.dll</HintPath>
+      <HintPath>..\lib\Mirror.dll</HintPath>
     </Reference>
     <Reference Include="QSB">
-      <HintPath>$(AppData)\OuterWildsModManager\OWML\Mods\Raicuparta.QuantumSpaceBuddies\QSB.dll</HintPath>
+      <HintPath>..\lib\QSB.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
