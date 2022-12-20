@@ -10,6 +10,8 @@ namespace HideAndSeek{
 
         private OWTriggerVolume triggerVolume;
 
+        public PlayerInfo seekerInfo;
+
         public void Start(){
             CapsuleShape shapeTrigger = gameObject.AddComponent<CapsuleShape>();
             shapeTrigger.radius = 0.5f;
@@ -29,6 +31,7 @@ namespace HideAndSeek{
                 //TODO :: ADD CUSTOM DEATHTYPES
                 Locator.GetDeathManager().KillPlayer(DeathType.CrushedByElevator);
                 new RoleChangeMessage(QSBPlayerManager.LocalPlayerId,PlayerState.Seeking).Send();
+                new RoleChangeMessage(seekerInfo.PlayerId, PlayerState.Hiding).Send();
                 StartCoroutine(AutoRespawnWithDelay(5f));
             }
         }
