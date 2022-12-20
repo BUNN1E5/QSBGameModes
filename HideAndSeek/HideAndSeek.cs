@@ -31,6 +31,8 @@ namespace HideAndSeek
                     SetupHideAndSeek(scene, loadScene);                    
                 });
             };
+
+            HarmonyLib.Harmony.CreateAndPatchAll(typeof(Patches.ChangePlayerResources));
         }
 
         public void SetupHideAndSeek(OWScene scene, OWScene loadScene){

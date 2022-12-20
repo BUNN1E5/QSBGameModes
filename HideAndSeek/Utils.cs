@@ -15,10 +15,21 @@ namespace HideAndSeek{
         public static Coroutine RunWhen(Func<bool> predicate, Action action) => 
             HideAndSeek.instance.StartCoroutine(WaitUntil(predicate, action));
 
-        private static IEnumerator WaitUntil(Func<bool> predicate, Action action)
-        {
+        private static IEnumerator WaitUntil(Func<bool> predicate, Action action){
             yield return new WaitUntil(predicate);
             action();
+        }
+
+        private static PlayerResources playerResources;
+        public static PlayerResources GetPlayerResources(){
+            if (playerResources != null)
+                return playerResources;
+
+            var playerBody = Locator.GetPlayerBody();
+            if (playerBody != null)
+               playerResources = playerBody.GetComponent<PlayerResources>();                 
+            
+            return playerResources;
         }
         
     }
