@@ -51,6 +51,7 @@ namespace HideAndSeek{
             seekerVolume.transform.localPosition = Vector3.zero;
             seekerVolume.transform.localRotation = Quaternion.identity;
             Trigger = seekerVolume.AddComponent<SeekerTrigger>();
+            Trigger.seekerInfo = Info;
 
             Utils.WriteLine("Adding the HUD Marker", MessageType.Success);
             Info.HudMarker.enabled = true;
