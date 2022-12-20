@@ -25,7 +25,7 @@ namespace HideAndSeek{
         
         public virtual bool SetupHider(){
             if (!isReady) { 
-                Utils.Unity.RunWhen(() => isReady, () => SetupHider());
+                Utils.RunWhen(() => isReady, () => SetupHider());
                 return false;
             }
 
@@ -40,7 +40,7 @@ namespace HideAndSeek{
         
         public virtual bool SetupSeeker(){
             if (!isReady) { 
-                Utils.Unity.RunWhen(() => isReady, () => SetupSeeker());
+                Utils.RunWhen(() => isReady, () => SetupSeeker());
                 return false;
             }
             
@@ -55,7 +55,7 @@ namespace HideAndSeek{
 
         public virtual bool SetupSpectator(){
             if (!isReady) { 
-                Utils.Unity.RunWhen(() => isReady, () => SetupSpectator());
+                Utils.RunWhen(() => isReady, () => SetupSpectator());
                 return false;
             }
             
