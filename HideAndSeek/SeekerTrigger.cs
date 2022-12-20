@@ -9,7 +9,7 @@ namespace HideAndSeek{
     public class SeekerTrigger : MonoBehaviour{
 
         private OWTriggerVolume triggerVolume;
-
+        
         public void Start(){
             CapsuleShape shapeTrigger = gameObject.AddComponent<CapsuleShape>();
             shapeTrigger.radius = 0.5f;

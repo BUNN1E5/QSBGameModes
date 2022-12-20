@@ -33,6 +33,7 @@ namespace HideAndSeek{
                 Utils.WriteLine(this.Info + " is already a Hider", MessageType.Info);
                 return false;
             }
+            Reset();
             State = PlayerState.Hiding;
             
             return true;
@@ -48,6 +49,7 @@ namespace HideAndSeek{
                 Utils.WriteLine(this.Info + " is already a Seeker", MessageType.Info);
                 return false;
             }
+            Reset();
             State = PlayerState.Seeking;
             
             return true;
@@ -63,6 +65,7 @@ namespace HideAndSeek{
                 Utils.WriteLine(this.Info + " is already a Spectator", MessageType.Info);
                 return false;
             }
+            Reset();
             State = PlayerState.Spectating;
             
             return true;
