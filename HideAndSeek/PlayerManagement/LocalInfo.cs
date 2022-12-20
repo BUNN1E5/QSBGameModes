@@ -44,6 +44,9 @@ namespace HideAndSeek{
             
             Utils.WriteLine("Adding the Seeker Markers", MessageType.Success);
             foreach (PlayerInfo info in PlayerManager.seekers) {
+                if (info.IsLocalPlayer)
+                    continue;
+
                 info.HudMarker.enabled = true;
                 info.MapMarker.enabled = true;
             }
@@ -62,7 +65,7 @@ namespace HideAndSeek{
                     continue;
                 info.HudMarker.enabled = true;
                 info.MapMarker.enabled = true;
-                Info.SetVisible(true);
+                info.SetVisible(true);
             }
 
             return true;
