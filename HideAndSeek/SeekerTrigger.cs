@@ -9,6 +9,7 @@ namespace HideAndSeek{
     public class SeekerTrigger : MonoBehaviour{
 
         private OWTriggerVolume triggerVolume;
+        public PlayerInfo seekerInfo;
         
         public void Start(){
             CapsuleShape shapeTrigger = gameObject.AddComponent<CapsuleShape>();
@@ -28,7 +29,7 @@ namespace HideAndSeek{
             {
                 //TODO :: ADD CUSTOM DEATHTYPES
                 Locator.GetDeathManager().KillPlayer(DeathType.CrushedByElevator);
-                new RoleChangeMessage(QSBPlayerManager.LocalPlayerId,PlayerState.Seeking).Send();
+                new RoleChangeMessage(seekerInfo.PlayerId, PlayerState.Hiding).Send();
                 StartCoroutine(AutoRespawnWithDelay(5f));
             }
         }
@@ -37,6 +38,7 @@ namespace HideAndSeek{
         {
             yield return new WaitForSeconds(delay);
             new LocationRespawnMessage(QSBPlayerManager.LocalPlayerId, SpawnLocation.TimberHearth).Send();
+            new RoleChangeMessage(QSBPlayerManager.LocalPlayerId, PlayerState.Seeking).Send();
         }
 
     }

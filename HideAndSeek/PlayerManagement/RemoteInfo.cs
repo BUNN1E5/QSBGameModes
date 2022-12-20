@@ -45,12 +45,15 @@ namespace HideAndSeek{
             if (!base.SetupSeeker()) //If the base func snagged out
                 return false;
             Info.SetVisible(true);
+            this.Signal._sourceRadius = 1;
+
 
             GameObject seekerVolume = new("seeker_volume");
             seekerVolume.transform.parent = this.Info.Body.transform;
             seekerVolume.transform.localPosition = Vector3.zero;
             seekerVolume.transform.localRotation = Quaternion.identity;
             Trigger = seekerVolume.AddComponent<SeekerTrigger>();
+            Trigger.seekerInfo = Info;
 
             Utils.WriteLine("Adding the HUD Marker", MessageType.Success);
             Info.HudMarker.enabled = true;
