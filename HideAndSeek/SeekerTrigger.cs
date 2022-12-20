@@ -5,14 +5,15 @@ using UnityEngine;
 using System.Collections;
 using HideAndSeek.ArbitraryLocaltionRespawnMessage;
 
-namespace HideAndSeek{
-    public class SeekerTrigger : MonoBehaviour{
+namespace HideAndSeek
+{
+    public class SeekerTrigger : MonoBehaviour
+    {
 
         private OWTriggerVolume triggerVolume;
 
-        public PlayerInfo seekerInfo;
-
-        public void Start(){
+        public void Start()
+        {
             CapsuleShape shapeTrigger = gameObject.AddComponent<CapsuleShape>();
             shapeTrigger.radius = 0.5f;
             shapeTrigger.height = 2f;
@@ -22,16 +23,16 @@ namespace HideAndSeek{
             triggerVolume.OnEntry += ShapeTrigger_OnEntry;
         }
 
-        private void ShapeTrigger_OnEntry(GameObject hitObj){
+        private void ShapeTrigger_OnEntry(GameObject hitObj)
+        {
             if (PlayerManager.playerInfo[QSBPlayerManager.LocalPlayer].State != PlayerState.Hiding)
                 return;
-            
+
             if (hitObj.CompareTag("PlayerDetector"))
             {
                 //TODO :: ADD CUSTOM DEATHTYPES
                 Locator.GetDeathManager().KillPlayer(DeathType.CrushedByElevator);
-                new RoleChangeMessage(QSBPlayerManager.LocalPlayerId,PlayerState.Seeking).Send();
-                new RoleChangeMessage(seekerInfo.PlayerId, PlayerState.Hiding).Send();
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayerId, PlayerState.Seeking).Send();
                 StartCoroutine(AutoRespawnWithDelay(5f));
             }
         }

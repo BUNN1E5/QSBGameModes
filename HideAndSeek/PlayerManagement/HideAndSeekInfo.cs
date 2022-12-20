@@ -8,23 +8,23 @@ namespace HideAndSeek{
         public AudioSignal Signal;
         public PlayerState State;
 
-        private bool isReady {
+        private bool isReady{
             get { return Info.Body != null; }
         }
 
-        public virtual bool SetupInfo(PlayerInfo playerInfo) {
+        public virtual bool SetupInfo(PlayerInfo playerInfo){
             this.Info = playerInfo;
             State = PlayerState.None;
             return true;
         }
 
-        public virtual bool Reset() {
+        public virtual bool Reset(){
             State = PlayerState.None;
             return true;
         }
-        
+
         public virtual bool SetupHider(){
-            if (!isReady) { 
+            if (!isReady){
                 Utils.RunWhen(() => isReady, () => SetupHider());
                 return false;
             }
@@ -33,38 +33,41 @@ namespace HideAndSeek{
                 Utils.WriteLine(this.Info + " is already a Hider", MessageType.Info);
                 return false;
             }
+            Reset();
             State = PlayerState.Hiding;
-            
+
             return true;
         }
-        
+
         public virtual bool SetupSeeker(){
-            if (!isReady) { 
+            if (!isReady){
                 Utils.RunWhen(() => isReady, () => SetupSeeker());
                 return false;
             }
-            
+
             if (this.State == PlayerState.Seeking){
                 Utils.WriteLine(this.Info + " is already a Seeker", MessageType.Info);
                 return false;
             }
+            Reset();
             State = PlayerState.Seeking;
-            
+
             return true;
         }
 
         public virtual bool SetupSpectator(){
-            if (!isReady) { 
+            if (!isReady){
                 Utils.RunWhen(() => isReady, () => SetupSpectator());
                 return false;
             }
-            
+
             if (this.State == PlayerState.Spectating){
                 Utils.WriteLine(this.Info + " is already a Spectator", MessageType.Info);
                 return false;
             }
+            Reset();
             State = PlayerState.Spectating;
-            
+
             return true;
         }
     }
