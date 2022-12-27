@@ -1,9 +1,15 @@
 using System.Linq;
+using HideAndSeek.Patches;
 using OWML.Common;
 using QSB.Player;
 
 namespace HideAndSeek{
     public class LocalInfo : HideAndSeekInfo{
+
+        NotificationData youAreAHiderNotification = new(NotificationTarget.All, "You are a HIDER");
+        NotificationData youAreASeekerNotification = new(NotificationTarget.All, "You are a SEEKER");
+
+        protected float DefaultRunSpeed = 6f;
         public override bool SetupHider() {
             if (!base.SetupHider()) //If the base func snagged out
                 return false;
@@ -19,6 +25,17 @@ namespace HideAndSeek{
                     info.HudMarker.enabled = false;
                 }
             }
+
+            Locator.GetPlayerSuit().SuitUp(false, false, true);
+            NotificationManager.SharedInstance.PostNotification(youAreAHiderNotification);
+            Locator.GetPlayerController()._runSpeed = DefaultRunSpeed * 1.5f;
+
+            Utils.GetPlayerResources()._currentFuel = ChangePlayerResources.DefaultMaxFuel * 1.2f;
+            Utils.GetPlayerResources()._currentOxygen = ChangePlayerResources.DefaultMaxOxygen * 1.2f;
+
+            ChangePlayerResources.ChangeValues = true;
+            ChangePlayerResources.MaxFuel = ChangePlayerResources.DefaultMaxFuel * 1.2f;
+            ChangePlayerResources.MaxOxygen = ChangePlayerResources.DefaultMaxOxygen * 1.2f;
 
             return false;
         }
@@ -50,6 +67,17 @@ namespace HideAndSeek{
                 info.HudMarker.enabled = true;
                 info.MapMarker.enabled = true;
             }
+
+            Locator.GetPlayerSuit().SuitUp(false, false, true);
+            NotificationManager.SharedInstance.PostNotification(youAreASeekerNotification);
+            Locator.GetPlayerController()._runSpeed = DefaultRunSpeed * 1.6f;
+
+            Utils.GetPlayerResources()._currentFuel = ChangePlayerResources.DefaultMaxFuel * 1.2f;
+            Utils.GetPlayerResources()._currentOxygen = ChangePlayerResources.DefaultMaxOxygen * 1.2f;
+
+            ChangePlayerResources.ChangeValues = true;
+            ChangePlayerResources.MaxFuel = ChangePlayerResources.DefaultMaxFuel * 1.2f;
+            ChangePlayerResources.MaxOxygen = ChangePlayerResources.DefaultMaxOxygen * 1.2f;
 
             return true;
         }
