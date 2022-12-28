@@ -8,6 +8,8 @@ namespace HideAndSeek{
         public AudioSignal Signal;
         public PlayerState State;
 
+        private Coroutine waitCoroutine;
+
         private bool isReady{
             get { return Info.Body != null; }
         }
@@ -25,7 +27,7 @@ namespace HideAndSeek{
 
         public virtual bool SetupHider(){
             if (!isReady){
-                Utils.RunWhen(() => isReady, () => SetupHider());
+                waitCoroutine = Utils.RunWhen(() => isReady, () => SetupHider(), waitCoroutine);
                 return false;
             }
 
@@ -41,7 +43,7 @@ namespace HideAndSeek{
 
         public virtual bool SetupSeeker(){
             if (!isReady){
-                Utils.RunWhen(() => isReady, () => SetupSeeker());
+                waitCoroutine = Utils.RunWhen(() => isReady, () => SetupSeeker(), waitCoroutine);
                 return false;
             }
 
@@ -57,7 +59,7 @@ namespace HideAndSeek{
 
         public virtual bool SetupSpectator(){
             if (!isReady){
-                Utils.RunWhen(() => isReady, () => SetupSpectator());
+                waitCoroutine = Utils.RunWhen(() => isReady, () => SetupSpectator(), waitCoroutine);
                 return false;
             }
 

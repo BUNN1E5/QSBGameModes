@@ -30,8 +30,8 @@ namespace HideAndSeek{
             NotificationManager.SharedInstance.PostNotification(youAreAHiderNotification);
             Locator.GetPlayerController()._runSpeed = DefaultRunSpeed * 1.5f;
 
-            Utils.GetPlayerResources()._currentFuel = ChangePlayerResources.DefaultMaxFuel * 1.2f;
-            Utils.GetPlayerResources()._currentOxygen = ChangePlayerResources.DefaultMaxOxygen * 1.2f;
+            playerResources._currentFuel = ChangePlayerResources.DefaultMaxFuel * 1.2f;
+            playerResources._currentOxygen = ChangePlayerResources.DefaultMaxOxygen * 1.2f;
 
             ChangePlayerResources.ChangeValues = true;
             ChangePlayerResources.MaxFuel = ChangePlayerResources.DefaultMaxFuel * 1.2f;
@@ -72,8 +72,8 @@ namespace HideAndSeek{
             NotificationManager.SharedInstance.PostNotification(youAreASeekerNotification);
             Locator.GetPlayerController()._runSpeed = DefaultRunSpeed * 1.6f;
 
-            Utils.GetPlayerResources()._currentFuel = ChangePlayerResources.DefaultMaxFuel * 1.2f;
-            Utils.GetPlayerResources()._currentOxygen = ChangePlayerResources.DefaultMaxOxygen * 1.2f;
+            playerResources._currentFuel = ChangePlayerResources.DefaultMaxFuel * 1.2f;
+            playerResources._currentOxygen = ChangePlayerResources.DefaultMaxOxygen * 1.2f;
 
             ChangePlayerResources.ChangeValues = true;
             ChangePlayerResources.MaxFuel = ChangePlayerResources.DefaultMaxFuel * 1.2f;
@@ -97,6 +97,20 @@ namespace HideAndSeek{
             }
 
             return true;
+        }
+
+        private static PlayerResources _playerResources;
+            private static PlayerResources playerResources{
+            get{
+                if (_playerResources != null)
+                    return _playerResources;
+
+                var playerBody = Locator.GetPlayerBody();
+                if (playerBody != null)
+                    _playerResources = playerBody.GetComponent<PlayerResources>();
+            
+                return _playerResources;
+            }
         }
     }
 }

@@ -12,6 +12,15 @@ namespace HideAndSeek{
             HideAndSeek.instance.ModHelper.Console.WriteLine(s, t);
         }
         
+        public static void WriteLine(string s){
+            HideAndSeek.instance.ModHelper.Console.WriteLine(s, MessageType.Info);
+        }
+
+        public static Coroutine RunWhen(Func<bool> predicate, Action action, Coroutine c){
+            HideAndSeek.instance.StopCoroutine(c);
+            return RunWhen(predicate, action);
+        }
+
         public static Coroutine RunWhen(Func<bool> predicate, Action action) => 
             HideAndSeek.instance.StartCoroutine(WaitUntil(predicate, action));
 
@@ -20,17 +29,5 @@ namespace HideAndSeek{
             action();
         }
 
-        private static PlayerResources playerResources;
-        public static PlayerResources GetPlayerResources(){
-            if (playerResources != null)
-                return playerResources;
-
-            var playerBody = Locator.GetPlayerBody();
-            if (playerBody != null)
-               playerResources = playerBody.GetComponent<PlayerResources>();                 
-            
-            return playerResources;
-        }
-        
     }
 }
