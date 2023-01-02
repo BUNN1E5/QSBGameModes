@@ -2,9 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using HideAndSeek.GameManagement;
 using HideAndSeek.HidersAndSeekersSelection;
 using OWML.Common;
+using OWML.Common.Menus;
 using OWML.ModHelper;
+using OWML.ModHelper.Menus;
 using QSB;
 using QSB.Menus;
 using QSB.Messaging;
@@ -13,6 +17,8 @@ using QSB.Player.TransformSync;
 using QSB.Utility;
 using QSB.WorldSync;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace HideAndSeek
 {
@@ -21,74 +27,61 @@ namespace HideAndSeek
         
         private void Start(){
             instance = this;
+            HarmonyLib.Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
             Utils.WriteLine($"{nameof(HideAndSeek)} is loaded!", MessageType.Success);
             
-            QSBPlayerManager.OnAddPlayer += PlayerManager.SetupPlayer;
-            QSBPlayerManager.OnRemovePlayer += PlayerManager.RemovePlayer;
+            PlayerManager.Init();
 
             LoadManager.OnCompleteSceneLoad += (scene, loadScene) => {
-                Utils.RunWhen(() => QSBWorldSync.AllObjectsReady, () => {
-                    SetupHideAndSeek(scene, loadScene);                    
-                });
+                if (loadScene != OWScene.SolarSystem) return;
+                
+                //This runs every loop IF we have started Hide and Seek
+                Utils.RunWhen(() => QSBWorldSync.AllObjectsReady && GameManager.state != GameState.Stopped, GameManager.SetupHideAndSeek);
+                
+                //Setup the Host button 
+                if (QSBCore.IsHost){ //TODO :: CHANGE ORDER OF HIDE AND SEEK INTERACT BUTTON
+                    Button menuButton = QSBCore.MenuApi.PauseMenu_MakeSimpleButton("START HIDE AND SEEK"); //HIDE AND SEEK INTERACT BUTTON
+                    Button.ButtonClickedEvent c_event = new Button.ButtonClickedEvent();
+                    c_event.AddListener(StartHideAndSeek);
+                
+                    menuButton.onClick = c_event;                
+                }
             };
-
-            HarmonyLib.Harmony.CreateAndPatchAll(typeof(Patches.ChangePlayerResources));
         }
 
-        public void SetupHideAndSeek(OWScene scene, OWScene loadScene){
-            if (loadScene != OWScene.SolarSystem) return;
-            Utils.WriteLine("Resetting All Player States");
-            PlayerManager.ResetAllPlayerStates();
+        static void StartHideAndSeek(){
+            GameManager.SetupHideAndSeek();
+            GameManager.SelectRoles();
+        }
 
-            Utils.WriteLine("Added the Hide and Seek Frequency");
-            PlayerData.LearnFrequency(SignalFrequency.HideAndSeek);
-            
-            Utils.WriteLine("Preventing the Quantum Moon from going to the 6th location", MessageType.Info);
-            QuantumMoon qm = QSBWorldSync.GetUnityObject<QuantumMoon>();
-            if (qm != null){
-                qm._collapseToIndex = 0;
-                qm.ChangeQuantumState(true);
-                Array.Resize(ref qm._orbits, 5);
-                Array.Resize(ref qm._states, 5);
-                Array.Resize(ref qm._stateSkipCounts, 5);
-            }
+        #region DEBUG
 
-            // QSBWorldSync.GetUnityObjects<SandLevelController>().ForEach(controller => {});
-
-            ModHelper.Console.WriteLine("Setting Up Settings for players", MessageType.Info);
-            QSBPlayerManager.PlayerList.ForEach((playerInfo) => {
-                PlayerManager.SetupPlayer(playerInfo);
-            });
-
-            ModHelper.Console.WriteLine("Setting all return platforms to active", MessageType.Info);
-            foreach (NomaiWarpTransmitter transmitter in QSBWorldSync.GetUnityObjects<NomaiWarpTransmitter>()){
-                transmitter.CloseBlackHole();
-                transmitter._targetReceiver._returnPlatform = transmitter;
-                transmitter._targetReceiver._returnOnEntry = true;
-                transmitter._targetReceiver._returnGlowFadeController.FadeTo(0.5f, 5f);
+        private void Update(){
+            if (GetKeyDown(Key.M)){
+                PlayerManager.SetPlayerState(QSBPlayerManager.LocalPlayer, PlayerState.Hiding);
             }
             
-            //TODO :: Change to Pause menu button
-            if (QSBCore.IsHost)
-            {
-                StartCoroutine(SelectRoles());
+            if (GetKeyDown(Key.Comma)){
+                PlayerManager.SetPlayerState(QSBPlayerManager.LocalPlayer, PlayerState.Seeking);
+            }
+            
+            if (GetKeyDown(Key.Period)){
+                PlayerManager.SetPlayerState(QSBPlayerManager.LocalPlayer, PlayerState.Spectating);
+            }
+            
+            if (GetKeyDown(Key.Slash)){
+                PlayerManager.SetPlayerState(QSBPlayerManager.LocalPlayer, PlayerState.None);
             }
         }
 
-        IEnumerator SelectRoles()
-        {
-            while (QSBPlayerManager.PlayerList.Count <= 1)
-            {
-                yield return new WaitForSeconds(5f);
-                Utils.WriteLine("Waiting For Players . . .", MessageType.Info);
-            }
-            Utils.WriteLine("Waiting For Players To Be Ready . . .", MessageType.Info);
-            
-            Utils.RunWhen(() => QSBPlayerManager.PlayerList.TrueForAll(playerInfo => playerInfo.Body != null), () => {
-                Utils.WriteLine("Choosing the Roles", MessageType.Success);
-                var seekers = RoleSelector.SelectRoles(1);
-                new RolesSelectionMessage(seekers.ToArray()).Send();
-            });
+        private bool GetKeyDown(Key keyCode) {
+            return Keyboard.current[keyCode].wasPressedThisFrame;
         }
+        
+        private bool GetKey(Key keyCode) {
+            return Keyboard.current[keyCode].isPressed;
+        }
+
+        #endregion
     }
 }

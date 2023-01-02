@@ -1,5 +1,4 @@
 {
   "enabled": true,
-  "CustomSignal": false,
-  "signalMusicURL" : ""
+  "CustomSignal": false
 }

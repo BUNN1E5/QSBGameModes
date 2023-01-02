@@ -32,8 +32,7 @@ namespace HideAndSeek.HidersAndSeekersSelection
 		public override void OnReceiveLocal() => OnReceiveRemote();
 		public override void OnReceiveRemote()
 		{
-			for(int i = 0; i< QSBPlayerManager.PlayerList.Count; i++)
-			{
+			for(int i = 0; i< QSBPlayerManager.PlayerList.Count; i++){
 				var player = QSBPlayerManager.PlayerList[i];
 				PlayerState playerState = PlayerState.Hiding;
 

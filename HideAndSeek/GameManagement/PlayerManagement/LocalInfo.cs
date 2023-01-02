@@ -8,6 +8,7 @@ namespace HideAndSeek{
 
         NotificationData youAreAHiderNotification = new(NotificationTarget.All, "You are a HIDER");
         NotificationData youAreASeekerNotification = new(NotificationTarget.All, "You are a SEEKER");
+        NotificationData youAreASpectatorNotification = new(NotificationTarget.All, "You are a SPECTATOR");
 
         protected float DefaultRunSpeed = 6f;
         public override bool SetupHider() {
@@ -27,7 +28,10 @@ namespace HideAndSeek{
             }
 
             Locator.GetPlayerSuit().SuitUp(false, false, true);
-            NotificationManager.SharedInstance.PostNotification(youAreAHiderNotification);
+            NotificationManager.SharedInstance.UnpinNotification(youAreASeekerNotification);
+            NotificationManager.SharedInstance.UnpinNotification(youAreASpectatorNotification);
+            NotificationManager.SharedInstance.PostNotification(youAreAHiderNotification, true);
+            
             Locator.GetPlayerController()._runSpeed = DefaultRunSpeed * 1.5f;
 
             playerResources._currentFuel = ChangePlayerResources.DefaultMaxFuel * 1.2f;
@@ -69,7 +73,9 @@ namespace HideAndSeek{
             }
 
             Locator.GetPlayerSuit().SuitUp(false, false, true);
-            NotificationManager.SharedInstance.PostNotification(youAreASeekerNotification);
+            NotificationManager.SharedInstance.UnpinNotification(youAreAHiderNotification);
+            NotificationManager.SharedInstance.UnpinNotification(youAreASpectatorNotification);
+            NotificationManager.SharedInstance.PostNotification(youAreASeekerNotification, true);
             Locator.GetPlayerController()._runSpeed = DefaultRunSpeed * 1.6f;
 
             playerResources._currentFuel = ChangePlayerResources.DefaultMaxFuel * 1.2f;
@@ -95,6 +101,10 @@ namespace HideAndSeek{
                 info.MapMarker.enabled = true;
                 info.SetVisible(true);
             }
+            
+            NotificationManager.SharedInstance.UnpinNotification(youAreAHiderNotification);
+            NotificationManager.SharedInstance.UnpinNotification(youAreASeekerNotification);
+            NotificationManager.SharedInstance.PostNotification(youAreASpectatorNotification, true);
 
             return true;
         }

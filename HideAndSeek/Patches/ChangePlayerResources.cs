@@ -21,8 +21,9 @@ namespace HideAndSeek.Patches
 		[HarmonyPatch("OnRemoveSuit")]
 		[HarmonyPatch("OnSuitUp")]
 		[HarmonyPatch("UpdateFuel")]
-		static IEnumerable<CodeInstruction> TranspilerForMaxFuel(IEnumerable<CodeInstruction> instructions)
-		{
+		static IEnumerable<CodeInstruction> TranspilerForMaxFuel(IEnumerable<CodeInstruction> instructions){
+			
+			
 			return new CodeMatcher(instructions)
 			.MatchForward(false, //Searchs for everytime that the following "list" of codes is matched
 					new CodeMatch(i => i.opcode == OpCodes.Ldc_R4 && Convert.ToSingle(i.operand) == DefaultMaxFuel)

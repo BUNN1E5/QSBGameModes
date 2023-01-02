@@ -11,7 +11,13 @@ namespace HideAndSeek{
         public static HashSet<PlayerInfo> spectators = new();
 
         public static Dictionary<PlayerInfo, HideAndSeekInfo> playerInfo = new();
-        
+        public static Dictionary<PlayerInfo, DeathType> PlayerDeathTypes;
+
+        public static void Init(){
+            QSBPlayerManager.OnAddPlayer += SetupPlayer;
+            QSBPlayerManager.OnRemovePlayer += RemovePlayer;
+        }
+
         public static void RemovePlayer(PlayerInfo playerInfo){
             PlayerManager.playerInfo.Remove(playerInfo);
             PlayerManager.hiders.Remove(playerInfo);
@@ -43,7 +49,7 @@ namespace HideAndSeek{
                     hiders.Remove(playerInfo);
                     seekers.Remove(playerInfo);
                     spectators.Add(playerInfo);
-                    SetupSeeker(PlayerManager.playerInfo[playerInfo]);
+                    SetupSpectator(PlayerManager.playerInfo[playerInfo]);
                     break;
                 case PlayerState.None:
                     Utils.WriteLine("Player Set to None State", MessageType.Error);
@@ -78,7 +84,11 @@ namespace HideAndSeek{
         public static void SetupSpectator(HideAndSeekInfo info){
             info.SetupSpectator();
         }
-        
+
+        public static void CleanUpPlayer(HideAndSeekInfo info){
+            info.CleanUp();
+        }
+
         public static void SetPlayerSignalSize(HideAndSeekInfo info){
             //PlayerTransformSync.LocalInstance?.ReferenceSector?.AttachedObject.GetRootSector();
             //TODO :: WHEN ADDED TO QSB

@@ -3,11 +3,12 @@ using QSB.Player;
 using QSB.Messaging;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using HideAndSeek.ArbitraryLocaltionRespawnMessage;
+using OWML.Common;
 
 namespace HideAndSeek{
     public class SeekerTrigger : MonoBehaviour{
-
         private OWTriggerVolume triggerVolume;
         public PlayerInfo seekerInfo;
         
@@ -24,15 +25,23 @@ namespace HideAndSeek{
         }
 
         private void ShapeTrigger_OnEntry(GameObject hitObj){
+            //Only kill the player if they are hiding
             if (PlayerManager.playerInfo[QSBPlayerManager.LocalPlayer].State != PlayerState.Hiding)
                 return;
             
             if (hitObj.CompareTag("PlayerDetector"))
             {
-                //TODO :: ADD CUSTOM DEATHTYPES
-                Locator.GetDeathManager().KillPlayer(DeathType.CrushedByElevator);
-                Locator.GetPlayerAudioController().PlayOneShotInternal(AudioType.Death_Crushed);
+                Locator.GetPlayerAudioController().PlayOneShotInternal(AudioType.Death_Instant);
                 StartCoroutine(AutoRespawnWithDelay(5f));
+                //TODO :: ADD CUSTOM DEATHTYPES
+                if (PlayerManager.PlayerDeathTypes.ContainsKey(seekerInfo)){
+                    Locator.GetDeathManager().KillPlayer(PlayerManager.PlayerDeathTypes[seekerInfo]);
+                }
+                
+                Locator.GetDeathManager().KillPlayer(DeathType.Impact);
+                Utils.WriteLine("DeathType not found for " + seekerInfo);
+                
+                
             }
         }
 

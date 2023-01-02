@@ -1,4 +1,6 @@
+using System;
 using OWML.Common;
+using OWML.Utils;
 using QSB.Player;
 using UnityEngine;
 
@@ -17,7 +19,15 @@ namespace HideAndSeek{
         public virtual bool SetupInfo(PlayerInfo playerInfo){
             this.Info = playerInfo;
             State = PlayerState.None;
+            if (!EnumUtils.IsDefined<DeathType>(playerInfo)){
+                PlayerManager.PlayerDeathTypes.Add(this.Info, EnumUtils.Create<DeathType>(playerInfo.Name));
+            }
             return true;
+        }
+
+        public virtual bool CleanUp(){
+            PlayerManager.PlayerDeathTypes.Remove(Info);
+            return false;
         }
 
         public virtual bool Reset(){

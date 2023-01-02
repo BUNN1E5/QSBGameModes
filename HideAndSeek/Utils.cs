@@ -5,9 +5,9 @@ using OWML.Common;
 using UnityEngine;
 
 namespace HideAndSeek{
-    public static class Utils {
-        
-        public static IModUnityEvents Unity = HideAndSeek.instance.ModHelper.Events.Unity; 
+    public static class Utils{
+
+        public static IModHelper ModHelper = HideAndSeek.instance.ModHelper;
         public static void WriteLine(string s, MessageType t){
             HideAndSeek.instance.ModHelper.Console.WriteLine(s, t);
         }

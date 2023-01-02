@@ -34,4 +34,7 @@
       <HintPath>..\lib\QSB.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CompatabilityLayer" />
+  </ItemGroup>
 </Project>
