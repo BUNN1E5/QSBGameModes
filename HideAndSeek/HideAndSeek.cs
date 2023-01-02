@@ -39,6 +39,7 @@ namespace HideAndSeek
                 Utils.RunWhen(() => QSBWorldSync.AllObjectsReady && GameManager.state != GameState.Stopped, GameManager.SetupHideAndSeek);
                 
                 //Setup the Host button 
+                //for some reason this is currently not working
                 if (QSBCore.IsHost){ //TODO :: CHANGE ORDER OF HIDE AND SEEK INTERACT BUTTON
                     Button menuButton = QSBCore.MenuApi.PauseMenu_MakeSimpleButton("START HIDE AND SEEK"); //HIDE AND SEEK INTERACT BUTTON
                     Button.ButtonClickedEvent c_event = new Button.ButtonClickedEvent();

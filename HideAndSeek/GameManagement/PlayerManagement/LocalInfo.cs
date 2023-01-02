@@ -2,6 +2,7 @@ using System.Linq;
 using HideAndSeek.Patches;
 using OWML.Common;
 using QSB.Player;
+using QSB.ShipSync;
 
 namespace HideAndSeek{
     public class LocalInfo : HideAndSeekInfo{
@@ -26,6 +27,9 @@ namespace HideAndSeek{
                     info.HudMarker.enabled = false;
                 }
             }
+            
+            ShipManager.Instance.CockpitController._interactVolume.DisableInteraction();
+            
 
             Locator.GetPlayerSuit().SuitUp(false, false, true);
             NotificationManager.SharedInstance.UnpinNotification(youAreASeekerNotification);
@@ -71,6 +75,8 @@ namespace HideAndSeek{
                 info.HudMarker.enabled = true;
                 info.MapMarker.enabled = true;
             }
+            
+            ShipManager.Instance.CockpitController._interactVolume.EnableInteraction();
 
             Locator.GetPlayerSuit().SuitUp(false, false, true);
             NotificationManager.SharedInstance.UnpinNotification(youAreAHiderNotification);
@@ -101,6 +107,8 @@ namespace HideAndSeek{
                 info.MapMarker.enabled = true;
                 info.SetVisible(true);
             }
+            
+            ShipManager.Instance.CockpitController._interactVolume.DisableInteraction();
             
             NotificationManager.SharedInstance.UnpinNotification(youAreAHiderNotification);
             NotificationManager.SharedInstance.UnpinNotification(youAreASeekerNotification);
