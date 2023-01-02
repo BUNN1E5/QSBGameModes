@@ -4,7 +4,7 @@ using QSB.Messaging;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using HideAndSeek.ArbitraryLocaltionRespawnMessage;
+using HideAndSeek.Messages;
 using OWML.Common;
 
 namespace HideAndSeek{
@@ -33,7 +33,7 @@ namespace HideAndSeek{
             {
                 Locator.GetPlayerAudioController().PlayOneShotInternal(AudioType.Death_Instant);
                 StartCoroutine(AutoRespawnWithDelay(5f));
-                //TODO :: ADD CUSTOM DEATHTYPES
+                
                 if (PlayerManager.PlayerDeathTypes.ContainsKey(seekerInfo)){
                     Locator.GetDeathManager().KillPlayer(PlayerManager.PlayerDeathTypes[seekerInfo]);
                 }

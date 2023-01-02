@@ -19,14 +19,14 @@ namespace HideAndSeek{
         public virtual bool SetupInfo(PlayerInfo playerInfo){
             this.Info = playerInfo;
             State = PlayerState.None;
-            //if (!EnumUtils.IsDefined<DeathType>(playerInfo.Name)){
-            //    PlayerManager.PlayerDeathTypes.Add(this.Info, EnumUtils.Create<DeathType>(playerInfo.Name));
-            //}
+            if (!EnumUtils.IsDefined<DeathType>(playerInfo.Name)){
+                PlayerManager.PlayerDeathTypes.Add(this.Info, EnumUtils.Create<DeathType>(playerInfo.Name));
+            }
             return true;
         }
 
         public virtual bool CleanUp(){
-            PlayerManager.PlayerDeathTypes.Remove(Info);
+            EnumUtils.Remove<DeathType>(this.Info);
             return false;
         }
 

@@ -37,22 +37,24 @@ namespace HideAndSeek
                 
                 //This runs every loop IF we have started Hide and Seek
                 Utils.RunWhen(() => QSBWorldSync.AllObjectsReady && GameManager.state != GameState.Stopped, GameManager.SetupHideAndSeek);
-                
-                //Setup the Host button 
-                //for some reason this is currently not working
-                if (QSBCore.IsHost){ //TODO :: CHANGE ORDER OF HIDE AND SEEK INTERACT BUTTON
-                    Button menuButton = QSBCore.MenuApi.PauseMenu_MakeSimpleButton("START HIDE AND SEEK"); //HIDE AND SEEK INTERACT BUTTON
-                    Button.ButtonClickedEvent c_event = new Button.ButtonClickedEvent();
-                    c_event.AddListener(StartHideAndSeek);
-                
-                    menuButton.onClick = c_event;                
-                }
             };
+            
+            //Setup the Host button 
+            if (QSBCore.IsHost){ //TODO :: CHANGE ORDER OF HIDE AND SEEK INTERACT BUTTON
+                Utils.WriteLine("We are host, adding button to menu");
+                Button menuButton = QSBCore.MenuApi.PauseMenu_MakeSimpleButton("START HIDE AND SEEK"); //HIDE AND SEEK INTERACT BUTTON
+                Button.ButtonClickedEvent c_event = new Button.ButtonClickedEvent();
+                c_event.AddListener(StartHideAndSeek);
+                
+                menuButton.onClick = c_event;                
+            }
         }
 
         static void StartHideAndSeek(){
-            GameManager.SetupHideAndSeek();
-            GameManager.SelectRoles();
+            Utils.RunWhen(() => QSBWorldSync.AllObjectsReady, () => {
+                GameManager.SetupHideAndSeek();
+                GameManager.SelectRoles();
+            });
         }
 
         #region DEBUG
@@ -68,10 +70,6 @@ namespace HideAndSeek
             
             if (GetKeyDown(Key.Period)){
                 PlayerManager.SetPlayerState(QSBPlayerManager.LocalPlayer, PlayerState.Spectating);
-            }
-            
-            if (GetKeyDown(Key.Slash)){
-                PlayerManager.SetPlayerState(QSBPlayerManager.LocalPlayer, PlayerState.None);
             }
         }
 

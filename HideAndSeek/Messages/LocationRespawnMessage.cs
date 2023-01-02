@@ -5,12 +5,12 @@ using QSB.Patches;
 using QSB.Player;
 using QSB.RespawnSync;
 
-namespace HideAndSeek.ArbitraryLocaltionRespawnMessage
+namespace HideAndSeek.Messages
 {
     public class LocationRespawnMessage : QSBMessage
 	{
-		uint playerId;
-		int spawnLocation;
+		private uint playerId;
+		private int spawnLocation;
 		public LocationRespawnMessage(uint playerId, SpawnLocation spawnLocation) 
 		{
 			this.playerId = playerId;
@@ -48,6 +48,8 @@ namespace HideAndSeek.ArbitraryLocaltionRespawnMessage
 			MapController mapController = UnityEngine.Object.FindObjectOfType<MapController>();
 			QSBPatchManager.DoUnpatchType(QSBPatchTypes.RespawnTime);
 			PlayerSpawner playerSpawner = UnityEngine.Object.FindObjectOfType<PlayerSpawner>();
+			
+			//TODO :: MAKE THE PLAYER SPAWN WHERE THEY DIED
 			playerSpawner.DebugWarp(playerSpawner.GetSpawnPoint(spawnLocation));
 			mapController.ExitMapView();
 			PlayerCameraEffectController cameraEffectController = Locator.GetPlayerCamera().GetComponent<PlayerCameraEffectController>();

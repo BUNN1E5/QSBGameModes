@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+using HideAndSeek.GameManagement;
 using OWML.Common;
+using QSB;
+using QSB.Messaging;
 using QSB.Player;
 using UnityEngine;
 
@@ -11,7 +14,7 @@ namespace HideAndSeek{
         public static HashSet<PlayerInfo> spectators = new();
 
         public static Dictionary<PlayerInfo, HideAndSeekInfo> playerInfo = new();
-        public static Dictionary<PlayerInfo, DeathType> PlayerDeathTypes;
+        public static Dictionary<PlayerInfo, DeathType> PlayerDeathTypes = new();
 
         public static void Init(){
             QSBPlayerManager.OnAddPlayer += SetupPlayer;
@@ -68,6 +71,9 @@ namespace HideAndSeek{
                     PlayerManager.playerInfo[playerInfo] =  info;
                 }
                 
+                //Make sure each player gets the proper settings
+                if (QSBCore.IsHost){ new SharedSettingsMessage(){To = info.Info.PlayerId}.Send(); }
+
                 SetPlayerState(playerInfo, PlayerManager.playerInfo[playerInfo].State);
             });
         }

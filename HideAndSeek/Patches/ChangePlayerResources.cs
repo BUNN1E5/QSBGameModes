@@ -8,7 +8,9 @@ namespace HideAndSeek.Patches
 	[HarmonyPatch(typeof(PlayerResources))]
 	public static class ChangePlayerResources
 	{
-
+		
+		//TODO :: TRY TO FIND A BETTER WAY TO DO THIS
+		
 		public const float DefaultMaxFuel = 100f;
 		public const float DefaultMaxOxygen = 450f;
 
