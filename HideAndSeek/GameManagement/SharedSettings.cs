@@ -11,10 +11,16 @@ namespace HideAndSeek.GameManagement{
         public static Dictionary<string, object> settingsToShare = new();
 
         public static void LoadSettings(){
+            LoadSettings(Utils.ModHelper.Config);
+        }
+
+        public static void LoadSettings(IModConfig config){
             Utils.WriteLine("Loading Shared Settings");
-            //settingsToShare.Add("Setting Here");
-            var localSettings = Utils.ModHelper.Config.Settings;
-            //settingsToShare.Add("Test", localSettings["test"]);
+            
+            //Put the shared settings here
+            settingsToShare["GameType"] = config.Settings["GameType"];
+            settingsToShare["Disable 6th Location"] = config.Settings["Disable 6th Location"];
+            settingsToShare["Activate All Return Platforms"] = config.Settings["Activate All Return Platforms"];
         }
 
         public static void UpdateSettings(Dictionary<string, object> sharedSettings){
@@ -27,11 +33,16 @@ namespace HideAndSeek.GameManagement{
     public class SharedSettingsMessage : QSBMessage{
         private Dictionary<string, object> settings;
         
+        public SharedSettingsMessage(IModConfig config) : base(){
+            SharedSettings.LoadSettings(config);
+            this.settings = SharedSettings.settingsToShare;
+        }
+
         public SharedSettingsMessage() : base(){
             SharedSettings.LoadSettings();
             this.settings = SharedSettings.settingsToShare;
         }
-        
+
         public override void Serialize(NetworkWriter writer){
             base.Serialize(writer);
             writer.Write(settings);

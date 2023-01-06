@@ -32,6 +32,8 @@ namespace HideAndSeek{
 
         public virtual bool Reset(){
             State = PlayerState.None;
+            this.Info.MapMarker.enabled = true;
+            this.Info.HudMarker.enabled = true;
             return true;
         }
 

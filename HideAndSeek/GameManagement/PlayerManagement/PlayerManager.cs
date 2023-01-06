@@ -22,6 +22,7 @@ namespace HideAndSeek{
         }
 
         public static void RemovePlayer(PlayerInfo playerInfo){
+            PlayerManager.CleanUpPlayer(PlayerManager.playerInfo[playerInfo]);
             PlayerManager.playerInfo.Remove(playerInfo);
             PlayerManager.hiders.Remove(playerInfo);
             PlayerManager.seekers.Remove(playerInfo);
@@ -55,7 +56,8 @@ namespace HideAndSeek{
                     SetupSpectator(PlayerManager.playerInfo[playerInfo]);
                     break;
                 case PlayerState.None:
-                    Utils.WriteLine("Player Set to None State", MessageType.Error);
+                    Utils.WriteLine("Player state is None", MessageType.Error);
+                    Reset(PlayerManager.playerInfo[playerInfo]);
                     break;
             }
         }
@@ -91,11 +93,15 @@ namespace HideAndSeek{
             info.SetupSpectator();
         }
 
+        public static void Reset(HideAndSeekInfo info){
+            info.Reset();
+        }
+
         public static void CleanUpPlayer(HideAndSeekInfo info){
             info.CleanUp();
         }
 
-        public static void SetPlayerSignalSize(HideAndSeekInfo info){
+        public static void SetPlayerSignalSize(HideAndSeekInfo info, float size){
             //PlayerTransformSync.LocalInstance?.ReferenceSector?.AttachedObject.GetRootSector();
             //TODO :: WHEN ADDED TO QSB
         }

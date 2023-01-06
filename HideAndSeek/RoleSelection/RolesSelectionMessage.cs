@@ -1,37 +1,32 @@
-﻿using Mirror;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Mirror;
 using QSB.Messaging;
 using QSB.Player;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace HideAndSeek.HidersAndSeekersSelection
+namespace HideAndSeek.RoleSelection
 {
 	//For when the roles are selected, before the match begins
     public class RolesSelectionMessage : QSBMessage
     {
 		private List<uint> seekers;
 
-		public RolesSelectionMessage(uint[] seekers)
-		{	
+		public RolesSelectionMessage(uint[] seekers){
 			this.seekers = seekers.ToList();
 		}
 
-		public override void Serialize(NetworkWriter writer)
-		{
+		public override void Serialize(NetworkWriter writer){
 			base.Serialize(writer);
 			writer.Write(seekers.ToArray());
 		}
 
-		public override void Deserialize(NetworkReader reader)
-		{
+		public override void Deserialize(NetworkReader reader){
 			base.Deserialize(reader);
 			seekers = reader.Read<uint[]>().ToList();
 		}
-
-
+		
 		public override void OnReceiveLocal() => OnReceiveRemote();
-		public override void OnReceiveRemote()
-		{
+		public override void OnReceiveRemote(){
 			for(int i = 0; i< QSBPlayerManager.PlayerList.Count; i++){
 				var player = QSBPlayerManager.PlayerList[i];
 				PlayerState playerState = PlayerState.Hiding;

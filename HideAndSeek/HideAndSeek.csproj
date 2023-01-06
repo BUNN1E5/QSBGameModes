@@ -35,6 +35,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="CompatabilityLayer" />
+    <Folder Include="GUI" />
   </ItemGroup>
 </Project>

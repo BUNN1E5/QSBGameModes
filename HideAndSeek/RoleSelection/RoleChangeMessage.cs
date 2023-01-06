@@ -2,32 +2,32 @@
 using QSB.Messaging;
 using QSB.Player;
 
-namespace HideAndSeek.HidersAndSeekersSelection
+namespace HideAndSeek.RoleSelection
 {
 	//For when there is a change of player state, during the match
     internal class RoleChangeMessage : QSBMessage
 	{
 		private uint playerId;
-		int newPlayerState;
+		PlayerState playerState;
 
 		public RoleChangeMessage(uint playerId, PlayerState playerState)
 		{
 			this.playerId = playerId;
-			newPlayerState = (int)playerState;
+			this.playerState = playerState;
 		}
 
 		public override void Serialize(NetworkWriter writer)
 		{
 			base.Serialize(writer);
 			writer.Write(playerId);
-			writer.Write(newPlayerState);
+			writer.Write(playerState);
 		}
 
 		public override void Deserialize(NetworkReader reader)
 		{
 			base.Deserialize(reader);
 			playerId = reader.Read<uint>();
-			newPlayerState = reader.Read<int>();
+			playerState = reader.Read<PlayerState>();
 		}
 
 		public override void OnReceiveLocal() => OnReceiveRemote();
@@ -37,7 +37,7 @@ namespace HideAndSeek.HidersAndSeekersSelection
 			if (QSBPlayerManager.PlayerExists(playerId))
 			{
 				var playerInfo = QSBPlayerManager.GetPlayer(playerId);
-				PlayerManager.SetPlayerState(playerInfo, (PlayerState)newPlayerState);
+				PlayerManager.SetPlayerState(playerInfo, playerState);
 			}
 		}
 	}

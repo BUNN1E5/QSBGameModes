@@ -1,3 +1,4 @@
+using HideAndSeek.HidersAndSeekersSelection;
 using OWML.Common;
 using QSB.Player;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace HideAndSeek{
             if (!base.Reset()) //If the base func snagged out
                 return false;
             GameObject.Destroy(Trigger);
+            GameObject.Destroy(Signal);
             return true;
         }
 
@@ -36,8 +38,7 @@ namespace HideAndSeek{
             Utils.WriteLine("Removing the Markers for " + Info, MessageType.Success);
             this.Info.MapMarker.enabled = false;
             this.Info.HudMarker.enabled = false;
-            base.SetupHider();
-
+            
             return true;
         }
 

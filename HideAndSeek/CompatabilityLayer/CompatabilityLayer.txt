@@ -1,0 +1,8 @@
+
+TODO :: THINGS TO ADD A COMPAT LAYER
+    - PlayerBody
+    - PlayerShip (OWO Multiship)
+    - PlayerProbe
+    - PlayerManager (player list, etc)
+    - Network Messages
+    - Host (or "Host" for OWO)

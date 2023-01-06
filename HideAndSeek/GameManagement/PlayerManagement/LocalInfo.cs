@@ -1,5 +1,7 @@
 using System.Linq;
+using HideAndSeek.HidersAndSeekersSelection;
 using HideAndSeek.Patches;
+using HideAndSeek.RoleSelection;
 using OWML.Common;
 using QSB.Player;
 using QSB.ShipSync;
@@ -12,25 +14,40 @@ namespace HideAndSeek{
         NotificationData youAreASpectatorNotification = new(NotificationTarget.All, "You are a SPECTATOR");
 
         protected float DefaultRunSpeed = 6f;
+
+        public override bool Reset(){
+            if (!base.SetupHider()) //If the base func snagged out
+                return false;
+            NotificationManager.SharedInstance.UnpinNotification(youAreASeekerNotification);
+            NotificationManager.SharedInstance.UnpinNotification(youAreASpectatorNotification);
+            NotificationManager.SharedInstance.PostNotification(youAreAHiderNotification);
+            return true;
+        }
+
         public override bool SetupHider() {
             if (!base.SetupHider()) //If the base func snagged out
                 return false;
 
             Utils.WriteLine("Local Player Is Now Hider", MessageType.Info);
             Utils.WriteLine("Removing the All Markers", MessageType.Success);
-            foreach (PlayerInfo info in QSBPlayerManager.PlayerList) {
-                if (info.IsLocalPlayer)
-                    continue;
-                
-                if (info.Body != null){
+            foreach (PlayerInfo info in PlayerManager.playerInfo.Keys) {
+                if (info.IsLocalPlayer) continue;
+                if (info.Body == null) continue;
+
+                if (PlayerManager.spectators.Contains(info)) {
+                    //Turn off spectator just in case
+                    info.SetVisible(false);
                     info.MapMarker.enabled = false;
                     info.HudMarker.enabled = false;
+                    continue;
                 }
+                
+                info.MapMarker.enabled = false;
+                info.HudMarker.enabled = true;
             }
             
             ShipManager.Instance.CockpitController._interactVolume.DisableInteraction();
             
-
             Locator.GetPlayerSuit().SuitUp(false, true, true);
             NotificationManager.SharedInstance.UnpinNotification(youAreASeekerNotification);
             NotificationManager.SharedInstance.UnpinNotification(youAreASpectatorNotification);
@@ -54,9 +71,14 @@ namespace HideAndSeek{
             Utils.WriteLine("Local Player Is Now Seeker", MessageType.Info);
             
             Utils.WriteLine("Removing the Hider Markers", MessageType.Success);
-            foreach (PlayerInfo info in PlayerManager.playerInfo.Keys.Except(PlayerManager.seekers)) {
-                if (info.IsLocalPlayer)
-                    continue;
+            foreach (PlayerInfo info in PlayerManager.playerInfo.Keys) {
+                if (info.IsLocalPlayer) continue;
+                if (info.Body == null) continue;
+
+                if (PlayerManager.seekers.Contains(info)){
+                    info.HudMarker.enabled = true;
+                    info.MapMarker.enabled = true;
+                }
                 
                 info.HudMarker.enabled = false;
                 info.MapMarker.enabled = false;
@@ -66,16 +88,7 @@ namespace HideAndSeek{
                     info.SetVisible(false);
                 }
             } //Turn off markers for everyone excluding seekers
-            
-            Utils.WriteLine("Adding the Seeker Markers", MessageType.Success);
-            foreach (PlayerInfo info in PlayerManager.seekers) {
-                if (info.IsLocalPlayer)
-                    continue;
 
-                info.HudMarker.enabled = true;
-                info.MapMarker.enabled = true;
-            }
-            
             ShipManager.Instance.CockpitController._interactVolume.EnableInteraction();
 
             Locator.GetPlayerSuit().SuitUp(false, true, true);
@@ -103,11 +116,13 @@ namespace HideAndSeek{
             foreach (PlayerInfo info in PlayerManager.playerInfo.Keys) {
                 if (info.IsLocalPlayer)
                     continue;
+                
                 info.HudMarker.enabled = true;
                 info.MapMarker.enabled = true;
                 info.SetVisible(true);
             }
             
+            //Spectators cannot use the ship
             ShipManager.Instance.CockpitController._interactVolume.DisableInteraction();
             
             NotificationManager.SharedInstance.UnpinNotification(youAreAHiderNotification);
@@ -116,6 +131,7 @@ namespace HideAndSeek{
 
             return true;
         }
+        
 
         private static PlayerResources _playerResources;
             private static PlayerResources playerResources{

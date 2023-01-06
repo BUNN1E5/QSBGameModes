@@ -1,5 +1,6 @@
 ﻿using QSB.Player;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace HideAndSeek.HidersAndSeekersSelection
 {
@@ -22,7 +23,8 @@ namespace HideAndSeek.HidersAndSeekersSelection
                 rnd = new();
             }
 
-            var players = QSBPlayerManager.PlayerList;
+            //Make sure we dont assign any new roles to spectators
+            var players = PlayerManager.playerInfo.Keys.Except(PlayerManager.spectators).ToList();
 
             HashSet<uint> seekers = new();
             while(seekers.Count < numberOfSeekers && seekers.Count < players.Count){

@@ -1,4 +1,23 @@
 {
   "enabled": true,
-  "CustomSignal": false
+  "settings": {
+    "SpectateOnJoin": false,
+    
+    "Host Settings": {
+      "type": "separator",
+      "tooltip" : "The host decides these settings"
+    },
+
+    "GameType": {
+      "type": "selector",
+      "value": "Hide And Seek",
+      "options": [
+        "Hide And Seek",
+        "Tag"
+      ]
+    },
+    "Disable 6th Location": true,
+    "Activate All Return Platforms": true
+  }
+
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using HideAndSeek.GameManagement;
 using HideAndSeek.HidersAndSeekersSelection;
+using HideAndSeek.RoleSelection;
 using OWML.Common;
 using OWML.Common.Menus;
 using OWML.ModHelper;
@@ -24,6 +25,8 @@ namespace HideAndSeek
 {
     public class HideAndSeek : ModBehaviour{
         public static HideAndSeek instance;
+
+        private Button menuButton;
         
         private void Start(){
             instance = this;
@@ -39,14 +42,22 @@ namespace HideAndSeek
                 Utils.RunWhen(() => QSBWorldSync.AllObjectsReady && GameManager.state != GameState.Stopped, GameManager.SetupHideAndSeek);
             };
             
+            Utils.WriteLine("Adding button to menu");
             //Setup the Host button 
+            //TODO :: MAKE BETTER GUI FOR SETTING UP GAME
             if (QSBCore.IsHost){ //TODO :: CHANGE ORDER OF HIDE AND SEEK INTERACT BUTTON
-                Utils.WriteLine("We are host, adding button to menu");
-                Button menuButton = QSBCore.MenuApi.PauseMenu_MakeSimpleButton("START HIDE AND SEEK"); //HIDE AND SEEK INTERACT BUTTON
+                menuButton = QSBCore.MenuApi.PauseMenu_MakeSimpleButton("START GAME"); //HIDE AND SEEK INTERACT BUTTON
                 Button.ButtonClickedEvent c_event = new Button.ButtonClickedEvent();
                 c_event.AddListener(StartHideAndSeek);
                 
                 menuButton.onClick = c_event;                
+            }
+            else{
+                menuButton = QSBCore.MenuApi.PauseMenu_MakeSimpleButton("JOIN GAME"); //HIDE AND SEEK INTERACT BUTTON
+                Button.ButtonClickedEvent c_event = new Button.ButtonClickedEvent();
+                c_event.AddListener(StartHideAndSeek);
+                
+                menuButton.onClick = c_event;       
             }
         }
 
@@ -57,19 +68,43 @@ namespace HideAndSeek
             });
         }
 
+        static void JoinHideAndSeek(){
+            
+        }
+
+        //TODO :: CONFIRM THAT THIS WORKS
+        //Ambiguous on if the settings are changed before or after this function
+        public override void Configure(IModConfig config){
+            if (QSBCore.IsInMultiplayer){
+                if (QSBCore.IsHost){
+                    //Make sure everyone has the server settings
+                    new SharedSettingsMessage(config);
+                    base.Configure(config);
+                    return;
+                }
+
+                foreach (var setting in config.Settings){
+                    if (SharedSettings.settingsToShare.ContainsKey(setting.Key))
+                        continue;
+                    Utils.ModHelper.Config.Settings[setting.Key] = setting.Value;
+                }
+            }
+            base.Configure(config);
+        }
+
         #region DEBUG
 
         private void Update(){
             if (GetKeyDown(Key.M)){
-                PlayerManager.SetPlayerState(QSBPlayerManager.LocalPlayer, PlayerState.Hiding);
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, PlayerState.Hiding);
             }
             
             if (GetKeyDown(Key.Comma)){
-                PlayerManager.SetPlayerState(QSBPlayerManager.LocalPlayer, PlayerState.Seeking);
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, PlayerState.Seeking);
             }
             
             if (GetKeyDown(Key.Period)){
-                PlayerManager.SetPlayerState(QSBPlayerManager.LocalPlayer, PlayerState.Spectating);
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, PlayerState.Spectating);
             }
         }
 

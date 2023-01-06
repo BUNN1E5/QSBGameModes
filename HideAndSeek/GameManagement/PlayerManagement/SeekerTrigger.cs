@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using HideAndSeek.Messages;
+using HideAndSeek.RoleSelection;
 using OWML.Common;
 
 namespace HideAndSeek{
@@ -33,15 +34,14 @@ namespace HideAndSeek{
             {
                 Locator.GetPlayerAudioController().PlayOneShotInternal(AudioType.Death_Instant);
                 StartCoroutine(AutoRespawnWithDelay(5f));
-                
+                //TODO :: DECIDE ON IF WE WANT TO KILL THE PLAYER OR NOT
                 if (PlayerManager.PlayerDeathTypes.ContainsKey(seekerInfo)){
                     Locator.GetDeathManager().KillPlayer(PlayerManager.PlayerDeathTypes[seekerInfo]);
+                    return;
                 }
                 
                 Locator.GetDeathManager().KillPlayer(DeathType.Impact);
                 Utils.WriteLine("DeathType not found for " + seekerInfo);
-                
-                
             }
         }
 
