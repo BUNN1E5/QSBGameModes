@@ -1,20 +1,37 @@
 using System;
 using System.Linq;
-using HideAndSeek.HidersAndSeekersSelection;
-using HideAndSeek.RoleSelection;
+using HideAndSeek.GameManagement.RoleSelection;
+using HideAndSeek.Messages;
 using OWML.Common;
 using OWML.ModHelper;
 using QSB;
 using QSB.Messaging;
 using QSB.Player;
+using QSB.SaveSync.Messages;
 using QSB.WorldSync;
 using UnityEngine.UI;
 
 namespace HideAndSeek.GameManagement{
-    public static class GameManager{
+    public static partial class GameManager{
 
-        public static GameState state = GameState.Stopped;
+        private static GameState _state = GameState.Stopped;
+        public static GameState state{
+            get{ return _state; }
+            set{
+                if (QSBCore.IsHost){ //So that when the host changes the game state a message gets sent
+                    new GameStateMessage(value);
+                    _state = value; //we will also technically be set from the message
+                }
+                //We dont want the non hosts from changing the gamestate at any point
+            }
+        }
+
+        public static void Init(){
+            QSBPlayerManager.OnAddPlayer += (PlayerInfo info) => { new GameStateMessage(state){To = info.PlayerId}.Send(); };
+        }
+
         public static void SetupHideAndSeek(){
+            GameManager.state = GameState.Starting;
             
             Utils.WriteLine("Resetting All Player States");
             PlayerManager.ResetAllPlayerStates();
@@ -28,7 +45,7 @@ namespace HideAndSeek.GameManagement{
             });
             
             
-            if(Utils.ModHelper.Config.GetSettingsValue<bool>("Disable 6th Location")){
+            if(SharedSettings.settingsToShare.Disable6thLocation){
                 Utils.WriteLine("Preventing the Quantum Moon from going to the 6th location", MessageType.Info);
                 QuantumMoon qm = QSBWorldSync.GetUnityObject<QuantumMoon>();
                 if (qm != null){
@@ -42,7 +59,7 @@ namespace HideAndSeek.GameManagement{
             
             // QSBWorldSync.GetUnityObjects<SandLevelController>().ForEach(controller => {});
 
-            if (Utils.ModHelper.Config.GetSettingsValue<bool>("Activate All Return Platforms")){
+            if (SharedSettings.settingsToShare.ActivateAllReturnPlatforms){
                 Utils.WriteLine("Setting all return platforms to active", MessageType.Info);
                 foreach (NomaiWarpTransmitter transmitter in QSBWorldSync.GetUnityObjects<NomaiWarpTransmitter>()){
                     transmitter.CloseBlackHole();
@@ -60,12 +77,22 @@ namespace HideAndSeek.GameManagement{
                 new RolesSelectionMessage(seekers.ToArray()).Send();
             });
         }
+
+        public static void SeekersReleased(){
+            GameManager.state = GameState.InProgress;
+        }
     }
 
+    //Player should only be able to join as a player while the state is:
+    //  Starting, Ending, or Waiting
+    
+    //If game state is InProgress and Setting is false let player join as
+    //spectator
     public enum GameState{
         Starting,
         InProgress,
-        Ending,
+        Ending, //Mark this at some point
+        Waiting,
         Stopped //This is the default state until host starts the game
     }
 }

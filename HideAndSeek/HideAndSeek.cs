@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using HideAndSeek.GameManagement;
-using HideAndSeek.HidersAndSeekersSelection;
-using HideAndSeek.RoleSelection;
+using HideAndSeek.GameManagement.RoleSelection;
+using HideAndSeek.Messages;
 using OWML.Common;
 using OWML.Common.Menus;
 using OWML.ModHelper;
@@ -26,7 +26,12 @@ namespace HideAndSeek
     public class HideAndSeek : ModBehaviour{
         public static HideAndSeek instance;
 
-        private Button menuButton;
+        private static Button menuButton;
+        private static Text menuText;
+
+        private static Button spectateButton;
+        private static Text spectateText;
+
         
         private void Start(){
             instance = this;
@@ -34,31 +39,41 @@ namespace HideAndSeek
             Utils.WriteLine($"{nameof(HideAndSeek)} is loaded!", MessageType.Success);
             
             PlayerManager.Init();
+            GameManager.Init();
 
             LoadManager.OnCompleteSceneLoad += (scene, loadScene) => {
                 if (loadScene != OWScene.SolarSystem) return;
                 
+                
+                ModHelper.Events.Unity.FireOnNextUpdate(() => {
+                    Utils.WriteLine("Adding button to menu");
+                    //Setup the Host button 
+                    //TODO :: MAKE BETTER GUI FOR SETTING UP GAME
+                    if (QSBCore.IsHost){ //TODO :: CHANGE ORDER OF HIDE AND SEEK INTERACT BUTTON
+                        menuButton = QSBCore.MenuApi.PauseMenu_MakeSimpleButton("START " + SharedSettings.settingsToShare.GameType); //HIDE AND SEEK INTERACT BUTTON
+                        menuText = menuButton.GetComponentInChildren<Text>();
+                        Button.ButtonClickedEvent c_event = new Button.ButtonClickedEvent();
+                        c_event.AddListener(StartHideAndSeek);
+                
+                        menuButton.onClick = c_event;                
+                    } else {
+                        menuButton = QSBCore.MenuApi.PauseMenu_MakeSimpleButton("JOIN " + SharedSettings.settingsToShare.GameType); //HIDE AND SEEK INTERACT BUTTON
+                        menuText = menuButton.GetComponentInChildren<Text>();
+                        Button.ButtonClickedEvent c_event = new Button.ButtonClickedEvent();
+                        c_event.AddListener(JoinHideAndSeek);
+                        
+                        menuButton.onClick = c_event;       
+                    }
+                    
+                    UpdateGUI();
+                });
+                
+                
+                
+                
                 //This runs every loop IF we have started Hide and Seek
                 Utils.RunWhen(() => QSBWorldSync.AllObjectsReady && GameManager.state != GameState.Stopped, GameManager.SetupHideAndSeek);
             };
-            
-            Utils.WriteLine("Adding button to menu");
-            //Setup the Host button 
-            //TODO :: MAKE BETTER GUI FOR SETTING UP GAME
-            if (QSBCore.IsHost){ //TODO :: CHANGE ORDER OF HIDE AND SEEK INTERACT BUTTON
-                menuButton = QSBCore.MenuApi.PauseMenu_MakeSimpleButton("START GAME"); //HIDE AND SEEK INTERACT BUTTON
-                Button.ButtonClickedEvent c_event = new Button.ButtonClickedEvent();
-                c_event.AddListener(StartHideAndSeek);
-                
-                menuButton.onClick = c_event;                
-            }
-            else{
-                menuButton = QSBCore.MenuApi.PauseMenu_MakeSimpleButton("JOIN GAME"); //HIDE AND SEEK INTERACT BUTTON
-                Button.ButtonClickedEvent c_event = new Button.ButtonClickedEvent();
-                c_event.AddListener(StartHideAndSeek);
-                
-                menuButton.onClick = c_event;       
-            }
         }
 
         static void StartHideAndSeek(){
@@ -66,6 +81,24 @@ namespace HideAndSeek
                 GameManager.SetupHideAndSeek();
                 GameManager.SelectRoles();
             });
+        }
+
+        static void UpdateGUI(){
+            if (QSBCore.IsHost){
+                if (GameManager.state == GameState.Stopped){
+                    menuText.text = "Start " + SharedSettings.settingsToShare.GameType;
+                } else{
+                    menuText.text = "Stop " + SharedSettings.settingsToShare.GameType;
+                }
+            } else {
+                if (GameManager.state != GameState.Stopped){
+                    if (PlayerManager.playerInfo[QSBPlayerManager.LocalPlayer].State == PlayerState.None){
+                        menuText.text = "Join " + SharedSettings.settingsToShare.GameType;
+                    } else if(PlayerManager.playerInfo[QSBPlayerManager.LocalPlayer].State != PlayerState.None){
+                        menuText.text = "Leave " + SharedSettings.settingsToShare.GameType;
+                    }
+                }
+            }
         }
 
         static void JoinHideAndSeek(){
@@ -77,16 +110,10 @@ namespace HideAndSeek
         public override void Configure(IModConfig config){
             if (QSBCore.IsInMultiplayer){
                 if (QSBCore.IsHost){
-                    //Make sure everyone has the server settings
-                    new SharedSettingsMessage(config);
                     base.Configure(config);
+                    SharedSettings.LoadSettings();
+                    new SharedSettingsMessage(SharedSettings.settingsToShare);
                     return;
-                }
-
-                foreach (var setting in config.Settings){
-                    if (SharedSettings.settingsToShare.ContainsKey(setting.Key))
-                        continue;
-                    Utils.ModHelper.Config.Settings[setting.Key] = setting.Value;
                 }
             }
             base.Configure(config);

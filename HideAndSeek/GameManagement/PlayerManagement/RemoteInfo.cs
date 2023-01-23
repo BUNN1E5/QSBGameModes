@@ -1,4 +1,3 @@
-using HideAndSeek.HidersAndSeekersSelection;
 using OWML.Common;
 using QSB.Player;
 using UnityEngine;
@@ -7,9 +6,12 @@ namespace HideAndSeek{
     public class RemoteInfo : HideAndSeekInfo
     {
         public SeekerTrigger Trigger;
+        public AudioSignal Signal;
         public override bool Reset() {
             if (!base.Reset()) //If the base func snagged out
                 return false;
+            Info.MapMarker.enabled = true;
+            Info.HudMarker.enabled = true;
             GameObject.Destroy(Trigger);
             GameObject.Destroy(Signal);
             return true;

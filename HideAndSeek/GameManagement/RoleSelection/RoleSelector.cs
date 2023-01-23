@@ -1,8 +1,7 @@
-﻿using QSB.Player;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace HideAndSeek.HidersAndSeekersSelection
+namespace HideAndSeek.GameManagement.RoleSelection
 {
     public class RoleSelector
     {

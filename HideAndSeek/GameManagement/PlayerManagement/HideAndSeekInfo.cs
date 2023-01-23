@@ -7,9 +7,7 @@ using UnityEngine;
 namespace HideAndSeek{
     public class HideAndSeekInfo{
         public PlayerInfo Info;
-        public AudioSignal Signal;
         public PlayerState State;
-
         private Coroutine waitCoroutine;
 
         private bool isReady{
@@ -31,9 +29,13 @@ namespace HideAndSeek{
         }
 
         public virtual bool Reset(){
+            if (!isReady){
+                waitCoroutine = Utils.RunWhen(() => isReady, () => Reset(), waitCoroutine);
+                Utils.WriteLine("Player not ready, Waiting", MessageType.Debug);
+                return false;
+            }
+            Utils.WriteLine("Resetting Player", MessageType.Debug);
             State = PlayerState.None;
-            this.Info.MapMarker.enabled = true;
-            this.Info.HudMarker.enabled = true;
             return true;
         }
 

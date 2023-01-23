@@ -2,7 +2,7 @@
 using QSB.Messaging;
 using QSB.Player;
 
-namespace HideAndSeek.RoleSelection
+namespace HideAndSeek.GameManagement.RoleSelection
 {
 	//For when there is a change of player state, during the match
     internal class RoleChangeMessage : QSBMessage

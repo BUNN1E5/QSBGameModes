@@ -1,11 +1,10 @@
-using HideAndSeek.HidersAndSeekersSelection;
 using QSB.Player;
 using QSB.Messaging;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using HideAndSeek.GameManagement.RoleSelection;
 using HideAndSeek.Messages;
-using HideAndSeek.RoleSelection;
 using OWML.Common;
 
 namespace HideAndSeek{

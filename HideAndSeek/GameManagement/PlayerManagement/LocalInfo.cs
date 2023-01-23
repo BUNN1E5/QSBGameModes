@@ -1,7 +1,5 @@
 using System.Linq;
-using HideAndSeek.HidersAndSeekersSelection;
 using HideAndSeek.Patches;
-using HideAndSeek.RoleSelection;
 using OWML.Common;
 using QSB.Player;
 using QSB.ShipSync;
@@ -16,7 +14,7 @@ namespace HideAndSeek{
         protected float DefaultRunSpeed = 6f;
 
         public override bool Reset(){
-            if (!base.SetupHider()) //If the base func snagged out
+            if (!base.Reset()) //If the base func snagged out
                 return false;
             NotificationManager.SharedInstance.UnpinNotification(youAreASeekerNotification);
             NotificationManager.SharedInstance.UnpinNotification(youAreASpectatorNotification);

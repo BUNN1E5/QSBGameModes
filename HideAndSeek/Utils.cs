@@ -7,7 +7,9 @@ using UnityEngine;
 namespace HideAndSeek{
     public static class Utils{
 
-        public static IModHelper ModHelper = HideAndSeek.instance.ModHelper;
+        public static IModHelper ModHelper{
+            get{ return HideAndSeek.instance.ModHelper; }
+        }
         public static void WriteLine(string s, MessageType t){
             HideAndSeek.instance.ModHelper.Console.WriteLine(s, t);
         }

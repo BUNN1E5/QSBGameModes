@@ -57,6 +57,9 @@ namespace HideAndSeek{
                     break;
                 case PlayerState.None:
                     Utils.WriteLine("Player state is None", MessageType.Error);
+                    hiders.Remove(playerInfo);
+                    seekers.Remove(playerInfo);
+                    spectators.Remove(playerInfo);
                     Reset(PlayerManager.playerInfo[playerInfo]);
                     break;
             }
@@ -72,9 +75,6 @@ namespace HideAndSeek{
                 if (!PlayerManager.playerInfo.ContainsKey(playerInfo)){
                     PlayerManager.playerInfo[playerInfo] =  info;
                 }
-                
-                //Make sure each player gets the proper settings
-                if (QSBCore.IsHost){ new SharedSettingsMessage(){To = info.Info.PlayerId}.Send(); }
 
                 SetPlayerState(playerInfo, PlayerManager.playerInfo[playerInfo].State);
             });

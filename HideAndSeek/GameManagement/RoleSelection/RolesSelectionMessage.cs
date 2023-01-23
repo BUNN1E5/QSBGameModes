@@ -4,7 +4,7 @@ using Mirror;
 using QSB.Messaging;
 using QSB.Player;
 
-namespace HideAndSeek.RoleSelection
+namespace HideAndSeek.GameManagement.RoleSelection
 {
 	//For when the roles are selected, before the match begins
     public class RolesSelectionMessage : QSBMessage
