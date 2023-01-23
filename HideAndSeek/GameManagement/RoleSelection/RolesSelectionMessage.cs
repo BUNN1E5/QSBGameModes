@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using HideAndSeek.GameManagement.PlayerManagement;
 using Mirror;
 using QSB.Messaging;
 using QSB.Player;
@@ -10,32 +11,47 @@ namespace HideAndSeek.GameManagement.RoleSelection
     public class RolesSelectionMessage : QSBMessage
     {
 		private List<uint> seekers;
+		private List<uint> hiders;
+		private List<uint> spectators;
 
-		public RolesSelectionMessage(uint[] seekers){
+		public RolesSelectionMessage(uint[] seekers, uint[] hiders, uint[] spectators){
 			this.seekers = seekers.ToList();
+			this.hiders = hiders.ToList();
+			this.spectators = spectators.ToList();
 		}
 
 		public override void Serialize(NetworkWriter writer){
 			base.Serialize(writer);
 			writer.Write(seekers.ToArray());
+			writer.Write(hiders.ToArray());
+			writer.Write(spectators.ToArray());
 		}
 
 		public override void Deserialize(NetworkReader reader){
 			base.Deserialize(reader);
 			seekers = reader.Read<uint[]>().ToList();
+			hiders = reader.Read<uint[]>().ToList();
+			spectators = reader.Read<uint[]>().ToList();
 		}
 		
 		public override void OnReceiveLocal() => OnReceiveRemote();
 		public override void OnReceiveRemote(){
-			for(int i = 0; i< QSBPlayerManager.PlayerList.Count; i++){
-				var player = QSBPlayerManager.PlayerList[i];
-				PlayerState playerState = PlayerState.Hiding;
+			foreach (uint seeker in seekers){
+				if (QSBPlayerManager.PlayerExists(seeker))
+					return;
+				new RoleChangeMessage(seeker, PlayerManagement.PlayerState.Seeking);
+			}
 
-				if (seekers.Contains(player.PlayerId)){
-					playerState = PlayerState.Seeking;
-				}
-
-				PlayerManager.SetPlayerState(player, playerState);
+			foreach (uint hider in hiders){
+				if (QSBPlayerManager.PlayerExists(hider))
+					return;
+				new RoleChangeMessage(hider, PlayerManagement.PlayerState.Seeking);
+			}
+			
+			foreach (uint spectator in spectators){
+				if (QSBPlayerManager.PlayerExists(spectator))
+					return;
+				new RoleChangeMessage(spectator, PlayerManagement.PlayerState.Seeking);
 			}
 		}
 	}

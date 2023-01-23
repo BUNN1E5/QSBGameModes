@@ -1,3 +1,4 @@
+using HideAndSeek.GameManagement.PlayerManagement;
 using OWML.Common;
 using QSB.Player;
 using UnityEngine;
@@ -59,15 +60,25 @@ namespace HideAndSeek{
             Trigger.seekerInfo = Info;
 
             Utils.WriteLine("Adding the HUD Marker", MessageType.Success);
-            Info.HudMarker.enabled = true;
-            Info.MapMarker.enabled = true;
+            
+            //Hiders shouldn't be able to see the seekers Map and Hud Markers
+            bool state = PlayerManager.LocalPlayer.State == State;
+            Info.HudMarker.enabled = state;
+            Info.MapMarker.enabled = state;
             return true;
         }
 
         public override bool SetupSpectator() {
             if (!base.SetupSpectator()) //If the base func snagged out
                 return false;
-            Info.SetVisible(false);
+            
+            //The visibility of the player should be the same as the lcoal Player if they are spectator already
+            bool state = PlayerManager.LocalPlayer.State == State;
+            Info.SetVisible(state);
+            Info.HudMarker.enabled = state;
+            Info.MapMarker.enabled = state;
+
+            
             return true;
         }
     }

@@ -3,6 +3,7 @@ using QSB.Messaging;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using HideAndSeek.GameManagement.PlayerManagement;
 using HideAndSeek.GameManagement.RoleSelection;
 using HideAndSeek.Messages;
 using OWML.Common;
@@ -26,7 +27,7 @@ namespace HideAndSeek{
 
         private void ShapeTrigger_OnEntry(GameObject hitObj){
             //Only kill the player if they are hiding
-            if (PlayerManager.playerInfo[QSBPlayerManager.LocalPlayer].State != PlayerState.Hiding)
+            if (PlayerManager.playerInfo[QSBPlayerManager.LocalPlayer].State != GameManagement.PlayerManagement.PlayerState.Hiding)
                 return;
             
             if (hitObj.CompareTag("PlayerDetector"))
@@ -52,8 +53,8 @@ namespace HideAndSeek{
         {
             yield return new WaitForSeconds(delay);
             new LocationRespawnMessage(QSBPlayerManager.LocalPlayerId, SpawnLocation.TimberHearth).Send();
-            new RoleChangeMessage(QSBPlayerManager.LocalPlayerId, PlayerState.Seeking).Send();
-            new RoleChangeMessage(seekerInfo.PlayerId, PlayerState.Hiding).Send();
+            new RoleChangeMessage(QSBPlayerManager.LocalPlayerId, GameManagement.PlayerManagement.PlayerState.Seeking).Send();
+            new RoleChangeMessage(seekerInfo.PlayerId, GameManagement.PlayerManagement.PlayerState.Hiding).Send();
         }
 
     }

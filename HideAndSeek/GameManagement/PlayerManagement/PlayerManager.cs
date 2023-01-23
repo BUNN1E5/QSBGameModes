@@ -1,23 +1,29 @@
 using System.Collections.Generic;
-using HideAndSeek.GameManagement;
+using System.Linq;
 using OWML.Common;
 using QSB;
 using QSB.Messaging;
 using QSB.Player;
-using UnityEngine;
 
-namespace HideAndSeek{
+namespace HideAndSeek.GameManagement.PlayerManagement{
     public static class PlayerManager{
 
         public static HashSet<PlayerInfo> hiders = new();
         public static HashSet<PlayerInfo> seekers = new();
         public static HashSet<PlayerInfo> spectators = new();
 
-        public static Dictionary<PlayerInfo, HideAndSeekInfo> playerInfo = new();
-        public static Dictionary<PlayerInfo, DeathType> PlayerDeathTypes = new();
+        public static Dictionary<PlayerInfo, HideAndSeekInfo> playerInfo = new(); //All HideAndSeekInfos have playerInfo
+        public static Dictionary<PlayerInfo, DeathType> PlayerDeathTypes = new(); //This gets setup by the HideAndSeekInfo
+
+        public static HideAndSeekInfo LocalPlayer = PlayerManager.LocalPlayer;
 
         public static void Init(){
-            QSBPlayerManager.OnAddPlayer += SetupPlayer;
+            QSBPlayerManager.OnAddPlayer += (PlayerInfo info) => {
+                SetupPlayer(info);
+                if(QSBCore.IsHost)
+                    new  PlayerManagerUpdateMessage(playerInfo.Values.ToArray()){To = info.PlayerId}.Send();
+            };
+            
             QSBPlayerManager.OnRemovePlayer += RemovePlayer;
         }
 
@@ -33,6 +39,12 @@ namespace HideAndSeek{
             foreach (var info in playerInfo.Values) {
                 info.Reset();
             }
+        }
+
+        public static void SetupAllPlayers(){
+            QSBPlayerManager.PlayerList.ForEach((playerInfo) => {
+                PlayerManager.SetupPlayer(playerInfo);
+            });
         }
 
         public static void SetPlayerState(PlayerInfo playerInfo, PlayerState state){
@@ -111,6 +123,7 @@ namespace HideAndSeek{
         Hiding,
         Seeking,
         Spectating,
+        Ready,
         None
     }
 }

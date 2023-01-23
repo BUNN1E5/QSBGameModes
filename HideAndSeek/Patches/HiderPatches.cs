@@ -1,5 +1,6 @@
 using System;
 using HarmonyLib;
+using HideAndSeek.GameManagement.PlayerManagement;
 using OWML.Common;
 using QSB.DeathSync;
 using QSB.Player;

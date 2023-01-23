@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using HideAndSeek.GameManagement.PlayerManagement;
+using QSB.Player;
 
 namespace HideAndSeek.GameManagement.RoleSelection
 {
@@ -12,7 +14,7 @@ namespace HideAndSeek.GameManagement.RoleSelection
             lastSeletedSeekers.Clear();
         }
 
-        public static HashSet<uint> SelectRoles(int numberOfSeekers, int seed = -1, bool tryToNotRepeatPreviousSeekers = false) 
+        public static HashSet<uint> SelectRoles(HashSet<HideAndSeekInfo> players, int numberOfSeekers, int seed = -1, bool tryToNotRepeatPreviousSeekers = false) 
         {
             System.Random rnd;
             if (seed > 0) {
@@ -22,13 +24,11 @@ namespace HideAndSeek.GameManagement.RoleSelection
                 rnd = new();
             }
 
-            //Make sure we dont assign any new roles to spectators
-            var players = PlayerManager.playerInfo.Keys.Except(PlayerManager.spectators).ToList();
 
             HashSet<uint> seekers = new();
             while(seekers.Count < numberOfSeekers && seekers.Count < players.Count){
                 int newPosition = rnd.Next(0, players.Count);
-                var playerId = players[newPosition].PlayerId;
+                var playerId = players.ElementAt(newPosition).Info.PlayerId;
 
                 if(!tryToNotRepeatPreviousSeekers || //If we don't care about repeating, just add it
                     (tryToNotRepeatPreviousSeekers && //If we do care, then we check to see if playerInfo was a seeker

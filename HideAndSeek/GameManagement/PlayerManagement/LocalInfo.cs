@@ -1,4 +1,5 @@
 using System.Linq;
+using HideAndSeek.GameManagement.PlayerManagement;
 using HideAndSeek.Patches;
 using OWML.Common;
 using QSB.Player;

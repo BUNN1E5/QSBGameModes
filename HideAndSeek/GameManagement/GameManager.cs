@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using HideAndSeek.GameManagement.PlayerManagement;
 using HideAndSeek.GameManagement.RoleSelection;
 using HideAndSeek.Messages;
 using OWML.Common;
@@ -40,9 +42,7 @@ namespace HideAndSeek.GameManagement{
             PlayerData.LearnFrequency(SignalFrequency.HideAndSeek);
             
             Utils.WriteLine("Setting Up Settings for players", MessageType.Info);
-            QSBPlayerManager.PlayerList.ForEach((playerInfo) => {
-                PlayerManager.SetupPlayer(playerInfo);
-            });
+            
             
             
             if(SharedSettings.settingsToShare.Disable6thLocation){
@@ -71,10 +71,37 @@ namespace HideAndSeek.GameManagement{
         }
         
         public static void SelectRoles(){
+            if (!QSBCore.IsHost){
+                Utils.WriteLine("Only the host may select the roles", MessageType.Info);
+                return;
+            }
+
             Utils.RunWhen(() => QSBPlayerManager.PlayerList.TrueForAll(playerInfo => playerInfo.Body != null), () => {
                 Utils.WriteLine("Choosing the Roles", MessageType.Success);
-                var seekers = RoleSelector.SelectRoles(1);
-                new RolesSelectionMessage(seekers.ToArray()).Send();
+                HashSet<HideAndSeekInfo> players = new();
+                HashSet<uint> hiders = new();
+                List<uint> spectators = new();
+                
+                foreach (HideAndSeekInfo info in PlayerManager.playerInfo.Values){
+                    if (info.State == PlayerManagement.PlayerState.None){
+                        new RoleChangeMessage(info.Info.PlayerId, PlayerManagement.PlayerState.Spectating);
+                        spectators.Add(info.Info.PlayerId);
+                        continue;
+                    }
+                
+                    if (info.State == PlayerManagement.PlayerState.Spectating){
+                        spectators.Add(info.Info.PlayerId);
+                        //new RoleChangeMessage(info.Info.PlayerId, PlayerManagement.PlayerState.Spectating);
+                        continue;
+                    }
+                
+                    players.Add(info);
+                    hiders.Add(info.Info.PlayerId);
+                }
+                
+                var seekers = RoleSelector.SelectRoles(players, 1);
+                hiders.ExceptWith(seekers);
+                new RolesSelectionMessage(seekers.ToArray(), hiders.ToArray(), spectators.ToArray()).Send();
             });
         }
 

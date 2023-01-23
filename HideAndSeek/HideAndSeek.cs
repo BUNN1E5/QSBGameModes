@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using HideAndSeek.GameManagement;
+using HideAndSeek.GameManagement.PlayerManagement;
 using HideAndSeek.GameManagement.RoleSelection;
+using HideAndSeek.Menu;
 using HideAndSeek.Messages;
 using OWML.Common;
 using OWML.Common.Menus;
@@ -25,13 +27,6 @@ namespace HideAndSeek
 {
     public class HideAndSeek : ModBehaviour{
         public static HideAndSeek instance;
-
-        private static Button menuButton;
-        private static Text menuText;
-
-        private static Button spectateButton;
-        private static Text spectateText;
-
         
         private void Start(){
             instance = this;
@@ -43,66 +38,22 @@ namespace HideAndSeek
 
             LoadManager.OnCompleteSceneLoad += (scene, loadScene) => {
                 if (loadScene != OWScene.SolarSystem) return;
-                
-                
-                ModHelper.Events.Unity.FireOnNextUpdate(() => {
-                    Utils.WriteLine("Adding button to menu");
-                    //Setup the Host button 
-                    //TODO :: MAKE BETTER GUI FOR SETTING UP GAME
-                    if (QSBCore.IsHost){ //TODO :: CHANGE ORDER OF HIDE AND SEEK INTERACT BUTTON
-                        menuButton = QSBCore.MenuApi.PauseMenu_MakeSimpleButton("START " + SharedSettings.settingsToShare.GameType); //HIDE AND SEEK INTERACT BUTTON
-                        menuText = menuButton.GetComponentInChildren<Text>();
-                        Button.ButtonClickedEvent c_event = new Button.ButtonClickedEvent();
-                        c_event.AddListener(StartHideAndSeek);
-                
-                        menuButton.onClick = c_event;                
-                    } else {
-                        menuButton = QSBCore.MenuApi.PauseMenu_MakeSimpleButton("JOIN " + SharedSettings.settingsToShare.GameType); //HIDE AND SEEK INTERACT BUTTON
-                        menuText = menuButton.GetComponentInChildren<Text>();
-                        Button.ButtonClickedEvent c_event = new Button.ButtonClickedEvent();
-                        c_event.AddListener(JoinHideAndSeek);
-                        
-                        menuButton.onClick = c_event;       
-                    }
-                    
-                    UpdateGUI();
-                });
-                
-                
-                
-                
+                HideAndSeekMenu.SetupPauseButton();
+                HideAndSeekMenu.UpdateGUI();
                 //This runs every loop IF we have started Hide and Seek
-                Utils.RunWhen(() => QSBWorldSync.AllObjectsReady && GameManager.state != GameState.Stopped, GameManager.SetupHideAndSeek);
+                Utils.RunWhen(() => GameManager.state != GameState.Stopped, StartHideAndSeek);
             };
         }
-
-        static void StartHideAndSeek(){
+        
+        public static void StartHideAndSeek(){
             Utils.RunWhen(() => QSBWorldSync.AllObjectsReady, () => {
                 GameManager.SetupHideAndSeek();
                 GameManager.SelectRoles();
             });
         }
 
-        static void UpdateGUI(){
-            if (QSBCore.IsHost){
-                if (GameManager.state == GameState.Stopped){
-                    menuText.text = "Start " + SharedSettings.settingsToShare.GameType;
-                } else{
-                    menuText.text = "Stop " + SharedSettings.settingsToShare.GameType;
-                }
-            } else {
-                if (GameManager.state != GameState.Stopped){
-                    if (PlayerManager.playerInfo[QSBPlayerManager.LocalPlayer].State == PlayerState.None){
-                        menuText.text = "Join " + SharedSettings.settingsToShare.GameType;
-                    } else if(PlayerManager.playerInfo[QSBPlayerManager.LocalPlayer].State != PlayerState.None){
-                        menuText.text = "Leave " + SharedSettings.settingsToShare.GameType;
-                    }
-                }
-            }
-        }
-
-        static void JoinHideAndSeek(){
-            
+        public static void JoinHideAndSeek(){
+            new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Ready);
         }
 
         //TODO :: CONFIRM THAT THIS WORKS
@@ -123,16 +74,25 @@ namespace HideAndSeek
 
         private void Update(){
             if (GetKeyDown(Key.M)){
-                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, PlayerState.Hiding);
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Hiding);
             }
             
             if (GetKeyDown(Key.Comma)){
-                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, PlayerState.Seeking);
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Seeking);
             }
             
             if (GetKeyDown(Key.Period)){
-                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, PlayerState.Spectating);
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Spectating);
             }
+            
+            if (GetKeyDown(Key.Slash)){
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Ready);
+            }
+            
+            if (GetKeyDown(Key.Period)){
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.None);
+            }
+            
         }
 
         private bool GetKeyDown(Key keyCode) {

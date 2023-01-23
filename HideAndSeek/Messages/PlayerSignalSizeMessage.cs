@@ -1,4 +1,5 @@
 using HideAndSeek.GameManagement;
+using HideAndSeek.GameManagement.PlayerManagement;
 using Mirror;
 using QSB.Messaging;
 using QSB.Player;
