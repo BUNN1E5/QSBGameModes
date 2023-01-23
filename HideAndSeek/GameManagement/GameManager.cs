@@ -45,7 +45,7 @@ namespace HideAndSeek.GameManagement{
             
             
             
-            if(SharedSettings.settingsToShare.Disable6thLocation){
+            if(SharedSettings.SharedSettings.settingsToShare.Disable6thLocation){
                 Utils.WriteLine("Preventing the Quantum Moon from going to the 6th location", MessageType.Info);
                 QuantumMoon qm = QSBWorldSync.GetUnityObject<QuantumMoon>();
                 if (qm != null){
@@ -59,7 +59,7 @@ namespace HideAndSeek.GameManagement{
             
             // QSBWorldSync.GetUnityObjects<SandLevelController>().ForEach(controller => {});
 
-            if (SharedSettings.settingsToShare.ActivateAllReturnPlatforms){
+            if (SharedSettings.SharedSettings.settingsToShare.ActivateAllReturnPlatforms){
                 Utils.WriteLine("Setting all return platforms to active", MessageType.Info);
                 foreach (NomaiWarpTransmitter transmitter in QSBWorldSync.GetUnityObjects<NomaiWarpTransmitter>()){
                     transmitter.CloseBlackHole();

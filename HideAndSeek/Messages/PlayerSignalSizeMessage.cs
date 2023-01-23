@@ -5,7 +5,7 @@ using QSB.Messaging;
 using QSB.Player;
 
 namespace HideAndSeek.Messages;
-
+//TODO :: FIX THIS, IT PROB DOESN'T WORK DUE TO SERIALIZATION ISSUES
 public class PlayerSignalSizeMessage : QSBMessage{
     HideAndSeekInfo info;
     float size;

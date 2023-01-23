@@ -1,27 +1,17 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using HideAndSeek.GameManagement;
 using HideAndSeek.GameManagement.PlayerManagement;
 using HideAndSeek.GameManagement.RoleSelection;
+using HideAndSeek.GameManagement.SharedSettings;
 using HideAndSeek.Menu;
 using HideAndSeek.Messages;
 using OWML.Common;
-using OWML.Common.Menus;
 using OWML.ModHelper;
-using OWML.ModHelper.Menus;
 using QSB;
-using QSB.Menus;
-using QSB.Messaging;
 using QSB.Player;
-using QSB.Player.TransformSync;
-using QSB.Utility;
 using QSB.WorldSync;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 namespace HideAndSeek
 {
@@ -35,11 +25,14 @@ namespace HideAndSeek
             
             PlayerManager.Init();
             GameManager.Init();
-
+            SharedSettings.Init();
+            
             LoadManager.OnCompleteSceneLoad += (scene, loadScene) => {
                 if (loadScene != OWScene.SolarSystem) return;
-                HideAndSeekMenu.SetupPauseButton();
-                HideAndSeekMenu.UpdateGUI();
+                Utils.ModHelper.Events.Unity.FireOnNextUpdate(() => {
+                    HideAndSeekMenu.SetupPauseButton();
+                    HideAndSeekMenu.UpdateGUI();
+                });
                 //This runs every loop IF we have started Hide and Seek
                 Utils.RunWhen(() => GameManager.state != GameState.Stopped, StartHideAndSeek);
             };
@@ -73,6 +66,15 @@ namespace HideAndSeek
         #region DEBUG
 
         private void Update(){
+            if (GetKey(Key.Quote)){
+                new SharedSettingsMessage(SharedSettings.settingsToShare);
+            }
+
+            if (GetKey(Key.Semicolon)){
+                HideAndSeekMenu.UpdateGUI();
+            }
+
+
             if (GetKeyDown(Key.M)){
                 new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Hiding);
             }

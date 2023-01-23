@@ -10,10 +10,10 @@
 
     "GameType": {
       "type": "selector",
-      "value": "Hide And Seek",
+      "value": "HIDE AND SEEK",
       "options": [
-        "Hide And Seek",
-        "Tag"
+        "HIDE AND SEEK",
+        "TAG"
       ]
     },
     "Allow Join While Game in Progress": false,

@@ -15,7 +15,7 @@ namespace HideAndSeek.GameManagement.PlayerManagement{
         public static Dictionary<PlayerInfo, HideAndSeekInfo> playerInfo = new(); //All HideAndSeekInfos have playerInfo
         public static Dictionary<PlayerInfo, DeathType> PlayerDeathTypes = new(); //This gets setup by the HideAndSeekInfo
 
-        public static HideAndSeekInfo LocalPlayer = PlayerManager.LocalPlayer;
+        public static HideAndSeekInfo LocalPlayer{get{return playerInfo[QSBPlayerManager.LocalPlayer];}}
 
         public static void Init(){
             QSBPlayerManager.OnAddPlayer += (PlayerInfo info) => {
@@ -25,6 +25,7 @@ namespace HideAndSeek.GameManagement.PlayerManagement{
             };
             
             QSBPlayerManager.OnRemovePlayer += RemovePlayer;
+
         }
 
         public static void RemovePlayer(PlayerInfo playerInfo){

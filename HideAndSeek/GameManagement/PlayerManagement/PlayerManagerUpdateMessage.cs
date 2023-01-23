@@ -5,7 +5,7 @@ using QSB.Messaging;
 using QSB.Player;
 
 namespace HideAndSeek.GameManagement.PlayerManagement;
-
+//TODO :: FIX THIS, IT PROB DOESN'T WORK DUE TO SERIALIZATION ISSUES
 public class PlayerManagerUpdateMessage : QSBMessage{
 
     private HideAndSeekInfo[] HideAndSeekInfos;

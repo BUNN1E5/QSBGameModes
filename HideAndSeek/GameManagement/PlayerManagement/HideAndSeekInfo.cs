@@ -36,7 +36,7 @@ namespace HideAndSeek{
                 return false;
             }
             Utils.WriteLine("Resetting Player", MessageType.Debug);
-            State = GameManagement.PlayerManagement.PlayerState.None;
+            State = GameManagement.PlayerManagement.PlayerState.Ready;
             return true;
         }
 
