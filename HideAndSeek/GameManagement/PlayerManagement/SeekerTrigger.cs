@@ -53,8 +53,8 @@ namespace HideAndSeek{
         {
             yield return new WaitForSeconds(delay);
             new LocationRespawnMessage(QSBPlayerManager.LocalPlayerId, SpawnLocation.TimberHearth).Send();
-            new RoleChangeMessage(QSBPlayerManager.LocalPlayerId, GameManagement.PlayerManagement.PlayerState.Seeking).Send();
-            new RoleChangeMessage(seekerInfo.PlayerId, GameManagement.PlayerManagement.PlayerState.Hiding).Send();
+            new RoleChangeMessage(QSBPlayerManager.LocalPlayerId, (uint)GameManagement.PlayerManagement.PlayerState.Seeking).Send();
+            new RoleChangeMessage(seekerInfo.PlayerId, (uint)GameManagement.PlayerManagement.PlayerState.Hiding).Send();
         }
 
     }

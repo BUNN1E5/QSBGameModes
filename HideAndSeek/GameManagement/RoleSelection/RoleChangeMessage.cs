@@ -2,6 +2,7 @@
 using Mirror;
 using QSB.Messaging;
 using QSB.Player;
+using PlayerState = HideAndSeek.GameManagement.PlayerManagement.PlayerState;
 
 namespace HideAndSeek.GameManagement.RoleSelection
 {
@@ -9,9 +10,9 @@ namespace HideAndSeek.GameManagement.RoleSelection
     internal class RoleChangeMessage : QSBMessage
 	{
 		private uint playerId;
-		PlayerManagement.PlayerState playerState;
+		uint playerState;
 
-		public RoleChangeMessage(uint playerId, PlayerManagement.PlayerState playerState)
+		public RoleChangeMessage(uint playerId, uint playerState)
 		{
 			this.playerId = playerId;
 			this.playerState = playerState;
@@ -34,7 +35,7 @@ namespace HideAndSeek.GameManagement.RoleSelection
 		public override void OnReceiveRemote(){
 			if (QSBPlayerManager.PlayerExists(playerId)){
 				var playerInfo = QSBPlayerManager.GetPlayer(playerId);
-				PlayerManager.SetPlayerState(playerInfo, playerState);
+				PlayerManager.SetPlayerState(playerInfo, (PlayerManagement.PlayerState)playerState);
 			}
 		}
 	}

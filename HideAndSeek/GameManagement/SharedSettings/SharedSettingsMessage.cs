@@ -45,7 +45,6 @@ public class SharedSettingsMessage : QSBMessage{
             ActivateAllReturnPlatforms = ActivateAllReturnPlatforms,
             AllowJoinWhileGameInProgress = AllowJoinWhileGameInProgress
         };
-        SharedSettings.LoadSettings();
         HideAndSeekMenu.UpdateGUI();
     }
     
