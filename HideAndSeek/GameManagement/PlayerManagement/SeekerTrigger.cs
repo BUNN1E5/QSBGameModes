@@ -29,7 +29,9 @@ namespace HideAndSeek{
             //Only kill the player if they are hiding
             if (PlayerManager.playerInfo[QSBPlayerManager.LocalPlayer].State != GameManagement.PlayerManagement.PlayerState.Hiding)
                 return;
-            
+
+            new RoleChangeMessage(QSBPlayerManager.LocalPlayerId, GameManagement.PlayerManagement.PlayerState.Seeking).Send();
+            /*
             if (hitObj.CompareTag("PlayerDetector"))
             {
                 Locator.GetPlayerAudioController().PlayOneShotInternal(AudioType.Death_Instant);
@@ -43,6 +45,7 @@ namespace HideAndSeek{
                 Locator.GetDeathManager().KillPlayer(DeathType.Impact);
                 Utils.WriteLine("DeathType not found for " + seekerInfo);
             }
+            */
         }
 
         private void OnDestroy(){
@@ -53,7 +56,6 @@ namespace HideAndSeek{
         {
             yield return new WaitForSeconds(delay);
             new LocationRespawnMessage(QSBPlayerManager.LocalPlayerId, SpawnLocation.TimberHearth).Send();
-            new RoleChangeMessage(QSBPlayerManager.LocalPlayerId, GameManagement.PlayerManagement.PlayerState.Seeking).Send();
             new RoleChangeMessage(seekerInfo.PlayerId, GameManagement.PlayerManagement.PlayerState.Hiding).Send();
         }
 
