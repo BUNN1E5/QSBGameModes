@@ -30,7 +30,7 @@ namespace HideAndSeek{
             if (PlayerManager.playerInfo[QSBPlayerManager.LocalPlayer].State != GameManagement.PlayerManagement.PlayerState.Hiding)
                 return;
 
-            new RoleChangeMessage(QSBPlayerManager.LocalPlayerId, GameManagement.PlayerManagement.PlayerState.Seeking).Send();
+            new RoleChangeMessage(QSBPlayerManager.LocalPlayer, GameManagement.PlayerManagement.PlayerState.Seeking).Send();
             /*
             if (hitObj.CompareTag("PlayerDetector"))
             {
@@ -56,7 +56,7 @@ namespace HideAndSeek{
         {
             yield return new WaitForSeconds(delay);
             new LocationRespawnMessage(QSBPlayerManager.LocalPlayerId, SpawnLocation.TimberHearth).Send();
-            new RoleChangeMessage(seekerInfo.PlayerId, GameManagement.PlayerManagement.PlayerState.Hiding).Send();
+            new RoleChangeMessage(seekerInfo, GameManagement.PlayerManagement.PlayerState.Hiding).Send();
         }
 
     }
