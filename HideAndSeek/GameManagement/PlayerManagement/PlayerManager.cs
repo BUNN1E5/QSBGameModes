@@ -49,6 +49,7 @@ namespace HideAndSeek.GameManagement.PlayerManagement{
         }
 
         public static void SetPlayerState(PlayerInfo playerInfo, PlayerState state){
+            Utils.WriteLine($"Chaging player {playerInfo.ToString()} state to {state.ToString()}");
             switch (state){
                 case PlayerState.Hiding:
                     hiders.Add(playerInfo);
