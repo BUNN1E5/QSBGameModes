@@ -10,12 +10,12 @@ namespace HideAndSeek.GameManagement{
             }
             public override void Serialize(NetworkWriter writer){
                 base.Serialize(writer);
-                writer.Write(state);
+                writer.WriteInt((int)state);
             }
 
             public override void Deserialize(NetworkReader reader){
                 base.Deserialize(reader);
-                state = reader.Read<GameState>();
+                state = (GameState)reader.ReadInt();
             }
 
             public override void OnReceiveLocal() => OnReceiveRemote();

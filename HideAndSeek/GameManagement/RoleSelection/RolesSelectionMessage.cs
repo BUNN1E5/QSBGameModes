@@ -22,36 +22,33 @@ namespace HideAndSeek.GameManagement.RoleSelection
 
 		public override void Serialize(NetworkWriter writer){
 			base.Serialize(writer);
-			writer.Write(seekers.ToArray());
-			writer.Write(hiders.ToArray());
-			writer.Write(spectators.ToArray());
+			writer.WriteArray(seekers.ToArray());
+			writer.WriteArray(hiders.ToArray());
+			writer.WriteArray(spectators.ToArray());
 		}
 
 		public override void Deserialize(NetworkReader reader){
 			base.Deserialize(reader);
-			seekers = reader.Read<uint[]>().ToList();
-			hiders = reader.Read<uint[]>().ToList();
-			spectators = reader.Read<uint[]>().ToList();
+			seekers = reader.ReadArray<uint>().ToList();
+			hiders = reader.ReadArray<uint>().ToList();
+			spectators = reader.ReadArray<uint>().ToList();
 		}
 		
 		public override void OnReceiveLocal() => OnReceiveRemote();
 		public override void OnReceiveRemote(){
 			foreach (uint seeker in seekers){
 				if (QSBPlayerManager.PlayerExists(seeker))
-					return;
-				new RoleChangeMessage(seeker, PlayerManagement.PlayerState.Seeking);
+					new RoleChangeMessage(seeker, PlayerManagement.PlayerState.Seeking).Send();
 			}
 
 			foreach (uint hider in hiders){
 				if (QSBPlayerManager.PlayerExists(hider))
-					return;
-				new RoleChangeMessage(hider, PlayerManagement.PlayerState.Hiding);
+					new RoleChangeMessage(hider, PlayerManagement.PlayerState.Seeking).Send();
 			}
 			
 			foreach (uint spectator in spectators){
 				if (QSBPlayerManager.PlayerExists(spectator))
-					return;
-				new RoleChangeMessage(spectator, PlayerManagement.PlayerState.Spectating);
+					new RoleChangeMessage(spectator, PlayerManagement.PlayerState.Seeking).Send();
 			}
 		}
 	}

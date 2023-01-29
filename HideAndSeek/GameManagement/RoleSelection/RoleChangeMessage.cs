@@ -17,26 +17,22 @@ namespace HideAndSeek.GameManagement.RoleSelection
 			this.playerState = playerState;
 		}
 
-		public override void Serialize(NetworkWriter writer)
-		{
+		public override void Serialize(NetworkWriter writer){
 			base.Serialize(writer);
-			writer.Write(playerId);
-			writer.Write(playerState);
+			writer.WriteUInt(playerId);
+			writer.WriteInt((int)playerState);
 		}
 
-		public override void Deserialize(NetworkReader reader)
-		{
+		public override void Deserialize(NetworkReader reader){
 			base.Deserialize(reader);
-			playerId = reader.Read<uint>();
-			playerState = reader.Read<PlayerManagement.PlayerState>();
+			playerId = reader.ReadUInt();
+			playerState = (PlayerManagement.PlayerState)reader.ReadInt();
 		}
 
 		public override void OnReceiveLocal() => OnReceiveRemote();
 
-		public override void OnReceiveRemote()
-        {
-			if (QSBPlayerManager.PlayerExists(playerId))
-			{
+		public override void OnReceiveRemote(){
+			if (QSBPlayerManager.PlayerExists(playerId)){
 				var playerInfo = QSBPlayerManager.GetPlayer(playerId);
 				PlayerManager.SetPlayerState(playerInfo, playerState);
 			}

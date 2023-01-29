@@ -84,7 +84,7 @@ namespace HideAndSeek.GameManagement{
                 
                 foreach (HideAndSeekInfo info in PlayerManager.playerInfo.Values){
                     if (info.State == PlayerManagement.PlayerState.None){
-                        new RoleChangeMessage(info.Info.PlayerId, PlayerManagement.PlayerState.Spectating);
+                        new RoleChangeMessage(info.Info.PlayerId, PlayerManagement.PlayerState.Spectating).Send();
                         spectators.Add(info.Info.PlayerId);
                         continue;
                     }

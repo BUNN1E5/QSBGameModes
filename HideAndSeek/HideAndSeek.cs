@@ -8,6 +8,7 @@ using HideAndSeek.Messages;
 using OWML.Common;
 using OWML.ModHelper;
 using QSB;
+using QSB.Messaging;
 using QSB.Player;
 using QSB.WorldSync;
 using UnityEngine;
@@ -46,7 +47,7 @@ namespace HideAndSeek
         }
 
         public static void JoinHideAndSeek(){
-            new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Ready);
+            new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Ready).Send();
         }
 
         //TODO :: CONFIRM THAT THIS WORKS
@@ -71,28 +72,34 @@ namespace HideAndSeek
             }
 
             if (GetKey(Key.Semicolon)){
+                ModHelper.Console.WriteLine("Update UI", MessageType.Debug);
                 HideAndSeekMenu.UpdateGUI();
             }
 
 
             if (GetKeyDown(Key.M)){
-                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Hiding);
+                ModHelper.Console.WriteLine("Changing role to Hiding", MessageType.Debug);
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Hiding).Send();
             }
             
             if (GetKeyDown(Key.Comma)){
-                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Seeking);
+                ModHelper.Console.WriteLine("Changing role to Seeking", MessageType.Debug);
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Seeking).Send();
             }
             
             if (GetKeyDown(Key.Period)){
-                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Spectating);
+                ModHelper.Console.WriteLine("Changing role to Spectating", MessageType.Debug);
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Spectating).Send();
             }
             
             if (GetKeyDown(Key.Slash)){
-                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Ready);
+                ModHelper.Console.WriteLine("Changing role to Ready", MessageType.Debug);
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Ready).Send();
             }
             
-            if (GetKeyDown(Key.Period)){
-                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.None);
+            if (GetKeyDown(Key.N)){
+                ModHelper.Console.WriteLine("Changing role to None", MessageType.Debug);
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.None).Send();
             }
             
         }
