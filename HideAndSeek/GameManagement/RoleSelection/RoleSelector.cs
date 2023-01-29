@@ -7,7 +7,7 @@ namespace HideAndSeek.GameManagement.RoleSelection
 {
     public class RoleSelector
     {
-        static HashSet<uint> lastSeletedSeekers;
+        static HashSet<uint> lastSeletedSeekers = new();
 
         public static void Reset()
         {
@@ -32,7 +32,7 @@ namespace HideAndSeek.GameManagement.RoleSelection
 
                 if(!tryToNotRepeatPreviousSeekers || //If we don't care about repeating, just add it
                     (tryToNotRepeatPreviousSeekers && //If we do care, then we check to see if playerInfo was a seeker
-                    (lastSeletedSeekers.Contains(playerId) || (players.Count - lastSeletedSeekers.Count - seekers.Count <= 0)))){
+                    (!lastSeletedSeekers.Contains(playerId) || (players.Count - lastSeletedSeekers.Count - seekers.Count <= 0)))){
                     //But in the situation where we don't have enough players (players.Count - lastSeekers.Count - seekers.Count <= 0) that weren't seekers, accept players that were:
                     //players.Count - lastSeekers.Count -> amount of non repeating seekers
                     //seekers.Count -> amount of current selected seekers

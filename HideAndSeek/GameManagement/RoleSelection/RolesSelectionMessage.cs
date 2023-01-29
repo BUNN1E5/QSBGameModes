@@ -45,13 +45,13 @@ namespace HideAndSeek.GameManagement.RoleSelection
 			foreach (uint hider in hiders){
 				if (QSBPlayerManager.PlayerExists(hider))
 					return;
-				new RoleChangeMessage(hider, PlayerManagement.PlayerState.Seeking);
+				new RoleChangeMessage(hider, PlayerManagement.PlayerState.Hiding);
 			}
 			
 			foreach (uint spectator in spectators){
 				if (QSBPlayerManager.PlayerExists(spectator))
 					return;
-				new RoleChangeMessage(spectator, PlayerManagement.PlayerState.Seeking);
+				new RoleChangeMessage(spectator, PlayerManagement.PlayerState.Spectating);
 			}
 		}
 	}
