@@ -29,11 +29,9 @@
   <ItemGroup>
     <Reference Include="Mirror">
       <HintPath>..\lib\Mirror.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="QSB">
       <HintPath>..\lib\QSB.dll</HintPath>
-      <Private>False</Private>
     </Reference>
   </ItemGroup>
 </Project>

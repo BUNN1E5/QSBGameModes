@@ -4,7 +4,6 @@ using HideAndSeek.GameManagement.PlayerManagement;
 using HideAndSeek.GameManagement.RoleSelection;
 using HideAndSeek.GameManagement.SharedSettings;
 using HideAndSeek.Menu;
-using HideAndSeek.Messages;
 using OWML.Common;
 using OWML.ModHelper;
 using QSB;
@@ -55,13 +54,10 @@ namespace HideAndSeek
         public override void Configure(IModConfig config){
             if (QSBCore.IsInMultiplayer){
                 if (QSBCore.IsHost){
-                    base.Configure(config);
                     SharedSettings.LoadSettings();
-                    new SharedSettingsMessage(SharedSettings.settingsToShare);
-                    return;
+                    new SharedSettingsMessage(SharedSettings.settingsToShare).Send();
                 }
             }
-            base.Configure(config);
         }
 
         #region DEBUG
@@ -100,8 +96,7 @@ namespace HideAndSeek
             if (GetKeyDown(Key.N)){
                 ModHelper.Console.WriteLine("Changing role to None", MessageType.Debug);
                 new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.None).Send();
-            }
-            
+            }            
         }
 
         private bool GetKeyDown(Key keyCode) {
