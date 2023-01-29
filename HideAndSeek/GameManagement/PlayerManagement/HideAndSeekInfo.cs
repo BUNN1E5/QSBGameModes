@@ -1,7 +1,9 @@
 using System;
 using HideAndSeek.GameManagement.PlayerManagement;
+using HideAndSeek.Messages;
 using OWML.Common;
 using OWML.Utils;
+using QSB.Messaging;
 using QSB.Player;
 using UnityEngine;
 
@@ -25,7 +27,7 @@ namespace HideAndSeek{
         }
 
         public virtual bool CleanUp(){
-            EnumUtils.Remove<DeathType>(this.Info);
+            EnumUtils.Remove<DeathType>(this.Info.Name);
             return false;
         }
 
@@ -52,7 +54,7 @@ namespace HideAndSeek{
             }
             Reset();
             State = GameManagement.PlayerManagement.PlayerState.Hiding;
-
+            //new LocationWarpMessage(Info.PlayerId, SpawnLocation.HourglassTwin_2).Send();
             return true;
         }
 
@@ -68,6 +70,7 @@ namespace HideAndSeek{
             }
             Reset();
             State = GameManagement.PlayerManagement.PlayerState.Seeking;
+            //new LocationWarpMessage(Info.PlayerId, SpawnLocation.TimberHearth).Send();
 
             return true;
         }
