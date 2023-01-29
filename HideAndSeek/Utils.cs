@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using OWML.Common;
+using QSB.Player;
 using UnityEngine;
 
 namespace HideAndSeek{
@@ -30,6 +32,5 @@ namespace HideAndSeek{
             yield return new WaitUntil(predicate);
             action();
         }
-
     }
 }

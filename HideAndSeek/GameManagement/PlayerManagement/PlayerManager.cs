@@ -114,7 +114,7 @@ namespace HideAndSeek.GameManagement.PlayerManagement{
             info.CleanUp();
         }
 
-        public static void SetPlayerSignalSize(HideAndSeekInfo info, float size){
+        public static void SetPlayerSignalSize(PlayerInfo info, float size){
             //PlayerTransformSync.LocalInstance?.ReferenceSector?.AttachedObject.GetRootSector();
             //TODO :: WHEN ADDED TO QSB
         }
