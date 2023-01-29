@@ -46,8 +46,12 @@ namespace HideAndSeek{
             }
             
             ShipManager.Instance.CockpitController._interactVolume.DisableInteraction();
-            
-            Locator.GetPlayerSuit().SuitUp(false, true, true);
+
+            var playerSuit = Locator.GetPlayerSuit();
+            if (!playerSuit.IsWearingSuit()){
+                playerSuit.SuitUp(false, true, true);
+            }
+
             NotificationManager.SharedInstance.UnpinNotification(youAreASeekerNotification);
             NotificationManager.SharedInstance.UnpinNotification(youAreASpectatorNotification);
             NotificationManager.SharedInstance.PostNotification(youAreAHiderNotification, true);
@@ -90,7 +94,11 @@ namespace HideAndSeek{
 
             ShipManager.Instance.CockpitController._interactVolume.EnableInteraction();
 
-            Locator.GetPlayerSuit().SuitUp(false, true, true);
+            var playerSuit = Locator.GetPlayerSuit();
+            if (!playerSuit.IsWearingSuit()){
+                playerSuit.SuitUp(false, true, true);
+            }
+
             NotificationManager.SharedInstance.UnpinNotification(youAreAHiderNotification);
             NotificationManager.SharedInstance.UnpinNotification(youAreASpectatorNotification);
             NotificationManager.SharedInstance.PostNotification(youAreASeekerNotification, true);

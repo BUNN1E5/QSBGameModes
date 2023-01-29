@@ -2,7 +2,6 @@
 using Mirror;
 using QSB.Messaging;
 using QSB.Player;
-using PlayerState = HideAndSeek.GameManagement.PlayerManagement.PlayerState;
 
 namespace HideAndSeek.GameManagement.RoleSelection
 {
@@ -10,9 +9,15 @@ namespace HideAndSeek.GameManagement.RoleSelection
     internal class RoleChangeMessage : QSBMessage
 	{
 		private uint playerId;
-		uint playerState;
+		PlayerManagement.PlayerState playerState;
 
-		public RoleChangeMessage(uint playerId, uint playerState)
+		public RoleChangeMessage(PlayerInfo player, PlayerManagement.PlayerState playerState)
+		{
+			this.playerId = player.PlayerId;
+			this.playerState = playerState;
+		}
+
+		public RoleChangeMessage(uint playerId, PlayerManagement.PlayerState playerState)
 		{
 			this.playerId = playerId;
 			this.playerState = playerState;
