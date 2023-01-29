@@ -4,10 +4,10 @@ using HideAndSeek.GameManagement.PlayerManagement;
 using HideAndSeek.GameManagement.RoleSelection;
 using HideAndSeek.GameManagement.SharedSettings;
 using HideAndSeek.Menu;
-using HideAndSeek.Messages;
 using OWML.Common;
 using OWML.ModHelper;
 using QSB;
+using QSB.Messaging;
 using QSB.Player;
 using QSB.WorldSync;
 using UnityEngine;
@@ -46,7 +46,7 @@ namespace HideAndSeek
         }
 
         public static void JoinHideAndSeek(){
-            new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Ready);
+            new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, (uint)GameManagement.PlayerManagement.PlayerState.Ready).Send();
         }
 
         //TODO :: CONFIRM THAT THIS WORKS
@@ -54,45 +54,34 @@ namespace HideAndSeek
         public override void Configure(IModConfig config){
             if (QSBCore.IsInMultiplayer){
                 if (QSBCore.IsHost){
-                    base.Configure(config);
                     SharedSettings.LoadSettings();
-                    new SharedSettingsMessage(SharedSettings.settingsToShare);
-                    return;
+                    new SharedSettingsMessage(SharedSettings.settingsToShare).Send();
                 }
             }
-            base.Configure(config);
         }
 
         #region DEBUG
 
         private void Update(){
-            if (GetKey(Key.Quote)){
-                new SharedSettingsMessage(SharedSettings.settingsToShare);
-            }
-
-            if (GetKey(Key.Semicolon)){
-                HideAndSeekMenu.UpdateGUI();
-            }
-
 
             if (GetKeyDown(Key.M)){
-                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Hiding);
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, (uint)GameManagement.PlayerManagement.PlayerState.Hiding).Send();
             }
             
             if (GetKeyDown(Key.Comma)){
-                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Seeking);
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, (uint)GameManagement.PlayerManagement.PlayerState.Seeking).Send();
             }
             
             if (GetKeyDown(Key.Period)){
-                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Spectating);
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, (uint)GameManagement.PlayerManagement.PlayerState.Spectating).Send();
             }
             
             if (GetKeyDown(Key.Slash)){
-                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Ready);
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, (uint)GameManagement.PlayerManagement.PlayerState.Ready).Send();
             }
             
             if (GetKeyDown(Key.Period)){
-                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.None);
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, (uint)GameManagement.PlayerManagement.PlayerState.None).Send();
             }
             
         }

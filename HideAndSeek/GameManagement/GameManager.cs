@@ -21,7 +21,7 @@ namespace HideAndSeek.GameManagement{
             get{ return _state; }
             set{
                 if (QSBCore.IsHost){ //So that when the host changes the game state a message gets sent
-                    new GameStateMessage(value);
+                    new GameStateMessage(value).Send();
                     _state = value; //we will also technically be set from the message
                 }
                 //We dont want the non hosts from changing the gamestate at any point
@@ -84,14 +84,14 @@ namespace HideAndSeek.GameManagement{
                 
                 foreach (HideAndSeekInfo info in PlayerManager.playerInfo.Values){
                     if (info.State == PlayerManagement.PlayerState.None){
-                        new RoleChangeMessage(info.Info.PlayerId, PlayerManagement.PlayerState.Spectating);
+                        new RoleChangeMessage(info.Info.PlayerId, (uint)PlayerManagement.PlayerState.Spectating).Send();
                         spectators.Add(info.Info.PlayerId);
                         continue;
                     }
                 
                     if (info.State == PlayerManagement.PlayerState.Spectating){
                         spectators.Add(info.Info.PlayerId);
-                        //new RoleChangeMessage(info.Info.PlayerId, PlayerManagement.PlayerState.Spectating);
+                        //new RoleChangeMessage(info.Info.PlayerId, PlayerManagement.PlayerState.Spectating).Send();
                         continue;
                     }
                 
