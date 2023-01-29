@@ -5,31 +5,48 @@ using QSB.Messaging;
 using QSB.Player;
 
 namespace HideAndSeek.GameManagement.PlayerManagement;
-//TODO :: FIX THIS, IT PROB DOESN'T WORK DUE TO SERIALIZATION ISSUES
 public class PlayerManagerUpdateMessage : QSBMessage{
 
-    private HideAndSeekInfo[] HideAndSeekInfos;
+    private uint[] playerIds;
+    private PlayerState[] playerStates;
 
-    public PlayerManagerUpdateMessage(HideAndSeekInfo[] HideAndSeekInfos){
-        this.HideAndSeekInfos = HideAndSeekInfos;
+    public PlayerManagerUpdateMessage(params HideAndSeekInfo[] HideAndSeekInfos){
+        playerIds = new uint[HideAndSeekInfos.Length];
+        playerStates = new PlayerState[HideAndSeekInfos.Length];
+        for (int i = 0; i < HideAndSeekInfos.Length; i++){
+            playerIds[i] = HideAndSeekInfos[i].Info.PlayerId;
+            playerStates[i] = HideAndSeekInfos[i].State;
+        }
     }
 
     public override void Serialize(NetworkWriter writer){
         base.Serialize(writer);
-        writer.Write(HideAndSeekInfos);
+        writer.WriteInt(playerIds.Length);
+        for (int i = 0; i < playerIds.Length; i++){
+            writer.WriteUInt(playerIds[i]);
+            writer.WriteInt((int)playerStates[i]);
+        }
     }
 
     public override void Deserialize(NetworkReader reader){
         base.Deserialize(reader);
-        this.HideAndSeekInfos = reader.Read<HideAndSeekInfo[]>();
+        int lengh = reader.ReadInt();
+        playerIds = new uint[lengh];
+        playerStates = new PlayerState[lengh];
+        for (int i = 0; i < playerIds.Length; i++){
+            playerIds[i] = reader.ReadUInt();
+            playerStates[i] = (PlayerState)reader.ReadInt();
+        }
     }
 
     public override void OnReceiveLocal() => OnReceiveRemote();
 
     public override void OnReceiveRemote(){
-        foreach (HideAndSeekInfo info in HideAndSeekInfos){
-            PlayerManager.playerInfo[info.Info] = info;
-            PlayerManager.SetupPlayer(info.Info);
+        for (int i = 0; i < playerIds.Length; i++) {
+            PlayerInfo info = QSBPlayerManager.GetPlayer(playerIds[i]);
+            HideAndSeekInfo hideAndSeekInfo = new() { Info = info, State = playerStates[i] };
+            PlayerManager.playerInfo[info] = hideAndSeekInfo;
+            PlayerManager.SetupPlayer(info);
         }
     }
 }
