@@ -8,6 +8,12 @@ namespace HideAndSeek{
     {
         public SeekerTrigger Trigger;
         public AudioSignal Signal;
+        
+        const string RemotePlayerMeshObject = "REMOTE_Traveller_HEA_Player_v2";
+        public GameObject SeekerVisual;
+        public bool UseSeekerVisual = true;
+        public static Material SeekerMaterial;
+        
         public override bool Reset() {
             if (!base.Reset()) //If the base func snagged out
                 return false;
@@ -15,6 +21,7 @@ namespace HideAndSeek{
             Info.HudMarker.enabled = true;
             GameObject.Destroy(Trigger);
             GameObject.Destroy(Signal);
+            SeekerVisual.SetActive(false);
             return true;
         }
 
@@ -27,11 +34,30 @@ namespace HideAndSeek{
                 
             Utils.WriteLine("Add the known signal for the local player", MessageType.Success);
             Signal._name = SignalName.RadioTower; //TODO :: CHANGE THIS NAME (Without losing prox chat support)
-            Signal._frequency = SignalFrequency.HideAndSeek; 
+            Signal._frequency = SignalFrequency.HideAndSeek;
+            
+            if(SeekerMaterial == null){
+                SeekerMaterial = GameObject.FindObjectOfType<TimelineObliterationEffect>().gameObject.GetComponent<MeshRenderer>().material;// new Material(Shader.Find("Outer Wilds/Effects/Reality Cracks"));
+            }
+            var remotePlayerSuitVisual = this.Info.Body.transform.Find(RemotePlayerMeshObject).GetChild(1);
+            SeekerVisual = GameObject.Instantiate(remotePlayerSuitVisual.gameObject, remotePlayerSuitVisual.position,
+                remotePlayerSuitVisual.rotation, remotePlayerSuitVisual.parent);
+            SeekerVisual.transform.name = "Seeker_visual_geo";
+            SeekerVisual.SetActive(true);
+            var seekerVisualSkinnedRenderers = SeekerVisual.GetComponentsInChildren<SkinnedMeshRenderer>();
+            foreach(var renderer in seekerVisualSkinnedRenderers){
+                renderer.material = SeekerMaterial;
+            }
+            SeekerVisual.SetActive(false);
             
             return true;
         }
-
+        private void SetSeekerVisual(bool enable){
+            if (!UseSeekerVisual){
+                SeekerVisual.SetActive(false);
+            }
+            SeekerVisual.SetActive(enable);
+        }
         public override bool SetupHider(){
             if (!base.SetupHider()) //If the base func snagged out
                 return false;
@@ -41,7 +67,9 @@ namespace HideAndSeek{
             Utils.WriteLine("Removing the Markers for " + Info, MessageType.Success);
             this.Info.MapMarker.enabled = false;
             this.Info.HudMarker.enabled = false;
-            
+
+            SetSeekerVisual(false);
+
             return true;
         }
 
@@ -65,6 +93,9 @@ namespace HideAndSeek{
             bool state = PlayerManager.LocalPlayer.State == State;
             Info.HudMarker.enabled = state;
             Info.MapMarker.enabled = state;
+
+            SetSeekerVisual(true);
+
             return true;
         }
 
@@ -78,7 +109,8 @@ namespace HideAndSeek{
             Info.HudMarker.enabled = state;
             Info.MapMarker.enabled = state;
 
-            
+            SetSeekerVisual(false);
+
             return true;
         }
     }
