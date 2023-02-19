@@ -83,18 +83,13 @@ namespace HideAndSeek.GameManagement{
                 List<uint> spectators = new();
                 
                 foreach (HideAndSeekInfo info in PlayerManager.playerInfo.Values){
-                    if (info.State == PlayerManagement.PlayerState.None){
+                    if (info.State == PlayerManagement.PlayerState.None ||
+                        info.State == PlayerManagement.PlayerState.Spectating){
                         new RoleChangeMessage(info.Info, PlayerManagement.PlayerState.Spectating).Send();
                         spectators.Add(info.Info.PlayerId);
                         continue;
                     }
-                
-                    if (info.State == PlayerManagement.PlayerState.Spectating){
-                        spectators.Add(info.Info.PlayerId);
-                        //new RoleChangeMessage(info.Info.PlayerId, PlayerManagement.PlayerState.Spectating).Send();
-                        continue;
-                    }
-                
+
                     players.Add(info);
                     hiders.Add(info.Info.PlayerId);
                 }
