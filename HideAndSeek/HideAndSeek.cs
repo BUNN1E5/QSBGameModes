@@ -23,6 +23,7 @@ namespace HideAndSeek
             HarmonyLib.Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
             Utils.WriteLine($"{nameof(HideAndSeek)} is loaded!", MessageType.Success);
             
+            AssetBundlesLoader.LoadBundles(ModHelper);
             PlayerManager.Init();
             GameManager.Init();
             SharedSettings.Init();
