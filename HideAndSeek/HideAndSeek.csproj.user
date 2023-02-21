@@ -1,8 +1,0 @@
-﻿<Project>
-  <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
-    <OutputPath>$(AppData)/OuterWildsModManager/OWML/Mods/BUNN1E5.HideAndSeek</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(OS)' == 'Unix'">
-    <OutputPath>$(HOME)/.steam/steam/steamapps/compatdata/753640/pfx/drive_c/users/steamuser/AppData/Roaming/OuterWildsModManager/OWML/Mods/BUNN1E5.HideAndSeek</OutputPath>
-  </PropertyGroup>
-</Project>
