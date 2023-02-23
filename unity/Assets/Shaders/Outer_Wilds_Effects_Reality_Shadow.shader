@@ -1,5 +1,4 @@
-﻿//From https://docs.unity3d.com/Manual/SL-GrabPass.html
-Shader "Custom/ColorInversion" {
+Shader "Outer Wilds/Effects/Reality Shadow" {
 	Properties {
 	}
 	SubShader {
