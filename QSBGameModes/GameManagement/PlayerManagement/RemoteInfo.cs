@@ -11,7 +11,6 @@ namespace QSBGameModes{
         
         const string RemotePlayerMeshObject = "REMOTE_Traveller_HEA_Player_v2";
         public GameObject SeekerVisual;
-        public static Material SeekerMaterial;
         
         public override bool Reset() {
             if (!base.Reset()) //If the base func snagged out
@@ -41,9 +40,6 @@ namespace QSBGameModes{
             Signal._name = SignalName.RadioTower; //TODO :: CHANGE THIS NAME (Without losing prox chat support)
             Signal._frequency = SignalFrequency.HideAndSeek;
 
-            if(SeekerMaterial == null){
-                SeekerMaterial = GameObject.FindObjectOfType<TimelineObliterationEffect>().gameObject.GetComponent<MeshRenderer>().material;// new Material(Shader.Find("Outer Wilds/Effects/Reality Cracks"));
-            }
             var remotePlayerSuitVisual = this.Info.Body.transform.Find(RemotePlayerMeshObject).GetChild(1);
             SeekerVisual = GameObject.Instantiate(remotePlayerSuitVisual.gameObject, remotePlayerSuitVisual.position,
                 remotePlayerSuitVisual.rotation, remotePlayerSuitVisual.parent);
@@ -51,7 +47,7 @@ namespace QSBGameModes{
             SeekerVisual.SetActive(true);
             var seekerVisualSkinnedRenderers = SeekerVisual.GetComponentsInChildren<SkinnedMeshRenderer>();
             foreach(var renderer in seekerVisualSkinnedRenderers){
-                renderer.material = SeekerMaterial;
+                renderer.material = AssetBundlesLoader.SeekerMaterial;
             }
             SeekerVisual.SetActive(false);
             
