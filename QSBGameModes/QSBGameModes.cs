@@ -31,8 +31,8 @@ namespace QSBGameModes
             LoadManager.OnCompleteSceneLoad += (scene, loadScene) => {
                 if (loadScene != OWScene.SolarSystem) return;
                 Utils.ModHelper.Events.Unity.FireOnNextUpdate(() => {
-                    HideAndSeekMenu.SetupPauseButton();
-                    HideAndSeekMenu.UpdateGUI();
+                    GameModeMenu.SetupPauseButton();
+                    GameModeMenu.UpdateGUI();
                 });
                 //This runs every loop IF we have started Hide and Seek
                 Utils.RunWhen(() => GameManager.state != GameState.Stopped, StartHideAndSeek);
@@ -69,7 +69,7 @@ namespace QSBGameModes
 
             if (GetKey(Key.Semicolon)){
                 ModHelper.Console.WriteLine("Update UI", MessageType.Debug);
-                HideAndSeekMenu.UpdateGUI();
+                GameModeMenu.UpdateGUI();
             }
 
 

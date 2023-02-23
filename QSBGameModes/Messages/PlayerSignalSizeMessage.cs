@@ -9,7 +9,7 @@ public class PlayerSignalSizeMessage : QSBMessage{
     uint playerId;
     float size;
     
-    public PlayerSignalSizeMessage(HideAndSeekInfo info, float size){
+    public PlayerSignalSizeMessage(GameModeInfo info, float size){
         playerId = info.Info.PlayerId;
         this.size = size;
     }

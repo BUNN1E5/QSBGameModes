@@ -14,7 +14,7 @@ namespace QSBGameModes.GameManagement.RoleSelection
             lastSeletedSeekers.Clear();
         }
 
-        public static HashSet<uint> SelectRoles(HashSet<HideAndSeekInfo> players, int numberOfSeekers, int seed = -1, bool tryToNotRepeatPreviousSeekers = false) 
+        public static HashSet<uint> SelectRoles(HashSet<GameModeInfo> players, int numberOfSeekers, int seed = -1, bool tryToNotRepeatPreviousSeekers = false) 
         {
             System.Random rnd;
             if (seed > 0) {

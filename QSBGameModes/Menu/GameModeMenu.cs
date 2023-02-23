@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace QSBGameModes.Menu;
 
-public static class HideAndSeekMenu{
+public static class GameModeMenu{
     public static Button menuButton;
     public static Text menuText;
 

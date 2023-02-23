@@ -9,6 +9,7 @@ using QSB.Messaging;
 using QSB.Player;
 using QSB.SaveSync.Messages;
 using QSB.WorldSync;
+using QSBGameModes.GameManagement.GameTypes;
 using QSBGameModes.GameManagement.PlayerManagement;
 using QSBGameModes.GameManagement.RoleSelection;
 using UnityEngine.UI;
@@ -16,6 +17,8 @@ using UnityEngine.UI;
 namespace QSBGameModes.GameManagement{
     public static partial class GameManager{
 
+        public static GameBase gameMode;
+        
         private static GameState _state = GameState.Stopped;
         public static GameState state{
             get{ return _state; }
@@ -68,6 +71,8 @@ namespace QSBGameModes.GameManagement{
                     transmitter._targetReceiver._returnGlowFadeController.FadeTo(0.5f, 5f);
                 }
             }
+            
+            gameMode.OnStarting();
         }
         
         public static void SelectRoles(){
@@ -78,11 +83,11 @@ namespace QSBGameModes.GameManagement{
 
             Utils.RunWhen(() => QSBPlayerManager.PlayerList.TrueForAll(playerInfo => playerInfo.Body != null), () => {
                 Utils.WriteLine("Choosing the Roles", MessageType.Success);
-                HashSet<HideAndSeekInfo> players = new();
+                HashSet<GameModeInfo> players = new();
                 HashSet<uint> hiders = new();
                 List<uint> spectators = new();
                 
-                foreach (HideAndSeekInfo info in PlayerManager.playerInfo.Values){
+                foreach (GameModeInfo info in PlayerManager.playerInfo.Values){
                     if (info.State == PlayerManagement.PlayerState.None ||
                         info.State == PlayerManagement.PlayerState.Spectating){
                         new RoleChangeMessage(info.Info, PlayerManagement.PlayerState.Spectating).Send();
@@ -98,10 +103,6 @@ namespace QSBGameModes.GameManagement{
                 hiders.ExceptWith(seekers);
                 new RolesSelectionMessage(seekers.ToArray(), hiders.ToArray(), spectators.ToArray()).Send();
             });
-        }
-
-        public static void SeekersReleased(){
-            GameManager.state = GameState.InProgress;
         }
     }
 

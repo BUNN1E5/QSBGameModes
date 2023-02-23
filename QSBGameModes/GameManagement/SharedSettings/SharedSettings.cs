@@ -16,7 +16,7 @@ namespace QSBGameModes.GameManagement.SharedSettings{
     public static class SharedSettings{
 
         public static SettingsPayload settingsToShare = new(){
-            GameType = "HIDE AND SEEK",
+            GameType = "INFECTION",
             Disable6thLocation = true,
             ActivateAllReturnPlatforms = true,
             AllowJoinWhileGameInProgress = false

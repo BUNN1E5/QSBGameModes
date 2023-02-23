@@ -4,14 +4,13 @@ using QSBGameModes.GameManagement.PlayerManagement;
 using UnityEngine;
 
 namespace QSBGameModes{
-    public class RemoteInfo : HideAndSeekInfo
+    public class RemoteInfo : GameModeInfo
     {
         public SeekerTrigger Trigger;
         public AudioSignal Signal;
         
         const string RemotePlayerMeshObject = "REMOTE_Traveller_HEA_Player_v2";
         public GameObject SeekerVisual;
-        public bool UseSeekerVisual = true;
         public static Material SeekerMaterial;
         
         public override bool Reset() {
@@ -19,9 +18,15 @@ namespace QSBGameModes{
                 return false;
             Info.MapMarker.enabled = true;
             Info.HudMarker.enabled = true;
+            SeekerVisual.SetActive(false);
+            return true;
+        }
+
+        public override bool CleanUp(){
+            if (!base.CleanUp()) //If the base func snagged out
+                return false;
             GameObject.Destroy(Trigger);
             GameObject.Destroy(Signal);
-            SeekerVisual.SetActive(false);
             return true;
         }
 
@@ -35,7 +40,7 @@ namespace QSBGameModes{
             Utils.WriteLine("Add the known signal for the local player", MessageType.Success);
             Signal._name = SignalName.RadioTower; //TODO :: CHANGE THIS NAME (Without losing prox chat support)
             Signal._frequency = SignalFrequency.HideAndSeek;
-            
+
             if(SeekerMaterial == null){
                 SeekerMaterial = GameObject.FindObjectOfType<TimelineObliterationEffect>().gameObject.GetComponent<MeshRenderer>().material;// new Material(Shader.Find("Outer Wilds/Effects/Reality Cracks"));
             }
@@ -52,12 +57,14 @@ namespace QSBGameModes{
             
             return true;
         }
+        
         private void SetSeekerVisual(bool enable){
-            if (!UseSeekerVisual){
+            if (!Utils.ModHelper.Config.GetSettingsValue<bool>("Seeker Visual Effect")){
                 SeekerVisual.SetActive(false);
             }
             SeekerVisual.SetActive(enable);
         }
+        
         public override bool SetupHider(){
             if (!base.SetupHider()) //If the base func snagged out
                 return false;

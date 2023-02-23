@@ -22,6 +22,7 @@ namespace QSBGameModes.GameManagement{
 
             public override void OnReceiveRemote(){
                 _state = state;
+                GameManager.gameMode.OnStateChange(state);
             }
         }
     }

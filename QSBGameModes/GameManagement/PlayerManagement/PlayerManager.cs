@@ -12,10 +12,10 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
         public static HashSet<PlayerInfo> seekers = new();
         public static HashSet<PlayerInfo> spectators = new();
 
-        public static Dictionary<PlayerInfo, HideAndSeekInfo> playerInfo = new(); //All HideAndSeekInfos have playerInfo
+        public static Dictionary<PlayerInfo, GameModeInfo> playerInfo = new(); //All HideAndSeekInfos have playerInfo
         public static Dictionary<PlayerInfo, DeathType> PlayerDeathTypes = new(); //This gets setup by the HideAndSeekInfo
 
-        public static HideAndSeekInfo LocalPlayer{get{return playerInfo[QSBPlayerManager.LocalPlayer];}}
+        public static GameModeInfo LocalPlayer{get{return playerInfo[QSBPlayerManager.LocalPlayer];}}
 
         public static void Init(){
             QSBPlayerManager.OnAddPlayer += (PlayerInfo info) => {
@@ -83,7 +83,7 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
         public static void SetupPlayer(PlayerInfo playerInfo){
             QSBGameModes.instance.ModHelper.Events.Unity.RunWhen(() => playerInfo.Body != null, () => {
                 Utils.WriteLine("Setting up " + playerInfo.Name + ": ", MessageType.Debug);
-                HideAndSeekInfo info = playerInfo.IsLocalPlayer ? new LocalInfo() : new RemoteInfo();
+                GameModeInfo info = playerInfo.IsLocalPlayer ? new LocalInfo() : new RemoteInfo();
                 info.SetupInfo(playerInfo);
                 
                 if (!PlayerManager.playerInfo.ContainsKey(playerInfo)){
@@ -95,23 +95,23 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
         }
 
         
-        public static void SetupHider(HideAndSeekInfo info){
+        public static void SetupHider(GameModeInfo info){
             info.SetupHider();
         }
         
-        public static void SetupSeeker(HideAndSeekInfo info){
+        public static void SetupSeeker(GameModeInfo info){
             info.SetupSeeker();
         }
         
-        public static void SetupSpectator(HideAndSeekInfo info){
+        public static void SetupSpectator(GameModeInfo info){
             info.SetupSpectator();
         }
 
-        public static void Reset(HideAndSeekInfo info){
+        public static void Reset(GameModeInfo info){
             info.Reset();
         }
 
-        public static void CleanUpPlayer(HideAndSeekInfo info){
+        public static void CleanUpPlayer(GameModeInfo info){
             info.CleanUp();
         }
 

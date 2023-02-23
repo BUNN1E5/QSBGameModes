@@ -1,14 +1,11 @@
-using System;
-using QSBGameModes.Messages;
 using OWML.Common;
 using OWML.Utils;
-using QSB.Messaging;
 using QSB.Player;
 using QSBGameModes.GameManagement.PlayerManagement;
 using UnityEngine;
 
 namespace QSBGameModes{
-    public class HideAndSeekInfo{
+    public class GameModeInfo{
         public PlayerInfo Info;
         public GameManagement.PlayerManagement.PlayerState State;
         private Coroutine waitCoroutine;

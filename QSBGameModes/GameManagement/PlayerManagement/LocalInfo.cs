@@ -6,7 +6,7 @@ using QSBGameModes.GameManagement.PlayerManagement;
 using QSBGameModes.Patches;
 
 namespace QSBGameModes{
-    public class LocalInfo : HideAndSeekInfo{
+    public class LocalInfo : GameModeInfo{
 
         NotificationData youAreAHiderNotification = new(NotificationTarget.All, "You are a HIDER");
         NotificationData youAreASeekerNotification = new(NotificationTarget.All, "You are a SEEKER");

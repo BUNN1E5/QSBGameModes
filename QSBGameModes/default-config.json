@@ -2,6 +2,7 @@
   "enabled": true,
   "settings": {
     "SpectateOnJoin": false,
+    "Seeker Visual Effect": true,
     
     "Host Settings": {
       "type": "separator",

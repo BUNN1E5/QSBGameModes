@@ -45,7 +45,8 @@ public class SharedSettingsMessage : QSBMessage{
             ActivateAllReturnPlatforms = ActivateAllReturnPlatforms,
             AllowJoinWhileGameInProgress = AllowJoinWhileGameInProgress
         };
-        HideAndSeekMenu.UpdateGUI();
+        Utils.WriteLine(SharedSettings.settingsToShare.ToString());
+        GameModeMenu.UpdateGUI();
     }
     
     public override void OnReceiveLocal() => OnReceiveRemote();

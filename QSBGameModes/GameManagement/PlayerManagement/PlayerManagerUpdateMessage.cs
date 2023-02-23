@@ -10,12 +10,12 @@ public class PlayerManagerUpdateMessage : QSBMessage{
     private uint[] playerIds;
     private PlayerState[] playerStates;
 
-    public PlayerManagerUpdateMessage(params HideAndSeekInfo[] HideAndSeekInfos){
-        playerIds = new uint[HideAndSeekInfos.Length];
-        playerStates = new PlayerState[HideAndSeekInfos.Length];
-        for (int i = 0; i < HideAndSeekInfos.Length; i++){
-            playerIds[i] = HideAndSeekInfos[i].Info.PlayerId;
-            playerStates[i] = HideAndSeekInfos[i].State;
+    public PlayerManagerUpdateMessage(params GameModeInfo[] GameModeInfos){
+        playerIds = new uint[GameModeInfos.Length];
+        playerStates = new PlayerState[GameModeInfos.Length];
+        for (int i = 0; i < GameModeInfos.Length; i++){
+            playerIds[i] = GameModeInfos[i].Info.PlayerId;
+            playerStates[i] = GameModeInfos[i].State;
         }
     }
 
@@ -44,8 +44,8 @@ public class PlayerManagerUpdateMessage : QSBMessage{
     public override void OnReceiveRemote(){
         for (int i = 0; i < playerIds.Length; i++) {
             PlayerInfo info = QSBPlayerManager.GetPlayer(playerIds[i]);
-            HideAndSeekInfo hideAndSeekInfo = new() { Info = info, State = playerStates[i] };
-            PlayerManager.playerInfo[info] = hideAndSeekInfo;
+            GameModeInfo gameModeInfo = new() { Info = info, State = playerStates[i] };
+            PlayerManager.playerInfo[info] = gameModeInfo;
             PlayerManager.SetupPlayer(info);
         }
     }
