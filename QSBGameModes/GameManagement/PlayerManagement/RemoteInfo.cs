@@ -27,7 +27,7 @@ namespace QSBGameModes{
                 return false;
             GameObject.Destroy(Trigger);
             GameObject.Destroy(Signal);
-            return true;
+            return false;
         }
 
         public override bool SetupInfo(PlayerInfo playerInfo) {
