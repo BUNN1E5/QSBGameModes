@@ -1,4 +1,6 @@
-﻿namespace QSBGameModes.GameManagement.GameTypes;
+﻿using QSB.Player;
+
+namespace QSBGameModes.GameManagement.GameTypes;
 
 public class GameBase{
 

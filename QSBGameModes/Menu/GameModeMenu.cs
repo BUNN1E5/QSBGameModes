@@ -52,7 +52,7 @@ public static class GameModeMenu{
                 }
             }
             else{
-                menuText.text = "READY UP FOR ";// + SharedSettings.settingsToShare.GameType;
+                menuText.text = "READY UP FOR " + SharedSettings.settingsToShare.GameType;// + SharedSettings.settingsToShare.GameType;
             }
         }
     }
