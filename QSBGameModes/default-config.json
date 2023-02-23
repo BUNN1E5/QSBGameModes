@@ -1,0 +1,26 @@
+{
+  "enabled": true,
+  "settings": {
+    "SpectateOnJoin": false,
+    "Seeker Visual Effect": true,
+    
+    "Host Settings": {
+      "type": "separator",
+      "tooltip" : "The host decides these settings"
+    },
+
+    "GameType": {
+      "type": "selector",
+      "value": "HIDE AND SEEK",
+      "options": [
+        "HIDE AND SEEK",
+        "TAG"
+      ]
+    },
+    "Starting Seekers": 1,
+    "Allow Join While Game in Progress": false,
+    "Disable 6th Location": true,
+    "Activate All Return Platforms": true
+  }
+
+}
