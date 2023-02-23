@@ -22,10 +22,14 @@ public class GameBase{
         }
     }
 
+    public virtual void Init(){ }
+
     public virtual void OnCatch(){}
     public virtual void OnStarting(){}
     public virtual void OnInProgress(){}
     public virtual void OnEnding(){}
     public virtual void OnStopped(){}
     public virtual void OnWaiting(){}
+
+    public virtual void OnJoin(){}
 }

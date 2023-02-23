@@ -110,7 +110,10 @@ namespace QSBGameModes.GameManagement{
     //  Starting, Ending, or Waiting
     
     //If game state is InProgress and Setting is false let player join as
-    //spectator
+    // spectator
+    //if game state is InProgress and setting is true let player join as
+    // spectator
+    // Seeker
     public enum GameState{
         Starting,
         InProgress,
