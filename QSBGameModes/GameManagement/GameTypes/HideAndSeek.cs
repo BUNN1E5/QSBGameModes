@@ -24,7 +24,6 @@ public class HideAndSeek : GameBase {
         if (SharedSettings.settingsToShare.KillHidersOnCatch){
             Locator.GetPlayerAudioController().PlayOneShotInternal(AudioType.Death_Instant);
             Utils.StartCoroutine(AutoRespawnWithDelay(5f));
-            //TODO :: DECIDE ON IF WE WANT TO KILL THE PLAYER OR NOT
             if (PlayerManager.PlayerDeathTypes.ContainsKey(seekerPlayer.Info)){
                 Locator.GetDeathManager().KillPlayer(PlayerManager.PlayerDeathTypes[seekerPlayer.Info]);
                 return;

@@ -21,14 +21,14 @@ public static class GameModeMenu{
             menuButton = QSBCore.MenuApi.PauseMenu_MakeSimpleButton("START"); //HIDE AND SEEK INTERACT BUTTON
             menuText = menuButton.GetComponentInChildren<Text>();
             Button.ButtonClickedEvent c_event = new Button.ButtonClickedEvent();
-            c_event.AddListener(QSBGameModes.StartHideAndSeek);
+            c_event.AddListener(QSBGameModes.StartGameMode);
                 
             menuButton.onClick = c_event;                
         } else {
             menuButton = QSBCore.MenuApi.PauseMenu_MakeSimpleButton("JOIN"); //HIDE AND SEEK INTERACT BUTTON
             menuText = menuButton.GetComponentInChildren<Text>();
             Button.ButtonClickedEvent c_event = new Button.ButtonClickedEvent();
-            c_event.AddListener(QSBGameModes.JoinHideAndSeek);
+            c_event.AddListener(QSBGameModes.JoinGameMode);
                         
             menuButton.onClick = c_event;
         }
