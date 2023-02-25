@@ -11,6 +11,8 @@ namespace QSBGameModes{
         
         const string RemotePlayerMeshObject = "REMOTE_Traveller_HEA_Player_v2";
         public GameObject SeekerVisual;
+        public GameObject SuitVisual;
+        public GameObject HeartianVisual;
         
         public override bool Reset() {
             if (!base.Reset()) //If the base func snagged out
@@ -40,7 +42,10 @@ namespace QSBGameModes{
             Signal._name = SignalName.RadioTower; //TODO :: CHANGE THIS NAME (Without losing prox chat support)
             Signal._frequency = SignalFrequency.HideAndSeek;
 
-            var remotePlayerSuitVisual = this.Info.Body.transform.Find(RemotePlayerMeshObject).GetChild(1);
+            var remoteVisuals = this.Info.Body.transform.Find(RemotePlayerMeshObject);
+            var remotePlayerSuitVisual = remoteVisuals.GetChild(1);
+            HeartianVisual = remoteVisuals.GetChild(0).gameObject;
+            SuitVisual = remotePlayerSuitVisual.gameObject;
             SeekerVisual = GameObject.Instantiate(remotePlayerSuitVisual.gameObject, remotePlayerSuitVisual.position,
                 remotePlayerSuitVisual.rotation, remotePlayerSuitVisual.parent);
             SeekerVisual.transform.name = "Seeker_visual_geo";
@@ -57,8 +62,18 @@ namespace QSBGameModes{
         private void SetSeekerVisual(bool enable){
             if (!Utils.ModHelper.Config.GetSettingsValue<bool>("Seeker Visual Effect")){
                 SeekerVisual.SetActive(false);
+                return;
             }
-            SeekerVisual.SetActive(enable);
+            if (!enable){
+                SeekerVisual.SetActive(false);
+                return;
+            }
+            Utils.RunWhen( () => PlayerState.IsWearingSuit(),() =>
+            {
+                SeekerVisual.SetActive(true);
+                SuitVisual.SetActive(false);
+                HeartianVisual.SetActive(true);
+            });
         }
         
         public override bool SetupHider(){
