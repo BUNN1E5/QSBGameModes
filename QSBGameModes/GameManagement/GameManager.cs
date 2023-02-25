@@ -48,7 +48,7 @@ namespace QSBGameModes.GameManagement{
             
             
             
-            if(SharedSettings.SharedSettings.settingsToShare.Disable6thLocation){
+            if(SharedSettings.settingsToShare.Disable6thLocation){
                 Utils.WriteLine("Preventing the Quantum Moon from going to the 6th location", MessageType.Info);
                 QuantumMoon qm = QSBWorldSync.GetUnityObject<QuantumMoon>();
                 if (qm != null){
@@ -62,7 +62,7 @@ namespace QSBGameModes.GameManagement{
             
             // QSBWorldSync.GetUnityObjects<SandLevelController>().ForEach(controller => {});
 
-            if (SharedSettings.SharedSettings.settingsToShare.ActivateAllReturnPlatforms){
+            if (SharedSettings.settingsToShare.ActivateAllReturnPlatforms){
                 Utils.WriteLine("Setting all return platforms to active", MessageType.Info);
                 foreach (NomaiWarpTransmitter transmitter in QSBWorldSync.GetUnityObjects<NomaiWarpTransmitter>()){
                     transmitter.CloseBlackHole();

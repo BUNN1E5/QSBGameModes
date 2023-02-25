@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using QSBGameModes.GameManagement;
-using QSBGameModes.GameManagement.SharedSettings;
+using QSBGameModes.GameManagement;
 using Mirror;
 using Newtonsoft.Json;
 using QSB.Messaging;
 using QSBGameModes.Menu;
 
-namespace QSBGameModes.GameManagement.SharedSettings;
+namespace QSBGameModes.GameManagement;
 
 public class SharedSettingsMessage : QSBMessage{
     string GameType;
@@ -46,8 +46,10 @@ public class SharedSettingsMessage : QSBMessage{
             AllowJoinWhileGameInProgress = AllowJoinWhileGameInProgress
         };
         Utils.WriteLine(SharedSettings.settingsToShare.ToString());
+        SharedSettings.UpdateSettings();
         GameModeMenu.UpdateGUI();
     }
     
-    public override void OnReceiveLocal() => OnReceiveRemote();
+    //Dont do this cause then we get caught in an infinite loop of updating the settings
+    //public override void OnReceiveLocal() => OnReceiveRemote();
 }

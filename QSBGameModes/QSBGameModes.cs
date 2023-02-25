@@ -8,7 +8,7 @@ using QSB.WorldSync;
 using QSBGameModes.GameManagement;
 using QSBGameModes.GameManagement.PlayerManagement;
 using QSBGameModes.GameManagement.RoleSelection;
-using QSBGameModes.GameManagement.SharedSettings;
+using QSBGameModes.GameManagement;
 using QSBGameModes.Menu;
 using UnityEngine;
 using UnityEngine.InputSystem;

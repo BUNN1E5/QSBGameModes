@@ -2,7 +2,6 @@ using OWML.Common;
 using QSB;
 using QSBGameModes.GameManagement;
 using QSBGameModes.GameManagement.PlayerManagement;
-using QSBGameModes.GameManagement.SharedSettings;
 using UnityEngine.UI;
 
 namespace QSBGameModes.Menu;
