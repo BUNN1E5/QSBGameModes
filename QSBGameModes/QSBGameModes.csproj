@@ -31,14 +31,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="QBSGameModes.user" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="Mirror">
       <HintPath>..\lib\Mirror.dll</HintPath>
     </Reference>
     <Reference Include="QSB">
       <HintPath>..\lib\QSB.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="QSBGameModes.csproj.user" />
   </ItemGroup>
 </Project>
