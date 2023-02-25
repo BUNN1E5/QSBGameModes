@@ -17,7 +17,7 @@ using UnityEngine.UI;
 namespace QSBGameModes.GameManagement{
     public static partial class GameManager{
 
-        public static GameBase gameMode;
+        public static GameBase gameMode = new HideAndSeek();
         
         private static GameState _state = GameState.Stopped;
         public static GameState state{
@@ -41,10 +41,14 @@ namespace QSBGameModes.GameManagement{
             Utils.WriteLine("Resetting All Player States");
             PlayerManager.ResetAllPlayerStates();
 
-            Utils.WriteLine("Added the Hide and Seek Frequency");
-            PlayerData.LearnFrequency(SignalFrequency.HideAndSeek);
+
+            if (SharedSettings.settingsToShare.AddPlayerSignals){
+                Utils.WriteLine("Added the Hide and Seek Frequency");
+                PlayerData.LearnFrequency(SignalFrequency.HideAndSeek);
             
-            Utils.WriteLine("Setting Up Settings for players", MessageType.Info);
+                Utils.WriteLine("Setting Up Settings for players", MessageType.Info);
+            }
+
             
             
             

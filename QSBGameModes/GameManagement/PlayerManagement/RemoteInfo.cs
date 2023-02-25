@@ -1,5 +1,6 @@
 using OWML.Common;
 using QSB.Player;
+using QSBGameModes.GameManagement;
 using QSBGameModes.GameManagement.PlayerManagement;
 using UnityEngine;
 
@@ -7,8 +8,9 @@ namespace QSBGameModes{
     public class RemoteInfo : GameModeInfo
     {
         public SeekerTrigger Trigger;
+
         public AudioSignal Signal;
-        
+
         const string RemotePlayerMeshObject = "REMOTE_Traveller_HEA_Player_v2";
         public GameObject SeekerVisual;
         public GameObject SuitVisual;
@@ -34,13 +36,15 @@ namespace QSBGameModes{
         public override bool SetupInfo(PlayerInfo playerInfo) {
             if (!base.SetupInfo(playerInfo)) //If the base func snagged out
                 return false;
+
+            if (SharedSettings.settingsToShare.AddPlayerSignals){
+                Utils.WriteLine("Adding Audio Signal to " + playerInfo, MessageType.Success);
+                Signal = this.Info.Body.AddComponent<AudioSignal>();
             
-            Utils.WriteLine("Adding Audio Signal", MessageType.Success);
-            Signal = this.Info.Body.AddComponent<AudioSignal>();
-                
-            Utils.WriteLine("Add the known signal for the local player", MessageType.Success);
-            Signal._name = SignalName.RadioTower; //TODO :: CHANGE THIS NAME (Without losing prox chat support)
-            Signal._frequency = SignalFrequency.HideAndSeek;
+                Utils.WriteLine("Add the known signal for the local player", MessageType.Success);
+                Signal._name = SignalName.RadioTower; //TODO :: CHANGE THIS NAME (Without losing prox chat support)
+                Signal._frequency = SignalFrequency.HideAndSeek;
+            }
 
             var remoteVisuals = this.Info.Body.transform.Find(RemotePlayerMeshObject);
             var remotePlayerSuitVisual = remoteVisuals.GetChild(1);
@@ -82,7 +86,7 @@ namespace QSBGameModes{
                 return false;
             Info.SetVisible(true);
 
-            this.Signal._sourceRadius = 500; //Magic OoOOooOh (Around Timber Hearth Radius)
+            if(Signal != null) Signal._sourceRadius = 500; //Magic OoOOooOh (Around Timber Hearth Radius)
             Utils.WriteLine("Removing the Markers for " + Info, MessageType.Success);
             this.Info.MapMarker.enabled = false;
             this.Info.HudMarker.enabled = false;
@@ -96,7 +100,7 @@ namespace QSBGameModes{
             if (!base.SetupSeeker()) //If the base func snagged out
                 return false;
             Info.SetVisible(true);
-            this.Signal._sourceRadius = 1;
+            if(Signal != null) Signal._sourceRadius = 1;
 
 
             GameObject seekerVolume = new("seeker_volume");
