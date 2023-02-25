@@ -8,7 +8,7 @@ using QSB.WorldSync;
 using QSBGameModes.GameManagement;
 using QSBGameModes.GameManagement.PlayerManagement;
 using QSBGameModes.GameManagement.RoleSelection;
-using QSBGameModes.GameManagement.SharedSettings;
+using QSBGameModes.GameManagement;
 using QSBGameModes.Menu;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -35,22 +35,22 @@ namespace QSBGameModes
                     GameModeMenu.UpdateGUI();
                 });
                 //This runs every loop IF we have started Hide and Seek
-                Utils.RunWhen(() => GameManager.state != GameState.Stopped, StartHideAndSeek);
+                Utils.RunWhen(() => GameManager.state != GameState.Stopped, StartGameMode);
             };
         }
         
-        public static void StartHideAndSeek(){
+        public static void StartGameMode(){
             Utils.RunWhen(() => QSBWorldSync.AllObjectsReady, () => {
                 GameManager.SetupGame();
                 GameManager.SelectRoles();
             });
         }
 
-        public static void JoinHideAndSeek(){
+        public static void JoinGameMode(){
             new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Ready).Send();
         }
 
-        public static void LeaveHideAndSeek() {
+        public static void LeaveGameMode() {
             new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Spectating).Send();
         }
 

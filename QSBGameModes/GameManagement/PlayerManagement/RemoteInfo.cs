@@ -104,7 +104,7 @@ namespace QSBGameModes{
             seekerVolume.transform.localPosition = Vector3.zero;
             seekerVolume.transform.localRotation = Quaternion.identity;
             Trigger = seekerVolume.AddComponent<SeekerTrigger>();
-            Trigger.seekerInfo = Info;
+            Trigger.seekerInfo = this;
 
             Utils.WriteLine("Adding the HUD Marker", MessageType.Success);
             

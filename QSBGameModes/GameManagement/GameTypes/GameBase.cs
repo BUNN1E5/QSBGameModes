@@ -26,7 +26,7 @@ public class GameBase{
 
     public virtual void Init(){ }
 
-    public virtual void OnCatch(){}
+    public virtual void OnCatch(GameModeInfo seekerPlayer){}
     public virtual void OnStarting(){}
     public virtual void OnInProgress(){}
     public virtual void OnEnding(){}
