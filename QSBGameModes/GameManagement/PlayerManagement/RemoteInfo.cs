@@ -46,7 +46,7 @@ namespace QSBGameModes{
             var remotePlayerSuitVisual = remoteVisuals.GetChild(1);
             HeartianVisual = remoteVisuals.GetChild(0).gameObject;
             SuitVisual = remotePlayerSuitVisual.gameObject;
-            SeekerVisual = GameObject.Instantiate(remotePlayerSuitVisual.gameObject, remotePlayerSuitVisual.position,
+            SeekerVisual = Object.Instantiate(SuitVisual, remotePlayerSuitVisual.position,
                 remotePlayerSuitVisual.rotation, remotePlayerSuitVisual.parent);
             SeekerVisual.transform.name = "Seeker_visual_geo";
             SeekerVisual.SetActive(true);
@@ -68,8 +68,9 @@ namespace QSBGameModes{
                 SeekerVisual.SetActive(false);
                 return;
             }
-            Utils.RunWhen( () => PlayerState.IsWearingSuit(),() =>
+            Utils.RunWhen( () => SuitVisual.activeSelf,() =>
             {
+                Utils.WriteLine("Disabling suit!");
                 SeekerVisual.SetActive(true);
                 SuitVisual.SetActive(false);
                 HeartianVisual.SetActive(true);

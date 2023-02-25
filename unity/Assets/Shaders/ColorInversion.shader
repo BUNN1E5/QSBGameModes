@@ -77,8 +77,8 @@ Shader "Custom/ColorInversion" {
                 tmp1.xyz = tmp0.xyz * float3(0.305306, 0.305306, 0.305306) + float3(0.6821711, 0.6821711, 0.6821711);
                 tmp1.xyz = tmp0.xyz * tmp1.xyz + float3(0.0125229, 0.0125229, 0.0125229);
                 tmp0.xyz = tmp0.xyz * tmp1.xyz;
-                tmp0.xyz = tmp0.xyz * tmp0.xyz;
-                tmp0.xyz = tmp0.xyz * tmp0.xyz;
+                //tmp0.xyz = tmp0.xyz * tmp0.xyz;
+                //tmp0.xyz = tmp0.xyz * tmp0.xyz;
                 o.sv_target.xyz = tmp0.xyz * tmp0.xyz;
                 return o;
 			}
