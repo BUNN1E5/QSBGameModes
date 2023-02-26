@@ -7,9 +7,8 @@ namespace QSBGameModes.GameManagement{
     public static partial class GameManager{
         public class GameStateMessage : QSBMessage{
             private GameState state;
-            private float gameStartTime;
+            
             public GameStateMessage(GameState state){
-                this.gameStartTime = GameManager.gameMode.gameStartTime;
                 this.state = state;
             }
 
