@@ -30,7 +30,7 @@ namespace QSBGameModes{
         public override bool CleanUp(){
             if (!base.CleanUp()) //If the base func snagged out
                 return false;
-            GameObject.Destroy(Trigger); //Bit redundant tbh
+            //GameObject.Destroy(Trigger); //Bit redundant tbh
             GameObject.Destroy(Signal);
             GameObject.Destroy(SeekerVisual);
             GameObject.Destroy(SeekerVolume);
@@ -62,8 +62,21 @@ namespace QSBGameModes{
             foreach (var renderer in seekerVisualSkinnedRenderers){
                 renderer.material = AssetBundlesLoader.SeekerMaterial;
             }
-
             SeekerVisual.SetActive(false);
+            
+            SeekerVolume = new("seeker_volume")
+            {
+                transform =
+                {
+                    parent = this.Info.Body.transform,
+                    localPosition = Vector3.zero,
+                    localRotation = Quaternion.identity 
+                }
+            };
+            Trigger = SeekerVolume.AddComponent<SeekerTrigger>();
+            Trigger.seekerInfo = this;
+            
+            SeekerVolume.SetActive(false);
 
             return true;
         }
@@ -117,6 +130,7 @@ namespace QSBGameModes{
             this.Info.HudMarker.enabled = false;
 
             SetSeekerVisual(false);
+            SeekerVolume.SetActive(false);
             return true;
         }
 
@@ -126,24 +140,6 @@ namespace QSBGameModes{
             Info.SetVisible(true);
             if(Signal != null) Signal._sourceRadius = 1;
 
-
-            if (SeekerVolume == null){
-                SeekerVolume = new("seeker_volume")
-                {
-                    transform =
-                    {
-                        parent = this.Info.Body.transform,
-                        localPosition = Vector3.zero,
-                        localRotation = Quaternion.identity
-                    }
-                };
-                Trigger = SeekerVolume.AddComponent<SeekerTrigger>();
-                Trigger.seekerInfo = this;
-            }
-            
-            SeekerVolume.SetActive(true);
-            
-
             Utils.WriteLine("Adding the HUD Marker", MessageType.Success);
             
             //Hiders shouldn't be able to see the seekers Map and Hud Markers
@@ -152,6 +148,7 @@ namespace QSBGameModes{
             Info.MapMarker.enabled = state;
 
             SetSeekerVisual(true);
+            SeekerVolume.SetActive(true);
             return true;
         }
 
@@ -166,6 +163,7 @@ namespace QSBGameModes{
             Info.MapMarker.enabled = state;
 
             SetSeekerVisual(false);
+            SeekerVolume.SetActive(false);
             return true;
         }
     }
