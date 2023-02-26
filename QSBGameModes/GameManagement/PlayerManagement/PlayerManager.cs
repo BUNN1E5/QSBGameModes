@@ -82,11 +82,11 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
         //This should run once every loop to initialize everything needed for Hide and Seek
         public static void SetupPlayer(PlayerInfo playerInfo){
             QSBGameModes.instance.ModHelper.Events.Unity.RunWhen(() => playerInfo.Body != null, () => {
-                Utils.WriteLine("Setting up " + playerInfo.Name + ": ", MessageType.Debug);
-                GameModeInfo info = playerInfo.IsLocalPlayer ? new LocalInfo() : new RemoteInfo();
-                info.SetupInfo(playerInfo);
+                Utils.WriteLine($"Setting up {playerInfo.Name}({playerInfo.PlayerId}):", MessageType.Debug);
                 
                 if (!PlayerManager.playerInfo.ContainsKey(playerInfo)){
+                    GameModeInfo info = playerInfo.IsLocalPlayer ? new LocalInfo() : new RemoteInfo();
+                    info.SetupInfo(playerInfo);
                     PlayerManager.playerInfo[playerInfo] =  info;
                 }
 
