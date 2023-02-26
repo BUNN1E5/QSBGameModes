@@ -28,10 +28,9 @@ public class GameBase{
             case GameState.Stopped:
                 OnStopped();
                 break;
-            
         }
     }
-
+    
     public virtual void Init(){ }
 
     public virtual void OnCatch(GameModeInfo seekerPlayer){}

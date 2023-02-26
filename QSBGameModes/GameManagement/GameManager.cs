@@ -25,6 +25,7 @@ namespace QSBGameModes.GameManagement{
             set{
                 if (QSBCore.IsHost){ //So that when the host changes the game state a message gets sent
                     new GameStateMessage(value).Send();
+                    Utils.WriteLine($"Current State {value}");
                     _state = value; //we will also technically be set from the message
                 }
                 //We dont want the non hosts from changing the gamestate at any point

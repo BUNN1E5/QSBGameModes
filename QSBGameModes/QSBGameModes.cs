@@ -47,7 +47,34 @@ namespace QSBGameModes
         }
 
         public static void JoinGameMode(){
-            new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Ready).Send();
+            JoinGame(GameManager.state);
+        }
+        
+        private static void JoinGame(GameState state){
+            if (state == GameState.Stopped){
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Ready).Send();
+                return;
+            }
+            
+            Utils.RunWhen(() => SharedSettings.receivedSettings, () => {
+                if (SharedSettings.settingsToShare.AllowJoinWhileGameInProgress){
+                    switch (state){
+                        case GameState.Starting:
+                        case GameState.Waiting:
+                            new RoleChangeMessage(PlayerManager.LocalPlayer.Info, GameManager.gameMode.StateOnJoinEarly()).Send();
+                            break;
+                        case GameState.InProgress:
+                            new RoleChangeMessage(PlayerManager.LocalPlayer.Info, GameManager.gameMode.StateOnJoinLate()).Send();
+                            break;
+                        case GameState.Ending:
+                            //What state should be here?
+                            //new RoleChangeMessage(PlayerManager.LocalPlayer.Info, PlayerManagement.PlayerState.Spectating).Send();
+                            break;
+                    }
+                    return;
+                }
+                new RoleChangeMessage(PlayerManager.LocalPlayer.Info, GameManagement.PlayerManagement.PlayerState.Spectating).Send();
+            });
         }
 
         public static void LeaveGameMode() {
