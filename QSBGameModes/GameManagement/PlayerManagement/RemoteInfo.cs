@@ -21,6 +21,7 @@ namespace QSBGameModes{
             Info.MapMarker.enabled = true;
             Info.HudMarker.enabled = true;
             SeekerVisual.SetActive(false);
+            ReturnToDefaultVisual();
             return true;
         }
 
@@ -29,6 +30,8 @@ namespace QSBGameModes{
                 return false;
             GameObject.Destroy(Trigger);
             GameObject.Destroy(Signal);
+            GameObject.Destroy(SeekerVisual);
+            ReturnToDefaultVisual();
             return false;
         }
 
@@ -94,7 +97,7 @@ namespace QSBGameModes{
                 ReturnToDefaultVisual();
                 return;
             }
-            Utils.RunWhen( () => SuitVisual.activeSelf,() =>
+            Utils.RunWhen( () => Info.SuitedUp,() =>
             {
                 SeekerVisual.SetActive(true);
                 SuitVisual.SetActive(false);
@@ -113,7 +116,6 @@ namespace QSBGameModes{
             this.Info.HudMarker.enabled = false;
 
             SetSeekerVisual(false);
-
             return true;
         }
 
@@ -144,7 +146,6 @@ namespace QSBGameModes{
             Info.MapMarker.enabled = state;
 
             SetSeekerVisual(true);
-
             return true;
         }
 
@@ -159,7 +160,6 @@ namespace QSBGameModes{
             Info.MapMarker.enabled = state;
 
             SetSeekerVisual(false);
-
             return true;
         }
     }
