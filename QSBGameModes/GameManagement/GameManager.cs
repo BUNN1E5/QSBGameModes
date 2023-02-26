@@ -86,7 +86,7 @@ namespace QSBGameModes.GameManagement{
                 Utils.WriteLine("Choosing the Roles", MessageType.Success);
                 HashSet<GameModeInfo> players = new();
                 HashSet<uint> hiders = new();
-                List<uint> spectators = new();
+                HashSet<uint> spectators = new();
                 
                 foreach (GameModeInfo info in PlayerManager.playerInfo.Values){
                     if (info.State == PlayerManagement.PlayerState.None ||
@@ -102,8 +102,24 @@ namespace QSBGameModes.GameManagement{
                 
                 var seekers = RoleSelector.SelectRoles(players, 1);
                 hiders.ExceptWith(seekers);
-                new RolesSelectionMessage(seekers.ToArray(), hiders.ToArray(), spectators.ToArray()).Send();
+                SendSelectedRoles(seekers, hiders, spectators);
             });
+        }
+        private static void SendSelectedRoles(HashSet<uint> seekers, HashSet<uint> hiders, HashSet<uint> spectators){
+            foreach (uint seeker in seekers){
+                if (QSBPlayerManager.PlayerExists(seeker))
+                    new RoleChangeMessage(seeker, PlayerManagement.PlayerState.Seeking).Send();
+            }
+
+            foreach (uint hider in hiders){
+                if (QSBPlayerManager.PlayerExists(hider))
+                    new RoleChangeMessage(hider, PlayerManagement.PlayerState.Hiding).Send();
+            }
+			
+            foreach (uint spectator in spectators){
+                if (QSBPlayerManager.PlayerExists(spectator))
+                    new RoleChangeMessage(spectator, PlayerManagement.PlayerState.Spectating).Send();
+            }
         }
     }
 
