@@ -45,9 +45,9 @@ public static class GameModeMenu{
         } else {
             if (GameManager.state != GameState.Stopped){
                 if (PlayerManager.LocalPlayer.State == GameManagement.PlayerManagement.PlayerState.None){
-                    menuText.text = "Join " + SharedSettings.settingsToShare.GameType;
+                    menuText.text = "JOIN " + SharedSettings.settingsToShare.GameType;
                 } else if(PlayerManager.LocalPlayer.State != GameManagement.PlayerManagement.PlayerState.None){
-                    menuText.text = "Leave " + SharedSettings.settingsToShare.GameType;
+                    menuText.text = "LEAVE " + SharedSettings.settingsToShare.GameType;
                 }
             }
             else{
