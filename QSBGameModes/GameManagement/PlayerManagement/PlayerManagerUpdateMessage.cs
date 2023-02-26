@@ -44,9 +44,7 @@ public class PlayerManagerUpdateMessage : QSBMessage{
     public override void OnReceiveRemote(){
         for (int i = 0; i < playerIds.Length; i++) {
             PlayerInfo info = QSBPlayerManager.GetPlayer(playerIds[i]);
-            GameModeInfo gameModeInfo = new() { Info = info, State = playerStates[i] };
-            PlayerManager.playerInfo[info] = gameModeInfo;
-            PlayerManager.SetupPlayer(info);
+            PlayerManager.SetupPlayer(info, playerStates[i]);
         }
     }
 }

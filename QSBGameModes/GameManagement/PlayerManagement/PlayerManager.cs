@@ -49,7 +49,7 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
         }
 
         public static void SetPlayerState(PlayerInfo playerInfo, PlayerState state){
-            Utils.WriteLine($"Chaging player {playerInfo.ToString()} state to {state.ToString()}");
+            Utils.WriteLine($"Chaging player {playerInfo.ToString()} state to {state.ToString()} [Client ID: {QSBPlayerManager.LocalPlayerId}");
             switch (state){
                 case PlayerState.Hiding:
                     hiders.Add(playerInfo);
@@ -80,7 +80,7 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
         }
 
         //This should run once every loop to initialize everything needed for Hide and Seek
-        public static void SetupPlayer(PlayerInfo playerInfo){
+        public static void SetupPlayer(PlayerInfo playerInfo, PlayerState state = PlayerState.None){
             QSBGameModes.instance.ModHelper.Events.Unity.RunWhen(() => playerInfo.Body != null, () => {
                 Utils.WriteLine($"Setting up {playerInfo.Name}({playerInfo.PlayerId}):", MessageType.Debug);
                 
@@ -90,7 +90,7 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
                     PlayerManager.playerInfo[playerInfo] =  info;
                 }
 
-                SetPlayerState(playerInfo, PlayerManager.playerInfo[playerInfo].State);
+                SetPlayerState(playerInfo, state);
             });
         }
 
