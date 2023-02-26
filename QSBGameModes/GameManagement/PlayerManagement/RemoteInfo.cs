@@ -62,7 +62,16 @@ namespace QSBGameModes{
             
             return true;
         }
-        
+        private void ReturnToDefaultVisual(){
+            if (Info.SuitedUp){
+                SuitVisual.SetActive(true);
+                HeartianVisual.SetActive(false);
+            }
+            else{
+                SuitVisual.SetActive(false);
+                HeartianVisual.SetActive(true);
+            }
+        }
         private void SetSeekerVisual(bool enable){
             if (!Utils.ModHelper.Config.GetSettingsValue<bool>("Seeker Visual Effect")){
                 SeekerVisual.SetActive(false);
@@ -70,16 +79,7 @@ namespace QSBGameModes{
             }
             if (!enable){
                 SeekerVisual.SetActive(false);
-
-                if (PlayerState.IsWearingSuit()){
-                    SuitVisual.SetActive(true);
-                    HeartianVisual.SetActive(false);
-                }
-                else{
-                    SuitVisual.SetActive(false);
-                    HeartianVisual.SetActive(true);
-                }
-                
+                ReturnToDefaultVisual();
                 return;
             }
             Utils.RunWhen( () => SuitVisual.activeSelf,() =>
