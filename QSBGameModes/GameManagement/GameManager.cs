@@ -140,9 +140,9 @@ namespace QSBGameModes.GameManagement{
     // Seeker
     public enum GameState{
         Starting,
+        Waiting,
         InProgress,
         Ending, //Mark this at some point
-        Waiting,
         Stopped //This is the default state until host starts the game
     }
 }

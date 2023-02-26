@@ -9,6 +9,9 @@ using UnityEngine;
 namespace QSBGameModes.GameManagement.GameTypes;
 
 public class HideAndSeek : GameBase {
+    
+    public PlayerManagement.PlayerState stateOnJoinLate{ get{ return PlayerManagement.PlayerState.Seeking; } }
+    public PlayerManagement.PlayerState stateOnJoinEarly{ get{ return PlayerManagement.PlayerState.Hiding; } }
     public override void OnCatch(GameModeInfo seekerPlayer){
         //We only run if we are a hider and we hit a seeker
         if (PlayerManager.playerInfo[QSBPlayerManager.LocalPlayer].State != GameManagement.PlayerManagement.PlayerState.Hiding)
@@ -42,7 +45,13 @@ public class HideAndSeek : GameBase {
 
     public override void OnStarting(){
         base.OnStarting();
+        GameManager.state = GameState.Waiting;
     }
-    
-    
+
+    public override void OnWaiting(){
+        //Wait X amount of time
+        //then move to inProgress
+    }
+
+
 }

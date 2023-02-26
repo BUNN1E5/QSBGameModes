@@ -17,6 +17,8 @@ namespace QSBGameModes.GameManagement{
 
     public static class SharedSettings{
 
+        public static bool receivedSettings = false; //Gets set to true the first time settings have changed
+        
         public static SettingsPayload settingsToShare = new(){
             GameType = "INFECTION",
             AddPlayerSignals = true,

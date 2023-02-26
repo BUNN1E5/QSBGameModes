@@ -1,7 +1,10 @@
 {
   "enabled": true,
   "settings": {
-    "SpectateOnJoin": false,
+    "Client Settings": {
+      "type": "separator",
+      "tooltip" : "These are your local settings"
+    },
     "Seeker Visual Effect": true,
     
     "Host Settings": {

@@ -58,6 +58,7 @@ public class SharedSettingsMessage : QSBMessage{
         };
         Utils.WriteLine(SharedSettings.settingsToShare.ToString());
         SharedSettings.UpdateSettings();
+        SharedSettings.receivedSettings = true; 
         GameModeMenu.UpdateGUI();
         PlayerManager.OnSettingsChange();
     }

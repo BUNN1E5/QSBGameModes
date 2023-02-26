@@ -1,5 +1,7 @@
 using Mirror;
 using QSB.Messaging;
+using QSBGameModes.GameManagement.PlayerManagement;
+using QSBGameModes.GameManagement.RoleSelection;
 
 namespace QSBGameModes.GameManagement{
     public static partial class GameManager{
@@ -8,6 +10,11 @@ namespace QSBGameModes.GameManagement{
             public GameStateMessage(GameState state){
                 this.state = state;
             }
+            public GameStateMessage(GameState state, bool firstMessage){
+                this.state = state;
+            }
+
+            
             public override void Serialize(NetworkWriter writer){
                 base.Serialize(writer);
                 writer.WriteInt((int)state);

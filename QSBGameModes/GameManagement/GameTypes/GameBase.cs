@@ -1,11 +1,12 @@
 ﻿using QSB.Player;
-
-namespace QSBGameModes.GameManagement.GameTypes;
+namespace QSBGameModes.GameManagement;
 
 public class GameBase{
-    public GameState State;
+
+    public PlayerManagement.PlayerState stateOnJoinLate{ get; }
+    public PlayerManagement.PlayerState stateOnJoinEarly{ get; }
+    
     public void OnStateChange(GameState state){
-        State = state;
         switch (state){
             case GameState.Starting:
                 OnStarting();
