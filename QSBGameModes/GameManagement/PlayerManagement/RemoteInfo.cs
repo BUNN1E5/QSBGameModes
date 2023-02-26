@@ -5,8 +5,7 @@ using QSBGameModes.GameManagement.PlayerManagement;
 using UnityEngine;
 
 namespace QSBGameModes{
-    public class RemoteInfo : GameModeInfo
-    {
+    public class RemoteInfo : GameModeInfo{
         public SeekerTrigger Trigger;
 
         public AudioSignal Signal;
@@ -15,8 +14,8 @@ namespace QSBGameModes{
         public GameObject SeekerVisual;
         public GameObject SuitVisual;
         public GameObject HeartianVisual;
-        
-        public override bool Reset() {
+
+        public override bool Reset(){
             if (!base.Reset()) //If the base func snagged out
                 return false;
             Info.MapMarker.enabled = true;
@@ -33,17 +32,17 @@ namespace QSBGameModes{
             return false;
         }
 
-        public override bool SetupInfo(PlayerInfo playerInfo) {
+        public override void OnSettingChange(){
+            if (SharedSettings.settingsToShare.AddPlayerSignals) SetupPlayerSignal();
+            else GameObject.Destroy(Signal);
+        }
+
+        public override bool SetupInfo(PlayerInfo playerInfo){
             if (!base.SetupInfo(playerInfo)) //If the base func snagged out
                 return false;
 
             if (SharedSettings.settingsToShare.AddPlayerSignals){
-                Utils.WriteLine("Adding Audio Signal to " + playerInfo, MessageType.Success);
-                Signal = this.Info.Body.AddComponent<AudioSignal>();
-            
-                Utils.WriteLine("Add the known signal for the local player", MessageType.Success);
-                Signal._name = SignalName.RadioTower; //TODO :: CHANGE THIS NAME (Without losing prox chat support)
-                Signal._frequency = SignalFrequency.HideAndSeek;
+                SetupPlayerSignal();
             }
 
             var remoteVisuals = this.Info.Body.transform.Find(RemotePlayerMeshObject);
@@ -55,13 +54,15 @@ namespace QSBGameModes{
             SeekerVisual.transform.name = "Seeker_visual_geo";
             SeekerVisual.SetActive(true);
             var seekerVisualSkinnedRenderers = SeekerVisual.GetComponentsInChildren<SkinnedMeshRenderer>();
-            foreach(var renderer in seekerVisualSkinnedRenderers){
+            foreach (var renderer in seekerVisualSkinnedRenderers){
                 renderer.material = AssetBundlesLoader.SeekerMaterial;
             }
+
             SeekerVisual.SetActive(false);
-            
+
             return true;
         }
+        
         private void ReturnToDefaultVisual(){
             if (Info.SuitedUp){
                 SuitVisual.SetActive(true);
@@ -72,6 +73,16 @@ namespace QSBGameModes{
                 HeartianVisual.SetActive(true);
             }
         }
+
+        private void SetupPlayerSignal(){
+            Utils.WriteLine("Adding Audio Signal to " + Info, MessageType.Success);
+            Signal = this.Info.Body.AddComponent<AudioSignal>();
+
+            Utils.WriteLine("Add the known signal for the local player", MessageType.Success);
+            Signal._name = SignalName.RadioTower; //TODO :: CHANGE THIS NAME (Without losing prox chat support)
+            Signal._frequency = SignalFrequency.HideAndSeek;
+        }
+        
         private void SetSeekerVisual(bool enable){
             if (!Utils.ModHelper.Config.GetSettingsValue<bool>("Seeker Visual Effect")){
                 SeekerVisual.SetActive(false);

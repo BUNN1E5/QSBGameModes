@@ -49,9 +49,6 @@ namespace QSBGameModes.GameManagement{
                 Utils.WriteLine("Setting Up Settings for players", MessageType.Info);
             }
 
-            
-            
-            
             if(SharedSettings.settingsToShare.Disable6thLocation){
                 Utils.WriteLine("Preventing the Quantum Moon from going to the 6th location", MessageType.Info);
                 QuantumMoon qm = QSBWorldSync.GetUnityObject<QuantumMoon>();

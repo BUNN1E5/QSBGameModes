@@ -39,6 +39,8 @@ namespace QSBGameModes{
             return true;
         }
 
+        public virtual void OnSettingChange(){}
+
         public virtual bool SetupHider(){
             if (!isReady){
                 waitCoroutine = Utils.RunWhen(() => isReady, () => SetupHider(), waitCoroutine);
