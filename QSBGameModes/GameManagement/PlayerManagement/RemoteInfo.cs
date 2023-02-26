@@ -84,7 +84,6 @@ namespace QSBGameModes{
             }
             Utils.RunWhen( () => SuitVisual.activeSelf,() =>
             {
-                Utils.WriteLine("Disabling suit!");
                 SeekerVisual.SetActive(true);
                 SuitVisual.SetActive(false);
                 HeartianVisual.SetActive(true);
