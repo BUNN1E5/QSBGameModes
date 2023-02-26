@@ -115,6 +115,12 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
             info.CleanUp();
         }
 
+        public static void OnSettingsChange(){
+            QSBPlayerManager.PlayerList.ForEach((playerInfo) => {
+                PlayerManager.playerInfo[playerInfo].OnSettingChange();
+            });
+        }
+
         public static void SetPlayerSignalSize(PlayerInfo info, float size){
             //PlayerTransformSync.LocalInstance?.ReferenceSector?.AttachedObject.GetRootSector();
             //TODO :: WHEN ADDED TO QSB

@@ -4,6 +4,7 @@ using QSBGameModes.GameManagement;
 using Mirror;
 using Newtonsoft.Json;
 using QSB.Messaging;
+using QSBGameModes.GameManagement.PlayerManagement;
 using QSBGameModes.Menu;
 
 namespace QSBGameModes.GameManagement;
@@ -58,6 +59,7 @@ public class SharedSettingsMessage : QSBMessage{
         Utils.WriteLine(SharedSettings.settingsToShare.ToString());
         SharedSettings.UpdateSettings();
         GameModeMenu.UpdateGUI();
+        PlayerManager.OnSettingsChange();
     }
     
     //Dont do this cause then we get caught in an infinite loop of updating the settings

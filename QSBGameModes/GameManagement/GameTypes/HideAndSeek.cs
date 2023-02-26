@@ -40,4 +40,10 @@ public class HideAndSeek : GameBase {
         new LocationRespawnMessage(QSBPlayerManager.LocalPlayerId, SpawnLocation.TimberHearth).Send();
         //new RoleChangeMessage(seekerInfo.Info, GameManagement.PlayerManagement.PlayerState.Hiding).Send();
     }
+
+    public override void OnStarting(){
+        base.OnStarting();
+    }
+    
+    
 }
