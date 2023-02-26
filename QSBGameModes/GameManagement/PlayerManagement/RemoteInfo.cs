@@ -75,7 +75,7 @@ namespace QSBGameModes{
         }
 
         private void SetupPlayerSignal(){
-            Utils.WriteLine("Adding Audio Signal to " + Info, MessageType.Success);
+            Utils.WriteLine($"Adding Audio Signal to {Info}", MessageType.Success);
             Signal = this.Info.Body.AddComponent<AudioSignal>();
 
             Utils.WriteLine("Add the known signal for the local player", MessageType.Success);
@@ -107,7 +107,7 @@ namespace QSBGameModes{
             Info.SetVisible(true);
 
             if(Signal != null) Signal._sourceRadius = 500; //Magic OoOOooOh (Around Timber Hearth Radius)
-            Utils.WriteLine("Removing the Markers for " + Info, MessageType.Success);
+            Utils.WriteLine($"Removing the Markers for {Info}", MessageType.Success);
             this.Info.MapMarker.enabled = false;
             this.Info.HudMarker.enabled = false;
 

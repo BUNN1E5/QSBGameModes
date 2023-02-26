@@ -27,7 +27,7 @@ namespace QSBGameModes{
             if (!base.SetupHider()) //If the base func snagged out
                 return false;
 
-            Utils.WriteLine("Local Player Is Now Hider", MessageType.Info);
+            Utils.WriteLine($"Local Player Is Now Hider ({Info.PlayerId})", MessageType.Info);
             Utils.WriteLine("Removing the All Markers", MessageType.Success);
             foreach (PlayerInfo info in PlayerManager.playerInfo.Keys) {
                 if (info.IsLocalPlayer) continue;
@@ -71,7 +71,7 @@ namespace QSBGameModes{
         public override bool SetupSeeker() {
             if (!base.SetupSeeker()) //If the base func snagged out
                 return false;
-            Utils.WriteLine("Local Player Is Now Seeker", MessageType.Info);
+            Utils.WriteLine($"Local Player Is Now Seeker ({Info.PlayerId})", MessageType.Info);
             
             Utils.WriteLine("Removing the Hider Markers", MessageType.Success);
             foreach (PlayerInfo info in PlayerManager.playerInfo.Keys) {
@@ -117,7 +117,7 @@ namespace QSBGameModes{
         public override bool SetupSpectator() {
             if (!base.SetupSpectator()) //If the base func snagged out
                 return false;
-            Utils.WriteLine("Local Player Is now Spectator", MessageType.Info);
+            Utils.WriteLine($"Local Player Is now Spectator ({Info.PlayerId})", MessageType.Info);
 
             //For now make spectators able to see all
             foreach (PlayerInfo info in PlayerManager.playerInfo.Keys) {
