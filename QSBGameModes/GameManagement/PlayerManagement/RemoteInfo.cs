@@ -112,10 +112,15 @@ namespace QSBGameModes{
             if(Signal != null) Signal._sourceRadius = 1;
 
 
-            GameObject seekerVolume = new("seeker_volume");
-            seekerVolume.transform.parent = this.Info.Body.transform;
-            seekerVolume.transform.localPosition = Vector3.zero;
-            seekerVolume.transform.localRotation = Quaternion.identity;
+            GameObject seekerVolume = new("seeker_volume")
+            {
+                transform =
+                {
+                    parent = this.Info.Body.transform,
+                    localPosition = Vector3.zero,
+                    localRotation = Quaternion.identity
+                }
+            };
             Trigger = seekerVolume.AddComponent<SeekerTrigger>();
             Trigger.seekerInfo = this;
 
