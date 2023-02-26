@@ -70,6 +70,16 @@ namespace QSBGameModes{
             }
             if (!enable){
                 SeekerVisual.SetActive(false);
+
+                if (PlayerState.IsWearingSuit()){
+                    SuitVisual.SetActive(true);
+                    HeartianVisual.SetActive(false);
+                }
+                else{
+                    SuitVisual.SetActive(false);
+                    HeartianVisual.SetActive(true);
+                }
+                
                 return;
             }
             Utils.RunWhen( () => SuitVisual.activeSelf,() =>
