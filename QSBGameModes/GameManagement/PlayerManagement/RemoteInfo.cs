@@ -39,16 +39,14 @@ namespace QSBGameModes{
         }
 
         public override void OnSettingChange(){
-            if (SharedSettings.settingsToShare.AddPlayerSignals) SetupPlayerSignal();
-            else GameObject.Destroy(Signal);
+            Signal.gameObject.SetActive(SharedSettings.settingsToShare.AddPlayerSignals);
         }
 
         public override bool SetupInfo(PlayerInfo playerInfo){
             if (!base.SetupInfo(playerInfo)) //If the base func snagged out
                 return false;
-            if (SharedSettings.settingsToShare.AddPlayerSignals){
-                SetupPlayerSignal();
-            }
+            SetupPlayerSignal();
+
 
             var remoteVisuals = this.Info.Body.transform.Find(RemotePlayerMeshObject);
             var remotePlayerSuitVisual = remoteVisuals.GetChild(1);
@@ -99,6 +97,7 @@ namespace QSBGameModes{
             Utils.WriteLine("Add the known signal for the local player", MessageType.Success);
             Signal._name = SignalName.RadioTower; //TODO :: CHANGE THIS NAME (Without losing prox chat support)
             Signal._frequency = SignalFrequency.HideAndSeek;
+            Signal.gameObject.SetActive(SharedSettings.settingsToShare.AddPlayerSignals);
         }
         
         private void SetSeekerVisual(bool enable){
