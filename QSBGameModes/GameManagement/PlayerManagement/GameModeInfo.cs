@@ -35,7 +35,15 @@ namespace QSBGameModes{
                 return false;
             }
             Utils.WriteLine("Resetting Player", MessageType.Debug);
+            Utils.WriteLine($"{State}", MessageType.Debug);
+            if (State is GameManagement.PlayerManagement.PlayerState.None 
+                or GameManagement.PlayerManagement.PlayerState.Spectating){
+                return true;
+            }
+            
             State = GameManagement.PlayerManagement.PlayerState.Ready;
+            
+            Utils.WriteLine($"{State}", MessageType.Debug);
             return true;
         }
 
