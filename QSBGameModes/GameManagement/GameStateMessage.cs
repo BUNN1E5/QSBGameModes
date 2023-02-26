@@ -2,6 +2,7 @@ using Mirror;
 using QSB.Messaging;
 using QSBGameModes.GameManagement.PlayerManagement;
 using QSBGameModes.GameManagement.RoleSelection;
+using QSBGameModes.Menu;
 
 namespace QSBGameModes.GameManagement{
     public static partial class GameManager{
@@ -29,6 +30,7 @@ namespace QSBGameModes.GameManagement{
             public override void OnReceiveRemote(){
                 _state = state;
                 GameManager.gameMode.OnStateChange(state);
+                GameModeMenu.UpdateGUI();
             }
         }
     }
