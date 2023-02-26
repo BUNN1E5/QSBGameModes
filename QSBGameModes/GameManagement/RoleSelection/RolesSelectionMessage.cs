@@ -43,12 +43,12 @@ namespace QSBGameModes.GameManagement.RoleSelection
 
 			foreach (uint hider in hiders){
 				if (QSBPlayerManager.PlayerExists(hider))
-					new RoleChangeMessage(hider, PlayerManagement.PlayerState.Seeking).Send();
+					new RoleChangeMessage(hider, PlayerManagement.PlayerState.Hiding).Send();
 			}
 			
 			foreach (uint spectator in spectators){
 				if (QSBPlayerManager.PlayerExists(spectator))
-					new RoleChangeMessage(spectator, PlayerManagement.PlayerState.Seeking).Send();
+					new RoleChangeMessage(spectator, PlayerManagement.PlayerState.Spectating).Send();
 			}
 		}
 	}
