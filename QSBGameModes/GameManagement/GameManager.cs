@@ -106,17 +106,24 @@ namespace QSBGameModes.GameManagement{
             });
         }
         private static void SendSelectedRoles(HashSet<uint> seekers, HashSet<uint> hiders, HashSet<uint> spectators){
+            Utils.WriteLine("Sending Roles!");
+            Utils.WriteLine($"Seekers: {seekers.Count}");
             foreach (uint seeker in seekers){
+                Utils.WriteLine($"Seeker: {seeker}");
                 if (QSBPlayerManager.PlayerExists(seeker))
                     new RoleChangeMessage(seeker, PlayerManagement.PlayerState.Seeking).Send();
             }
 
+            Utils.WriteLine($"Hiders: {hiders.Count}");
             foreach (uint hider in hiders){
+                Utils.WriteLine($"Hider: {hider}");
                 if (QSBPlayerManager.PlayerExists(hider))
                     new RoleChangeMessage(hider, PlayerManagement.PlayerState.Hiding).Send();
             }
 			
+            Utils.WriteLine($"Spectators: {spectators.Count}");
             foreach (uint spectator in spectators){
+                Utils.WriteLine($"Spectator: {spectator}");
                 if (QSBPlayerManager.PlayerExists(spectator))
                     new RoleChangeMessage(spectator, PlayerManagement.PlayerState.Spectating).Send();
             }

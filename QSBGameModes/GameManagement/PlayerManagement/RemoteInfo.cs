@@ -41,10 +41,8 @@ namespace QSBGameModes{
         }
 
         public override bool SetupInfo(PlayerInfo playerInfo){
-            Utils.WriteLine($"h: {playerInfo.PlayerId}");
             if (!base.SetupInfo(playerInfo)) //If the base func snagged out
                 return false;
-            Utils.WriteLine($"H: {playerInfo.PlayerId}");
             if (SharedSettings.settingsToShare.AddPlayerSignals){
                 SetupPlayerSignal();
             }

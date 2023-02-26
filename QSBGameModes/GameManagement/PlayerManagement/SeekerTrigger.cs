@@ -27,7 +27,9 @@ namespace QSBGameModes{
         }
 
         private void ShapeTrigger_OnEntry(GameObject hitObj){
-            GameManager.gameMode.OnCatch(seekerInfo); //The local player will never be the one with the 
+            if (hitObj.CompareTag("PlayerDetector")){
+                GameManager.gameMode.OnCatch(seekerInfo); //The local player will never be the one with the 
+            }
         }
 
         private void OnDestroy(){

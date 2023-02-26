@@ -35,7 +35,7 @@ namespace QSBGameModes
                     GameModeMenu.UpdateGUI();
                 });
                 //This runs every loop IF we have started Hide and Seek
-                Utils.RunWhen(() => GameManager.state != GameState.Stopped, StartGameMode);
+                //Utils.RunWhen(() => GameManager.state != GameState.Stopped, StartGameMode);
             };
         }
         

@@ -18,7 +18,6 @@ public class HideAndSeek : GameBase {
             Utils.WriteLine("How are you getting caught if you are both the same team!? Ignoring");
             return;
         }
-        
         new RoleChangeMessage(QSBPlayerManager.LocalPlayer, GameManagement.PlayerManagement.PlayerState.Seeking).Send();
 
         if (SharedSettings.settingsToShare.KillHidersOnCatch){
