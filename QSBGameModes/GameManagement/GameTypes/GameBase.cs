@@ -3,8 +3,9 @@
 namespace QSBGameModes.GameManagement.GameTypes;
 
 public class GameBase{
-
+    public GameState State;
     public void OnStateChange(GameState state){
+        State = state;
         switch (state){
             case GameState.Starting:
                 OnStarting();
