@@ -20,8 +20,9 @@ namespace QSBGameModes.GameManagement{
         public static GameBase gameMode = new HideAndSeek();
         
         private static GameState _state = GameState.Stopped;
-        public static GameState state{
-            get{ return _state; }
+        public static GameState state
+        {
+            get => _state;
             set{
                 if (QSBCore.IsHost){ //So that when the host changes the game state a message gets sent
                     new GameStateMessage(value).Send();
