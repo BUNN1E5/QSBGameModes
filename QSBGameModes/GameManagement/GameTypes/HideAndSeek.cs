@@ -8,8 +8,11 @@ using UnityEngine;
 
 namespace QSBGameModes.GameManagement.GameTypes;
 
-public class HideAndSeek : GameBase {
-    
+public class HideAndSeek : GameBase{
+
+
+    public float waitTime = 30f;
+
     public PlayerManagement.PlayerState stateOnJoinLate{ get{ return PlayerManagement.PlayerState.Seeking; } }
     public PlayerManagement.PlayerState stateOnJoinEarly{ get{ return PlayerManagement.PlayerState.Hiding; } }
     public override void OnCatch(GameModeInfo seekerPlayer){
@@ -51,7 +54,18 @@ public class HideAndSeek : GameBase {
     public override void OnWaiting(){
         //Wait X amount of time
         //then move to inProgress
+        float waitRemaining = (Time.time - gameStartTime) + waitTime;
+        Utils.WaitFor(waitRemaining, () => GameManager.state = GameState.InProgress);
     }
 
+    public override void OnInProgress(){
+        base.OnInProgress();
 
+        Utils.RunWhen(() => PlayerManager.hiders.Count == 0, () => { GameManager.state = GameState.Ending; });
+    }
+
+    public override void OnEnding(){
+        //TODO :: DO SOMETHING HERE
+        base.OnEnding();
+    }
 }

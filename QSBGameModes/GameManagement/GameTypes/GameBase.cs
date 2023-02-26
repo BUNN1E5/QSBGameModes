@@ -1,15 +1,23 @@
 ﻿using QSB.Player;
+using UnityEngine;
+
 namespace QSBGameModes.GameManagement;
 
 public class GameBase{
 
+    public float gameStartTime = 0f;
+    
     public PlayerManagement.PlayerState stateOnJoinLate{ get; }
     public PlayerManagement.PlayerState stateOnJoinEarly{ get; }
     
     public void OnStateChange(GameState state){
         switch (state){
             case GameState.Starting:
+                gameStartTime = Time.time;
                 OnStarting();
+                break;
+            case GameState.Waiting:
+                OnWaiting();
                 break;
             case GameState.InProgress:
                 OnInProgress();
@@ -20,9 +28,7 @@ public class GameBase{
             case GameState.Stopped:
                 OnStopped();
                 break;
-            case GameState.Waiting:
-                OnWaiting();
-                break;
+            
         }
     }
 

@@ -7,21 +7,21 @@ namespace QSBGameModes.GameManagement{
     public static partial class GameManager{
         public class GameStateMessage : QSBMessage{
             private GameState state;
+            private float gameStartTime;
             public GameStateMessage(GameState state){
-                this.state = state;
-            }
-            public GameStateMessage(GameState state, bool firstMessage){
+                this.gameStartTime = GameManager.gameMode.gameStartTime;
                 this.state = state;
             }
 
-            
             public override void Serialize(NetworkWriter writer){
                 base.Serialize(writer);
+                writer.WriteFloat(GameManager.gameMode.gameStartTime);
                 writer.WriteInt((int)state);
             }
 
             public override void Deserialize(NetworkReader reader){
                 base.Deserialize(reader);
+                GameManager.gameMode.gameStartTime = reader.ReadFloat();
                 state = (GameState)reader.ReadInt();
             }
 

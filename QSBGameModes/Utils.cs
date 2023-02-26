@@ -27,9 +27,17 @@ namespace QSBGameModes{
 
         public static Coroutine RunWhen(Func<bool> predicate, Action action) => 
             QSBGameModes.instance.StartCoroutine(WaitUntil(predicate, action));
+        
+        public static Coroutine WaitFor(float time, Action action) => 
+            QSBGameModes.instance.StartCoroutine(WaitUntil(time, action));
 
         public static Coroutine StartCoroutine(IEnumerator routine){
             return QSBGameModes.instance.StartCoroutine(routine);
+        }
+        
+        private static IEnumerator WaitUntil(float time, Action action){
+            yield return new WaitForSeconds(time);
+            action();
         }
 
         private static IEnumerator WaitUntil(Func<bool> predicate, Action action){

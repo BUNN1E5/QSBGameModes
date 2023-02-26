@@ -37,7 +37,7 @@ namespace QSBGameModes.GameManagement{
 
         public static void SetupGame(){
             GameManager.state = GameState.Starting;
-            
+
             Utils.WriteLine("Resetting All Player States");
             PlayerManager.ResetAllPlayerStates();
 
