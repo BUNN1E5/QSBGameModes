@@ -34,7 +34,7 @@ namespace QSBGameModes{
         public static Coroutine StartCoroutine(IEnumerator routine){
             return QSBGameModes.instance.StartCoroutine(routine);
         }
-        
+
         private static IEnumerator WaitUntil(float time, Action action){
             yield return new WaitForSeconds(time);
             action();
