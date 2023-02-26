@@ -62,6 +62,7 @@ namespace QSBGameModes{
 
             return true;
         }
+<<<<<<< HEAD
         
         private void ReturnToDefaultVisual(){
             if (Info.SuitedUp){
@@ -73,6 +74,8 @@ namespace QSBGameModes{
                 HeartianVisual.SetActive(true);
             }
         }
+=======
+>>>>>>> master
 
         private void SetupPlayerSignal(){
             Utils.WriteLine("Adding Audio Signal to " + Info, MessageType.Success);
@@ -82,7 +85,11 @@ namespace QSBGameModes{
             Signal._name = SignalName.RadioTower; //TODO :: CHANGE THIS NAME (Without losing prox chat support)
             Signal._frequency = SignalFrequency.HideAndSeek;
         }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> master
         private void SetSeekerVisual(bool enable){
             if (!Utils.ModHelper.Config.GetSettingsValue<bool>("Seeker Visual Effect")){
                 SeekerVisual.SetActive(false);
