@@ -7,6 +7,7 @@ using UnityEngine;
 namespace QSBGameModes{
     public class RemoteInfo : GameModeInfo{
         public SeekerTrigger Trigger;
+        public GameObject SeekerVolume;
 
         public AudioSignal Signal;
 
@@ -21,6 +22,7 @@ namespace QSBGameModes{
             Info.MapMarker.enabled = true;
             Info.HudMarker.enabled = true;
             SeekerVisual.SetActive(false);
+            SeekerVolume.SetActive(false);
             ReturnToDefaultVisual();
             return true;
         }
@@ -28,9 +30,10 @@ namespace QSBGameModes{
         public override bool CleanUp(){
             if (!base.CleanUp()) //If the base func snagged out
                 return false;
-            GameObject.Destroy(Trigger);
+            GameObject.Destroy(Trigger); //Bit redundant tbh
             GameObject.Destroy(Signal);
             GameObject.Destroy(SeekerVisual);
+            GameObject.Destroy(SeekerVolume);
             ReturnToDefaultVisual();
             return false;
         }
@@ -124,17 +127,22 @@ namespace QSBGameModes{
             if(Signal != null) Signal._sourceRadius = 1;
 
 
-            GameObject seekerVolume = new("seeker_volume")
-            {
-                transform =
+            if (SeekerVolume == null){
+                SeekerVolume = new("seeker_volume")
                 {
-                    parent = this.Info.Body.transform,
-                    localPosition = Vector3.zero,
-                    localRotation = Quaternion.identity
-                }
-            };
-            Trigger = seekerVolume.AddComponent<SeekerTrigger>();
-            Trigger.seekerInfo = this;
+                    transform =
+                    {
+                        parent = this.Info.Body.transform,
+                        localPosition = Vector3.zero,
+                        localRotation = Quaternion.identity
+                    }
+                };
+                Trigger = SeekerVolume.AddComponent<SeekerTrigger>();
+                Trigger.seekerInfo = this;
+            }
+            
+            SeekerVolume.SetActive(true);
+            
 
             Utils.WriteLine("Adding the HUD Marker", MessageType.Success);
             
