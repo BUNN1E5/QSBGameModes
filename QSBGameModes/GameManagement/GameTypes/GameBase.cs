@@ -6,9 +6,9 @@ namespace QSBGameModes.GameManagement;
 public class GameBase{
 
     public float gameStartTime = 0f;
-    
-    public PlayerManagement.PlayerState stateOnJoinLate{ get; }
-    public PlayerManagement.PlayerState stateOnJoinEarly{ get; }
+
+    public virtual PlayerManagement.PlayerState StateOnJoinLate() => PlayerManagement.PlayerState.None;
+    public virtual PlayerManagement.PlayerState StateOnJoinEarly() => PlayerManagement.PlayerState.None;
     
     public void OnStateChange(GameState state){
         switch (state){

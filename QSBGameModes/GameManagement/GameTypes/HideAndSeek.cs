@@ -13,8 +13,8 @@ public class HideAndSeek : GameBase{
 
     public float waitTime = 30f;
 
-    public PlayerManagement.PlayerState stateOnJoinLate{ get{ return PlayerManagement.PlayerState.Seeking; } }
-    public PlayerManagement.PlayerState stateOnJoinEarly{ get{ return PlayerManagement.PlayerState.Hiding; } }
+    public override PlayerManagement.PlayerState StateOnJoinLate() => PlayerManagement.PlayerState.Seeking;
+    public override PlayerManagement.PlayerState StateOnJoinEarly()  => PlayerManagement.PlayerState.Hiding;
     public override void OnCatch(GameModeInfo seekerPlayer){
         //We only run if we are a hider and we hit a seeker
         if (PlayerManager.playerInfo[QSBPlayerManager.LocalPlayer].State != GameManagement.PlayerManagement.PlayerState.Hiding)
