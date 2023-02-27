@@ -33,26 +33,32 @@ namespace QSBGameModes
                 Utils.ModHelper.Events.Unity.FireOnNextUpdate(() => {
                     GameModeMenu.SetupPauseButton();
                     GameModeMenu.UpdateGUI();
+                    
+                    Utils.RunWhen(() => GameManager.state != GameState.Stopped, StartGameMode);
                 });
                 //This runs every loop IF we have started Hide and Seek
-                Utils.RunWhen(() => GameManager.state != GameState.Stopped, StartGameMode);
+                
             };
         }
 
         public static void StopGameMode(){
             Utils.RunWhen(() => QSBWorldSync.AllObjectsReady, () => {
+                Utils.WriteLine("Host is stopping game", MessageType.Debug);
                 GameManager.StopGame();
                 PlayerManager.ResetAllPlayerStates();
             });
         }
 
         public static void StartGameMode(){
+            GameModeMenu.UpdateGUI();
             Utils.RunWhen(() => QSBWorldSync.AllObjectsReady, () => {
+                Utils.WriteLine("Game is Starting", MessageType.Debug);
                 GameManager.SetupGame();
             });
         }
 
         public static void JoinGameMode(){
+            Utils.WriteLine("Client is joining game", MessageType.Debug);
             JoinGame();
             GameModeMenu.UpdateGUI();
         }

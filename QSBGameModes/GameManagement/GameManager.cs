@@ -42,6 +42,9 @@ namespace QSBGameModes.GameManagement{
 
             Utils.WriteLine("Resetting All Player States");
             PlayerManager.ResetAllPlayerStates();
+            
+            Utils.WriteLine("Setting Up All Players");
+            PlayerManager.SetupAllPlayers();
 
 
             if (SharedSettings.settingsToShare.AddPlayerSignals){
