@@ -66,7 +66,7 @@ public static class GameModeMenu{
 
     public static void SetPauseButtonAction(UnityAction action){
         if (clickedEvent == null){
-            Button.ButtonClickedEvent c_event = new Button.ButtonClickedEvent();
+            clickedEvent = new Button.ButtonClickedEvent();
             menuButton.onClick = clickedEvent;
         }
         clickedEvent.AddListener(action);
