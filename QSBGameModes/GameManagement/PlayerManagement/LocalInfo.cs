@@ -2,24 +2,21 @@ using System.Linq;
 using OWML.Common;
 using QSB.Player;
 using QSB.ShipSync;
+using QSBGameModes.GameManagement;
 using QSBGameModes.GameManagement.PlayerManagement;
 using QSBGameModes.Patches;
 
 namespace QSBGameModes{
     public class LocalInfo : GameModeInfo{
 
-        NotificationData youAreAHiderNotification = new(NotificationTarget.All, "You are a HIDER");
-        NotificationData youAreASeekerNotification = new(NotificationTarget.All, "You are a SEEKER");
-        NotificationData youAreASpectatorNotification = new(NotificationTarget.All, "You are a SPECTATOR");
-
         protected float DefaultRunSpeed = 6f;
 
         public override bool Reset(){
             if (!base.Reset()) //If the base func snagged out
                 return false;
-            NotificationManager.SharedInstance.UnpinNotification(youAreASeekerNotification);
-            NotificationManager.SharedInstance.UnpinNotification(youAreASpectatorNotification);
-            NotificationManager.SharedInstance.PostNotification(youAreAHiderNotification);
+            NotificationManager.SharedInstance.UnpinNotification(GameManager.gameMode.catcherNotification);
+            NotificationManager.SharedInstance.UnpinNotification(GameManager.gameMode.spectatorNotification);
+            NotificationManager.SharedInstance.PostNotification(GameManager.gameMode.catcheeNotification);
             return true;
         }
 
@@ -52,9 +49,9 @@ namespace QSBGameModes{
                 playerSuit.SuitUp(false, true, true);
             }
 
-            NotificationManager.SharedInstance.UnpinNotification(youAreASeekerNotification);
-            NotificationManager.SharedInstance.UnpinNotification(youAreASpectatorNotification);
-            NotificationManager.SharedInstance.PostNotification(youAreAHiderNotification, true);
+            NotificationManager.SharedInstance.UnpinNotification(GameManager.gameMode.catcherNotification);
+            NotificationManager.SharedInstance.UnpinNotification(GameManager.gameMode.spectatorNotification);
+            NotificationManager.SharedInstance.PostNotification(GameManager.gameMode.catcheeNotification, true);
             
             Locator.GetPlayerController()._runSpeed = DefaultRunSpeed * 1.5f;
 
@@ -99,9 +96,9 @@ namespace QSBGameModes{
                 playerSuit.SuitUp(false, true, true);
             }
 
-            NotificationManager.SharedInstance.UnpinNotification(youAreAHiderNotification);
-            NotificationManager.SharedInstance.UnpinNotification(youAreASpectatorNotification);
-            NotificationManager.SharedInstance.PostNotification(youAreASeekerNotification, true);
+            NotificationManager.SharedInstance.UnpinNotification(GameManager.gameMode.catcheeNotification);
+            NotificationManager.SharedInstance.UnpinNotification(GameManager.gameMode.spectatorNotification);
+            NotificationManager.SharedInstance.PostNotification(GameManager.gameMode.catcherNotification, true);
             Locator.GetPlayerController()._runSpeed = DefaultRunSpeed * 1.6f;
 
             playerResources._currentFuel = ChangePlayerResources.DefaultMaxFuel * 1.2f;
@@ -132,9 +129,9 @@ namespace QSBGameModes{
             //Spectators cannot use the ship
             ShipManager.Instance.CockpitController._interactVolume.DisableInteraction();
             
-            NotificationManager.SharedInstance.UnpinNotification(youAreAHiderNotification);
-            NotificationManager.SharedInstance.UnpinNotification(youAreASeekerNotification);
-            NotificationManager.SharedInstance.PostNotification(youAreASpectatorNotification, true);
+            NotificationManager.SharedInstance.UnpinNotification(GameManager.gameMode.catcheeNotification);
+            NotificationManager.SharedInstance.UnpinNotification(GameManager.gameMode.catcherNotification);
+            NotificationManager.SharedInstance.PostNotification(GameManager.gameMode.spectatorNotification, true);
 
             return true;
         }

@@ -10,6 +10,10 @@ public class GameBase{
     public virtual PlayerManagement.PlayerState StateOnJoinLate() => PlayerManagement.PlayerState.None;
     public virtual PlayerManagement.PlayerState StateOnJoinEarly() => PlayerManagement.PlayerState.None;
     
+    public NotificationData catcheeNotification = new(NotificationTarget.All, "You are a catchee");
+    public NotificationData catcherNotification = new(NotificationTarget.All, "You are a catcher");
+    public NotificationData spectatorNotification = new(NotificationTarget.All, "You are a spectator");
+    
     public void OnStateChange(GameState state){
         switch (state){
             case GameState.Starting:

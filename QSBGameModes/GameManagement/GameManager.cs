@@ -79,7 +79,7 @@ namespace QSBGameModes.GameManagement{
         }
 
         public static void StopGame(){
-            
+            //Make sun splode
         }
 
         public static void SelectRoles(){

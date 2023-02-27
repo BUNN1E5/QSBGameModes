@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using QSB.Messaging;
 using QSB.Player;
 using QSBGameModes.GameManagement.PlayerManagement;
@@ -10,8 +11,10 @@ namespace QSBGameModes.GameManagement.GameTypes;
 
 public class HideAndSeek : GameBase{
 
-
-    public float waitTime = 30f;
+    
+    public NotificationData catcheeNotification = new(NotificationTarget.All, "HIDER");
+    public NotificationData catcherNotification = new(NotificationTarget.All, "SEEKER");
+    public NotificationData spectatorNotification = new(NotificationTarget.All, "SPECTATOR");
 
     public override PlayerManagement.PlayerState StateOnJoinLate() => PlayerManagement.PlayerState.Seeking;
     public override PlayerManagement.PlayerState StateOnJoinEarly()  => PlayerManagement.PlayerState.Hiding;
@@ -54,8 +57,23 @@ public class HideAndSeek : GameBase{
     public override void OnWaiting(){
         //Wait X amount of time
         //then move to inProgress
-        float waitRemaining = (Time.time - gameStartTime) + waitTime;
-        Utils.WaitFor(waitRemaining, () => GameManager.state = GameState.InProgress);
+        float waitRemaining = (Time.time - gameStartTime) + SharedSettings.settingsToShare.PreroundTime;
+        Utils.StartCoroutine(PreRoundTimer(waitRemaining));
+        //Utils.WaitFor(waitRemaining, () => GameManager.state = GameState.InProgress);
+    }
+
+    public IEnumerator PreRoundTimer(float time){
+        string formattedString = "Seekers selected in {0:0.##} seconds";
+        
+        NotificationData preroundNotification = new(NotificationTarget.All, String.Format(formattedString, time));
+        NotificationManager.SharedInstance.PostNotification(preroundNotification, true);
+        while (time > 0){
+            time -= Time.deltaTime;
+            preroundNotification.displayMessage = String.Format(formattedString, time);
+            yield return new WaitForEndOfFrame();
+        }
+        NotificationManager.SharedInstance.UnpinNotification(preroundNotification);
+        GameManager.state = GameState.InProgress;
     }
 
     public override void OnInProgress(){

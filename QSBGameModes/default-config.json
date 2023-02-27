@@ -11,6 +11,8 @@
       "type": "separator",
       "tooltip" : "The host decides these settings"
     },
+    
+    "Pre-Round Time": 30,
 
     "GameType": {
       "type": "selector",

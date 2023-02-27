@@ -11,6 +11,7 @@ namespace QSBGameModes.GameManagement;
 
 public class SharedSettingsMessage : QSBMessage{
     string GameType;
+    float preroundTime;
     bool AddPlayerSignals;
     bool Disable6thLocation;
     bool ActivateAllReturnPlatforms;
@@ -19,6 +20,7 @@ public class SharedSettingsMessage : QSBMessage{
     
     public SharedSettingsMessage(SettingsPayload payload) { 
         GameType = payload.GameType;
+        preroundTime = payload.PreroundTime;
         AddPlayerSignals = payload.AddPlayerSignals;
         Disable6thLocation = payload.Disable6thLocation;
         ActivateAllReturnPlatforms = payload.ActivateAllReturnPlatforms;
@@ -29,6 +31,7 @@ public class SharedSettingsMessage : QSBMessage{
     public override void Serialize(NetworkWriter writer){
         base.Serialize(writer);
         writer.Write(GameType);
+        writer.Write(preroundTime);
         writer.Write(AddPlayerSignals);
         writer.Write(Disable6thLocation);
         writer.Write(ActivateAllReturnPlatforms);
@@ -39,6 +42,7 @@ public class SharedSettingsMessage : QSBMessage{
     public override void Deserialize(NetworkReader reader){
         base.Deserialize(reader);
         GameType = reader.Read<string>();
+        preroundTime = reader.Read<float>();
         AddPlayerSignals = reader.Read<bool>();
         Disable6thLocation = reader.Read<bool>();
         ActivateAllReturnPlatforms = reader.Read<bool>();
@@ -50,6 +54,7 @@ public class SharedSettingsMessage : QSBMessage{
         Utils.WriteLine("Recieved Settings");
         SharedSettings.settingsToShare = new SettingsPayload(){ //This looks so dumb lmao
             GameType = GameType,
+            PreroundTime = preroundTime,
             AddPlayerSignals = AddPlayerSignals,
             Disable6thLocation = Disable6thLocation,
             ActivateAllReturnPlatforms = ActivateAllReturnPlatforms,
