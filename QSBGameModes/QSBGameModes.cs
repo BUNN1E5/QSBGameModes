@@ -38,11 +38,17 @@ namespace QSBGameModes
                 //Utils.RunWhen(() => GameManager.state != GameState.Stopped, StartGameMode);
             };
         }
-        
+
+        public static void StopGameMode(){
+            Utils.RunWhen(() => QSBWorldSync.AllObjectsReady, () => {
+                GameManager.StopGame();
+                PlayerManager.ResetAllPlayerStates();
+            });
+        }
+
         public static void StartGameMode(){
             Utils.RunWhen(() => QSBWorldSync.AllObjectsReady, () => {
                 GameManager.SetupGame();
-                GameManager.SelectRoles();
             });
         }
 

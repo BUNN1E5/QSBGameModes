@@ -77,7 +77,11 @@ namespace QSBGameModes.GameManagement{
             
             gameMode.OnStarting();
         }
-        
+
+        public static void StopGame(){
+            
+        }
+
         public static void SelectRoles(){
             if (!QSBCore.IsHost){
                 Utils.WriteLine("Only the host may select the roles", MessageType.Info);

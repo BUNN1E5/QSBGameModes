@@ -60,7 +60,7 @@ public class HideAndSeek : GameBase{
 
     public override void OnInProgress(){
         base.OnInProgress();
-
+        GameManager.SelectRoles();
         Utils.RunWhen(() => PlayerManager.hiders.Count == 0, () => { GameManager.state = GameState.Ending; });
     }
 
