@@ -10,12 +10,11 @@ using UnityEngine;
 namespace QSBGameModes.GameManagement.GameTypes;
 
 public class HideAndSeek : GameBase{
-
-    
-    public NotificationData catcheeNotification = new(NotificationTarget.All, "HIDER");
-    public NotificationData catcherNotification = new(NotificationTarget.All, "SEEKER");
-    public NotificationData spectatorNotification = new(NotificationTarget.All, "SPECTATOR");
-
+    public HideAndSeek(){ 
+        catcheeNotification = new(NotificationTarget.All, "HIDER");
+        catcherNotification = new(NotificationTarget.All, "SEEKER");
+        spectatorNotification = new(NotificationTarget.All, "SPECTATOR");
+    }
     public override PlayerManagement.PlayerState StateOnJoinLate() => PlayerManagement.PlayerState.Seeking;
     public override PlayerManagement.PlayerState StateOnJoinEarly()  => PlayerManagement.PlayerState.Hiding;
     public override void OnCatch(GameModeInfo seekerPlayer){
