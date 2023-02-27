@@ -59,6 +59,7 @@ public static class GameModeMenu{
             }
             else{
                 menuText.text = "READY UP FOR " + SharedSettings.settingsToShare.GameType;// + SharedSettings.settingsToShare.GameType;
+                SetPauseButtonAction(QSBGameModes.JoinGameMode);
             }
         }
     }
