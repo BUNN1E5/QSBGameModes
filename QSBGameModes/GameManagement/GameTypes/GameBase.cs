@@ -1,4 +1,8 @@
-﻿using QSB.Player;
+﻿using OWML.Common;
+using QSB.Messaging;
+using QSB.Player;
+using QSB.Utility.Messages;
+using QSBGameModes.GameManagement.PlayerManagement;
 using UnityEngine;
 
 namespace QSBGameModes.GameManagement;
@@ -17,7 +21,6 @@ public class GameBase{
     public void OnStateChange(GameState state){
         switch (state){
             case GameState.Starting:
-                gameStartTime = Time.time;
                 OnStarting();
                 break;
             case GameState.Waiting:
@@ -40,8 +43,15 @@ public class GameBase{
     public virtual void OnCatch(GameModeInfo seekerPlayer){}
     public virtual void OnStarting(){}
     public virtual void OnInProgress(){}
-    public virtual void OnEnding(){}
-    public virtual void OnStopped(){}
+
+    public virtual void OnEnding(){
+        new DebugTriggerSupernovaMessage().Send();
+    }
+
+    public virtual void OnStopped(){
+        PlayerManager.SetAllPlayerStates(PlayerManagement.PlayerState.None);
+        new DebugTriggerSupernovaMessage().Send();
+    }
     public virtual void OnWaiting(){}
 
     public virtual void OnJoin(){}

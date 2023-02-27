@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections;
+using OWML.Common;
 using QSB.Messaging;
 using QSB.Player;
 using QSBGameModes.GameManagement.PlayerManagement;
 using QSBGameModes.GameManagement.RoleSelection;
 using QSBGameModes.Messages;
 using UnityEngine;
+using UnityEngine.Playables;
 
 namespace QSBGameModes.GameManagement.GameTypes;
 
 public class HideAndSeek : GameBase{
     public HideAndSeek(){ 
-        catcheeNotification = new(NotificationTarget.All, "HIDER");
-        catcherNotification = new(NotificationTarget.All, "SEEKER");
-        spectatorNotification = new(NotificationTarget.All, "SPECTATOR");
+        catcheeNotification = new(NotificationTarget.All, "HIDER", 0, false);
+        catcherNotification = new(NotificationTarget.All, "SEEKER", 0, false);
+        spectatorNotification = new(NotificationTarget.All, "SPECTATOR",0, false);
     }
     public override PlayerManagement.PlayerState StateOnJoinLate() => PlayerManagement.PlayerState.Seeking;
     public override PlayerManagement.PlayerState StateOnJoinEarly()  => PlayerManagement.PlayerState.Hiding;
@@ -53,26 +55,36 @@ public class HideAndSeek : GameBase{
         GameManager.state = GameState.Waiting;
     }
 
+    private Coroutine preroundTimer;
     public override void OnWaiting(){
         //Wait X amount of time
         //then move to inProgress
         float waitRemaining = (Time.time - gameStartTime) + SharedSettings.settingsToShare.PreroundTime;
-        Utils.StartCoroutine(PreRoundTimer(waitRemaining));
+        if (preroundTimer == null){
+            Utils.WriteLine(String.Format("Waiting for {0:0.##} seconds", waitRemaining), MessageType.Info);
+            preroundTimer = Utils.StartCoroutine(PreRoundTimer(waitRemaining));
+        }
         //Utils.WaitFor(waitRemaining, () => GameManager.state = GameState.InProgress);
     }
 
     public IEnumerator PreRoundTimer(float time){
-        string formattedString = "Seekers selected in {0:0.##} seconds";
+        string formattedString = "Seekers selected in {0:0} seconds";
         
-        NotificationData preroundNotification = new(NotificationTarget.All, String.Format(formattedString, time));
+        NotificationData preroundNotification = new(NotificationTarget.All, String.Format(formattedString, time), 1f, false);
+        foreach(var notifiable in NotificationManager.SharedInstance._notifiableElements){
+            Utils.WriteLine(notifiable.ToString());
+        }
         NotificationManager.SharedInstance.PostNotification(preroundNotification, true);
         while (time > 0){
-            time -= Time.deltaTime;
             preroundNotification.displayMessage = String.Format(formattedString, time);
-            yield return new WaitForEndOfFrame();
+            Utils.WriteLine(String.Format(formattedString, time), MessageType.Info);
+            NotificationManager.SharedInstance.PostNotification(preroundNotification);
+            yield return new WaitForSeconds(1);
+            time -= 1;
         }
         NotificationManager.SharedInstance.UnpinNotification(preroundNotification);
         GameManager.state = GameState.InProgress;
+        preroundTimer = null;
     }
 
     public override void OnInProgress(){
@@ -84,5 +96,10 @@ public class HideAndSeek : GameBase{
     public override void OnEnding(){
         //TODO :: DO SOMETHING HERE
         base.OnEnding();
+        
+    }
+
+    public override void OnStopped(){
+        Utils.StopCoroutine(preroundTimer);
     }
 }

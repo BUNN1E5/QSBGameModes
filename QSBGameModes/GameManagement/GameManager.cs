@@ -74,12 +74,11 @@ namespace QSBGameModes.GameManagement{
                     transmitter._targetReceiver._returnGlowFadeController.FadeTo(0.5f, 5f);
                 }
             }
-            
-            gameMode.OnStarting();
         }
 
         public static void StopGame(){
             //Make sun splode
+            GameManager.state = GameState.Stopped;
         }
 
         public static void SelectRoles(){

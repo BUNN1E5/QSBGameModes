@@ -47,7 +47,13 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
                 PlayerManager.SetupPlayer(playerInfo);
             });
         }
-        
+
+        public static void SetAllPlayerStates(PlayerState state){
+            QSBPlayerManager.PlayerList.ForEach((playerInfo) => {
+                PlayerManager.SetPlayerState(playerInfo, state);
+            });
+        }
+
         public static void SetPlayerState(PlayerInfo playerInfo, PlayerState state){
             Utils.WriteLine($"Chaging player {playerInfo} state to {state.ToString()} [Client ID: {QSBPlayerManager.LocalPlayerId}]");
             switch (state){

@@ -34,6 +34,10 @@ namespace QSBGameModes{
         public static Coroutine StartCoroutine(IEnumerator routine){
             return QSBGameModes.instance.StartCoroutine(routine);
         }
+        
+        public static void StopCoroutine(Coroutine routine){
+            QSBGameModes.instance.StopCoroutine(routine);
+        }
 
         private static IEnumerator WaitUntil(float time, Action action){
             yield return new WaitForSeconds(time);

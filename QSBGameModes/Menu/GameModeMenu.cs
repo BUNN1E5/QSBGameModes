@@ -58,8 +58,13 @@ public static class GameModeMenu{
                 }
             }
             else{
-                menuText.text = "READY UP FOR " + SharedSettings.settingsToShare.GameType;// + SharedSettings.settingsToShare.GameType;
-                SetPauseButtonAction(QSBGameModes.JoinGameMode);
+                if (PlayerManager.LocalPlayer.State == GameManagement.PlayerManagement.PlayerState.None){
+                    menuText.text ="READY UP FOR " + SharedSettings.settingsToShare.GameType; // + SharedSettings.settingsToShare.GameType;
+                    SetPauseButtonAction(QSBGameModes.JoinGameMode);
+                } else {
+                    menuText.text ="UNREADY UP FOR " + SharedSettings.settingsToShare.GameType; // + SharedSettings.settingsToShare.GameType;
+                    SetPauseButtonAction(QSBGameModes.LeaveGameMode);
+                }
             }
         }
     }

@@ -1,8 +1,10 @@
 using Mirror;
+using OWML.Common;
 using QSB.Messaging;
 using QSBGameModes.GameManagement.PlayerManagement;
 using QSBGameModes.GameManagement.RoleSelection;
 using QSBGameModes.Menu;
+using UnityEngine;
 
 namespace QSBGameModes.GameManagement{
     public static partial class GameManager{
@@ -11,6 +13,7 @@ namespace QSBGameModes.GameManagement{
             
             public GameStateMessage(GameState state){
                 this.state = state;
+                GameManager.gameMode.gameStartTime = Time.time;
             }
 
             public override void Serialize(NetworkWriter writer){
@@ -29,6 +32,7 @@ namespace QSBGameModes.GameManagement{
 
             public override void OnReceiveRemote(){
                 _state = state;
+                Utils.WriteLine("Game State set to " + _state, MessageType.Debug);
                 GameManager.gameMode.OnStateChange(state);
                 GameModeMenu.UpdateGUI();
             }

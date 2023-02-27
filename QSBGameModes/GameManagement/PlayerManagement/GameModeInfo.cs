@@ -20,6 +20,8 @@ namespace QSBGameModes{
             if (!EnumUtils.IsDefined<DeathType>(playerInfo.Name)){
                 PlayerManager.PlayerDeathTypes.Add(this.Info, EnumUtils.Create<DeathType>(playerInfo.Name));
             }
+            
+            
             return true;
         }
 

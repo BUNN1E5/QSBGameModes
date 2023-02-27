@@ -35,7 +35,7 @@ namespace QSBGameModes
                     GameModeMenu.UpdateGUI();
                 });
                 //This runs every loop IF we have started Hide and Seek
-                //Utils.RunWhen(() => GameManager.state != GameState.Stopped, StartGameMode);
+                Utils.RunWhen(() => GameManager.state != GameState.Stopped, StartGameMode);
             };
         }
 
@@ -53,18 +53,19 @@ namespace QSBGameModes
         }
 
         public static void JoinGameMode(){
-            JoinGame(GameManager.state);
+            JoinGame();
+            GameModeMenu.UpdateGUI();
         }
         
-        private static void JoinGame(GameState state){
-            if (state == GameState.Stopped){
+        private static void JoinGame(){
+            if (GameManager.state == GameState.Stopped){
                 new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Ready).Send();
                 return;
             }
             
             Utils.RunWhen(() => SharedSettings.receivedSettings, () => {
                 if (SharedSettings.settingsToShare.AllowJoinWhileGameInProgress){
-                    switch (state){
+                    switch (GameManager.state){
                         case GameState.Starting:
                         case GameState.Waiting:
                             new RoleChangeMessage(PlayerManager.LocalPlayer.Info, GameManager.gameMode.StateOnJoinEarly()).Send();
@@ -74,7 +75,7 @@ namespace QSBGameModes
                             break;
                         case GameState.Ending:
                             //What state should be here?
-                            //new RoleChangeMessage(PlayerManager.LocalPlayer.Info, PlayerManagement.PlayerState.Spectating).Send();
+                            new RoleChangeMessage(PlayerManager.LocalPlayer.Info, GameManagement.PlayerManagement.PlayerState.Ready).Send();
                             break;
                     }
                     return;
@@ -85,12 +86,13 @@ namespace QSBGameModes
 
         public static void LeaveGameMode() {
             new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Spectating).Send();
+            GameModeMenu.UpdateGUI();
         }
 
         //TODO :: CONFIRM THAT THIS WORKS
         //Ambiguous on if the settings are changed before or after this function
         public override void Configure(IModConfig config){
-            SharedSettings.SendSettings(); //This only sends if host of session 
+            SharedSettings.SendSettings(); //This only sends if host of session
         }
 
         #region DEBUG

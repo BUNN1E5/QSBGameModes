@@ -20,6 +20,17 @@ namespace QSBGameModes{
             return true;
         }
 
+        public override bool SetupInfo(PlayerInfo playerInfo){
+            if (!base.SetupInfo(playerInfo))
+                return false;
+            var playerSuit = Locator.GetPlayerSuit();
+            if (!playerSuit.IsWearingSuit()){
+                playerSuit.SuitUp(false, true, true);
+            }
+
+            return true;
+        }
+
         public override bool SetupHider() {
             if (!base.SetupHider()) //If the base func snagged out
                 return false;
