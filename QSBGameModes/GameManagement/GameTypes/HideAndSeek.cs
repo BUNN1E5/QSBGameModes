@@ -100,6 +100,7 @@ public class HideAndSeek : GameBase{
     }
 
     public override void OnStopped(){
+        base.OnStopped();
         Utils.StopCoroutine(preroundTimer);
     }
 }
