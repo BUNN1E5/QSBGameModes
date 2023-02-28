@@ -26,8 +26,10 @@ namespace QSBGameModes.GameManagement{
             set{
                 if (QSBCore.IsHost){ //So that when the host changes the game state a message gets sent
                     new GameStateMessage(value).Send();
-                    Utils.WriteLine($"Current State {value}");
+                    Utils.WriteLine($"Current State {value}", MessageType.Debug);
                     _state = value; //we will also technically be set from the message
+                } else {
+                    Utils.WriteLine("Non-Host tried to set GameState", MessageType.Debug);
                 }
                 //We dont want the non hosts from changing the gamestate at any point
             }
@@ -39,6 +41,7 @@ namespace QSBGameModes.GameManagement{
         }
 
         public static void SetupGame(){
+            Utils.WriteLine("Setting Up Game", MessageType.Info);
             GameManager.state = GameState.Starting;
 
             Utils.WriteLine("Resetting All Player States");
@@ -82,6 +85,7 @@ namespace QSBGameModes.GameManagement{
 
         public static void StopGame(){
             //Make sun splode
+            Utils.WriteLine("Stopping Game", MessageType.Info);
             GameManager.state = GameState.Stopped;
         }
 
@@ -151,7 +155,7 @@ namespace QSBGameModes.GameManagement{
         Starting,
         Waiting,
         InProgress,
-        Ending, //Mark this at some point
+        Ending,
         Stopped //This is the default state until host starts the game
     }
 }

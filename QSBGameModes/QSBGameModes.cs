@@ -42,32 +42,33 @@ namespace QSBGameModes
         }
 
         public static void StopGameMode(){
+            
             Utils.RunWhen(() => QSBWorldSync.AllObjectsReady, () => {
                 Utils.WriteLine("Host is stopping game", MessageType.Debug);
                 GameManager.StopGame();
-                PlayerManager.ResetAllPlayerStates();
+                PlayerManager.SetAllPlayerStates(GameManagement.PlayerManagement.PlayerState.None);
+                GameModeMenu.UpdateGUI();
             });
         }
 
         public static void StartGameMode(){
+            if(QSBCore.IsHost)
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Ready).Send();
+            
             GameModeMenu.UpdateGUI();
             Utils.RunWhen(() => QSBWorldSync.AllObjectsReady, () => {
                 Utils.WriteLine("Game is Starting", MessageType.Debug);
                 GameManager.SetupGame();
             });
         }
-
-        public static void JoinGameMode(){
-            Utils.WriteLine("Client is joining game", MessageType.Debug);
-            JoinGame();
-            GameModeMenu.UpdateGUI();
-        }
         
-        private static void JoinGame(){
+        public static void JoinGameMode(){
             if (GameManager.state == GameState.Stopped){
                 new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Ready).Send();
                 return;
             }
+            
+            Utils.WriteLine("Client is joining game", MessageType.Debug);
             
             Utils.RunWhen(() => SharedSettings.receivedSettings, () => {
                 if (SharedSettings.settingsToShare.AllowJoinWhileGameInProgress){
@@ -88,6 +89,7 @@ namespace QSBGameModes
                 }
                 new RoleChangeMessage(PlayerManager.LocalPlayer.Info, GameManagement.PlayerManagement.PlayerState.Spectating).Send();
             });
+            
         }
 
         public static void LeaveGameMode() {

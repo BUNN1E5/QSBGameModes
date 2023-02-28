@@ -87,10 +87,11 @@ public class HideAndSeek : GameBase{
         preroundTimer = null;
     }
 
+    private Coroutine endGameCheck;
     public override void OnInProgress(){
         base.OnInProgress();
         GameManager.SelectRoles();
-        Utils.RunWhen(() => PlayerManager.hiders.Count == 0, () => { GameManager.state = GameState.Ending; });
+        endGameCheck = Utils.RunWhen(() => PlayerManager.hiders.Count == 0, () => { GameManager.state = GameState.Ending; });
     }
 
     public override void OnEnding(){
@@ -101,6 +102,7 @@ public class HideAndSeek : GameBase{
 
     public override void OnStopped(){
         base.OnStopped();
+        Utils.StopCoroutine(endGameCheck);
         Utils.StopCoroutine(preroundTimer);
     }
 }
