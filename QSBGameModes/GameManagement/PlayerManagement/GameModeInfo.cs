@@ -33,10 +33,10 @@ namespace QSBGameModes{
         public virtual bool Reset(){
             if (!isReady){
                 waitCoroutine = Utils.RunWhen(() => isReady, () => Reset(), waitCoroutine);
-                Utils.WriteLine("Player not ready, Waiting", MessageType.Debug);
+                Utils.WriteLine("GameModeInfo :: Player not ready, Waiting", MessageType.Debug);
                 return false;
             }
-            Utils.WriteLine("Resetting Player", MessageType.Debug);
+            Utils.WriteLine("GameModeInfo :: Resetting Player", MessageType.Debug);
             
             if (State is GameManagement.PlayerManagement.PlayerState.None 
                 or GameManagement.PlayerManagement.PlayerState.Spectating){
@@ -56,7 +56,7 @@ namespace QSBGameModes{
             }
 
             if (this.State == GameManagement.PlayerManagement.PlayerState.Hiding){
-                Utils.WriteLine(this.Info + " is already a Hider", MessageType.Info);
+                Utils.WriteLine("GameModeInfo :: " + this.Info + " is already a Hider", MessageType.Info);
                 return false;
             }
             Reset();
@@ -72,7 +72,7 @@ namespace QSBGameModes{
             }
 
             if (this.State == GameManagement.PlayerManagement.PlayerState.Seeking){
-                Utils.WriteLine(this.Info + " is already a Seeker", MessageType.Info);
+                Utils.WriteLine("GameModeInfo :: " + this.Info + " is already a Seeker", MessageType.Info);
                 return false;
             }
             Reset();
@@ -89,7 +89,7 @@ namespace QSBGameModes{
             }
 
             if (this.State == GameManagement.PlayerManagement.PlayerState.Spectating){
-                Utils.WriteLine(this.Info + " is already a Spectator", MessageType.Info);
+                Utils.WriteLine("GameModeInfo :: " + this.Info + " is already a Spectator", MessageType.Info);
                 return false;
             }
             

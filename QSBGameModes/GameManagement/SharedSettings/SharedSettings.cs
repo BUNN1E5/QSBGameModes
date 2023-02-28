@@ -49,7 +49,7 @@ namespace QSBGameModes.GameManagement{
         }
         
         public static void LoadSettings(IModConfig config){
-            Utils.WriteLine("Loading Shared Settings");
+            Utils.WriteLine("SharedSettings :: " + "Loading Shared Settings");
             
             //Put the shared settings here
             settingsToShare = new SettingsPayload(){

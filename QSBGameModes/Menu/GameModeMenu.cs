@@ -16,7 +16,7 @@ public static class GameModeMenu{
     public static Text spectateText;
 
     public static void SetupPauseButton(){
-        Utils.WriteLine("Adding button to menu", MessageType.Info);
+        Utils.WriteLine("GameModeMenu :: " + "Adding button to menu", MessageType.Info);
         //Setup the Host button 
         //TODO :: MAKE BETTER GUI FOR SETTING UP GAME
         if (QSBCore.IsHost){ //TODO :: CHANGE ORDER OF HIDE AND SEEK INTERACT BUTTON

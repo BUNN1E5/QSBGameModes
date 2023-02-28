@@ -26,10 +26,10 @@ namespace QSBGameModes.GameManagement{
             set{
                 if (QSBCore.IsHost){ //So that when the host changes the game state a message gets sent
                     new GameStateMessage(value).Send();
-                    Utils.WriteLine($"Current State {value}", MessageType.Debug);
+                    Utils.WriteLine("GameManager :: " + $"Current State {value}", MessageType.Debug);
                     _state = value; //we will also technically be set from the message
                 } else {
-                    Utils.WriteLine("Non-Host tried to set GameState", MessageType.Debug);
+                    Utils.WriteLine("GameManager :: " + "Non-Host tried to set GameState", MessageType.Debug);
                 }
                 //We dont want the non hosts from changing the gamestate at any point
             }
@@ -41,25 +41,25 @@ namespace QSBGameModes.GameManagement{
         }
 
         public static void SetupGame(){
-            Utils.WriteLine("Setting Up Game", MessageType.Info);
+            Utils.WriteLine("GameManager :: " + "Setting Up Game", MessageType.Info);
             GameManager.state = GameState.Starting;
 
-            Utils.WriteLine("Resetting All Player States");
+            Utils.WriteLine("GameManager :: " + "Resetting All Player States");
             PlayerManager.ResetAllPlayerStates();
             
-            Utils.WriteLine("Setting Up All Players");
+            Utils.WriteLine("GameManager :: " + "Setting Up All Players");
             PlayerManager.SetupAllPlayers();
 
 
             if (SharedSettings.settingsToShare.AddPlayerSignals){
-                Utils.WriteLine("Added the Hide and Seek Frequency");
+                Utils.WriteLine("GameManager :: " + "Added the Hide and Seek Frequency");
                 PlayerData.LearnFrequency(SignalFrequency.HideAndSeek);
             
-                Utils.WriteLine("Setting Up Settings for players", MessageType.Info);
+                Utils.WriteLine("GameManager :: " + "Setting Up Settings for players", MessageType.Info);
             }
 
             if(SharedSettings.settingsToShare.Disable6thLocation){
-                Utils.WriteLine("Preventing the Quantum Moon from going to the 6th location", MessageType.Info);
+                Utils.WriteLine("GameManager :: " + "Preventing the Quantum Moon from going to the 6th location", MessageType.Info);
                 QuantumMoon qm = QSBWorldSync.GetUnityObject<QuantumMoon>();
                 if (qm != null){
                     qm._collapseToIndex = 0;
@@ -73,7 +73,7 @@ namespace QSBGameModes.GameManagement{
             // QSBWorldSync.GetUnityObjects<SandLevelController>().ForEach(controller => {});
 
             if (SharedSettings.settingsToShare.ActivateAllReturnPlatforms){
-                Utils.WriteLine("Setting all return platforms to active", MessageType.Info);
+                Utils.WriteLine("GameManager :: " + "Setting all return platforms to active", MessageType.Info);
                 foreach (NomaiWarpTransmitter transmitter in QSBWorldSync.GetUnityObjects<NomaiWarpTransmitter>()){
                     transmitter.CloseBlackHole();
                     transmitter._targetReceiver._returnPlatform = transmitter;
@@ -85,18 +85,18 @@ namespace QSBGameModes.GameManagement{
 
         public static void StopGame(){
             //Make sun splode
-            Utils.WriteLine("Stopping Game", MessageType.Info);
+            Utils.WriteLine("GameManager :: " + "Stopping Game", MessageType.Info);
             GameManager.state = GameState.Stopped;
         }
 
         public static void SelectRoles(){
             if (!QSBCore.IsHost){
-                Utils.WriteLine("Only the host may select the roles", MessageType.Info);
+                Utils.WriteLine("GameManager :: " + "Only the host may select the roles", MessageType.Info);
                 return;
             }
 
             Utils.RunWhen(() => QSBPlayerManager.PlayerList.TrueForAll(playerInfo => playerInfo.Body != null), () => {
-                Utils.WriteLine("Choosing the Roles", MessageType.Success);
+                Utils.WriteLine("GameManager :: " + "Choosing the Roles", MessageType.Success);
                 HashSet<GameModeInfo> players = new();
                 HashSet<uint> hiders = new();
                 HashSet<uint> spectators = new();
@@ -119,24 +119,24 @@ namespace QSBGameModes.GameManagement{
             });
         }
         private static void SendSelectedRoles(HashSet<uint> seekers, HashSet<uint> hiders, HashSet<uint> spectators){
-            Utils.WriteLine("Sending Roles!");
-            Utils.WriteLine($"Seekers: {seekers.Count}");
+            Utils.WriteLine("GameManager :: " + "Sending Roles!");
+            Utils.WriteLine("GameManager :: " + $"Seekers: {seekers.Count}");
             foreach (uint seeker in seekers){
-                Utils.WriteLine($"Seeker: {seeker}");
+                Utils.WriteLine("GameManager :: " + $"Seeker: {seeker}");
                 if (QSBPlayerManager.PlayerExists(seeker))
                     new RoleChangeMessage(seeker, PlayerManagement.PlayerState.Seeking).Send();
             }
 
-            Utils.WriteLine($"Hiders: {hiders.Count}");
+            Utils.WriteLine("GameManager :: " + $"Hiders: {hiders.Count}");
             foreach (uint hider in hiders){
-                Utils.WriteLine($"Hider: {hider}");
+                Utils.WriteLine("GameManager :: " + $"Hider: {hider}");
                 if (QSBPlayerManager.PlayerExists(hider))
                     new RoleChangeMessage(hider, PlayerManagement.PlayerState.Hiding).Send();
             }
 			
-            Utils.WriteLine($"Spectators: {spectators.Count}");
+            Utils.WriteLine("GameManager :: " + $"Spectators: {spectators.Count}");
             foreach (uint spectator in spectators){
-                Utils.WriteLine($"Spectator: {spectator}");
+                Utils.WriteLine("GameManager :: " + $"Spectator: {spectator}");
                 if (QSBPlayerManager.PlayerExists(spectator))
                     new RoleChangeMessage(spectator, PlayerManagement.PlayerState.Spectating).Send();
             }

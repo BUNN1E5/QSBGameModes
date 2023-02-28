@@ -25,7 +25,7 @@ public class HideAndSeek : GameBase{
             return;
 
         if (PlayerManager.playerInfo[QSBPlayerManager.LocalPlayer].State == seekerPlayer.State){
-            Utils.WriteLine("How are you getting caught if you are both the same team!? Ignoring");
+            Utils.WriteLine("HideAndSeek :: How are you getting caught if you are both the same team!? Ignoring");
             return;
         }
         new RoleChangeMessage(QSBPlayerManager.LocalPlayer, GameManagement.PlayerManagement.PlayerState.Seeking).Send();
@@ -39,7 +39,7 @@ public class HideAndSeek : GameBase{
             }
             
             Locator.GetDeathManager().KillPlayer(DeathType.Impact);
-            Utils.WriteLine("DeathType not found for " + seekerPlayer.Info);
+            Utils.WriteLine("HideAndSeek :: DeathType not found for " + seekerPlayer.Info);
         }
     }
     
@@ -56,24 +56,31 @@ public class HideAndSeek : GameBase{
     }
 
     private Coroutine preroundTimer;
+    private int runCount = 0;
+    
     public override void OnWaiting(){
         //Wait X amount of time
         //then move to inProgress
         float waitRemaining = (Time.time - gameStartTime) + SharedSettings.settingsToShare.PreroundTime;
-        Utils.WriteLine($"Waiting for {waitRemaining:0.##} seconds", MessageType.Info);
-        preroundTimer = Utils.StartCoroutine(PreRoundTimer(waitRemaining));
+        Utils.WriteLine(String.Format("HideAndSeek :: Waiting for {0:0.##} seconds", waitRemaining), MessageType.Info);
+        
+        Utils.WriteLine("HideAndSeek :: Ran OnWaiting " + ++runCount + " times", MessageType.Error);
+        if(preroundTimer == null)
+            preroundTimer = Utils.StartCoroutine(PreRoundTimer(waitRemaining));
         //Utils.WaitFor(waitRemaining, () => GameManager.state = GameState.InProgress);
     }
 
     public IEnumerator PreRoundTimer(float time){
-        string formattedString = "Seekers selected in {0:0} seconds";
+        string formattedString = "Seekers selected in";
         
-        NotificationData preroundNotification = new(NotificationTarget.All, String.Format(formattedString, time), 1f, false);
+        NotificationData preroundNotification = new(NotificationTarget.All, formattedString, 1f, false);
+        NotificationData timeNotification = new(NotificationTarget.All, "" + time, 1f, false);
         NotificationManager.SharedInstance.PostNotification(preroundNotification, true);
+        NotificationManager.SharedInstance.PostNotification(timeNotification);
         while (time > 0){
-            preroundNotification.displayMessage = String.Format(formattedString, time);
-            Utils.WriteLine(String.Format(formattedString, time), MessageType.Info);
-            NotificationManager.SharedInstance.PostNotification(preroundNotification);
+            timeNotification.displayMessage = "" + time;
+            Utils.WriteLine("HideAndSeek :: Seekers selected in " + time, MessageType.Info);
+            NotificationManager.SharedInstance.RepostNotifcation(timeNotification);
             yield return new WaitForSeconds(1);
             time -= 1;
         }

@@ -55,7 +55,7 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
         }
 
         public static void SetPlayerState(PlayerInfo playerInfo, PlayerState state){
-            Utils.WriteLine($"Chaging player {playerInfo} state to {state.ToString()} [Client ID: {QSBPlayerManager.LocalPlayerId}]");
+            Utils.WriteLine("PlayerManager :: " + $"Chaging player {playerInfo} state to {state.ToString()} [Client ID: {QSBPlayerManager.LocalPlayerId}]");
             switch (state){
                 case PlayerState.Hiding:
                     hiders.Add(playerInfo);
@@ -76,7 +76,7 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
                     SetupSpectator(PlayerManager.playerInfo[playerInfo]);
                     break;
                 case PlayerState.None:
-                    Utils.WriteLine("Player state is None", MessageType.Error);
+                    Utils.WriteLine("PlayerManager :: " + "Player state is None", MessageType.Error);
                     hiders.Remove(playerInfo);
                     seekers.Remove(playerInfo);
                     spectators.Remove(playerInfo);
@@ -91,7 +91,7 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
         //This should run once every loop to initialize everything needed for Hide and Seek
         public static void SetupPlayer(PlayerInfo playerInfo, PlayerState state = PlayerState.None){
             QSBGameModes.instance.ModHelper.Events.Unity.RunWhen(() => playerInfo.Body != null, () => {
-                Utils.WriteLine($"Setting up {playerInfo.Name}({playerInfo.PlayerId}):", MessageType.Debug);
+                Utils.WriteLine("PlayerManager :: " + $"Setting up {playerInfo.Name}({playerInfo.PlayerId}):", MessageType.Debug);
                 
                 if (!PlayerManager.playerInfo.ContainsKey(playerInfo)){
                     GameModeInfo info = playerInfo.IsLocalPlayer ? new LocalInfo() : new RemoteInfo();
