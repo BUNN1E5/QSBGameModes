@@ -60,10 +60,8 @@ public class HideAndSeek : GameBase{
         //Wait X amount of time
         //then move to inProgress
         float waitRemaining = (Time.time - gameStartTime) + SharedSettings.settingsToShare.PreroundTime;
-        if (preroundTimer == null){
-            Utils.WriteLine(String.Format("Waiting for {0:0.##} seconds", waitRemaining), MessageType.Info);
-            preroundTimer = Utils.StartCoroutine(PreRoundTimer(waitRemaining));
-        }
+        Utils.WriteLine(String.Format("Waiting for {0:0.##} seconds", waitRemaining), MessageType.Info);
+        preroundTimer = Utils.StartCoroutine(PreRoundTimer(waitRemaining));
         //Utils.WaitFor(waitRemaining, () => GameManager.state = GameState.InProgress);
     }
 
@@ -84,7 +82,6 @@ public class HideAndSeek : GameBase{
         }
         NotificationManager.SharedInstance.UnpinNotification(preroundNotification);
         GameManager.state = GameState.InProgress;
-        preroundTimer = null;
     }
 
     private Coroutine endGameCheck;
