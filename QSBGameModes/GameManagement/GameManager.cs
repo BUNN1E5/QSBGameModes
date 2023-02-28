@@ -34,7 +34,8 @@ namespace QSBGameModes.GameManagement{
         }
 
         public static void Init(){
-            QSBPlayerManager.OnAddPlayer += (PlayerInfo info) => { new GameStateMessage(state){To = info.PlayerId}.Send(); };
+            if(QSBCore.IsHost)
+                QSBPlayerManager.OnAddPlayer += (PlayerInfo info) => { new GameStateMessage(state){To = info.PlayerId}.Send(); };
         }
 
         public static void SetupGame(){
