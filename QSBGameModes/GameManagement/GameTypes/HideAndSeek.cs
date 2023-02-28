@@ -60,7 +60,7 @@ public class HideAndSeek : GameBase{
         //Wait X amount of time
         //then move to inProgress
         float waitRemaining = (Time.time - gameStartTime) + SharedSettings.settingsToShare.PreroundTime;
-        Utils.WriteLine(String.Format("Waiting for {0:0.##} seconds", waitRemaining), MessageType.Info);
+        Utils.WriteLine($"Waiting for {waitRemaining:0.##} seconds", MessageType.Info);
         preroundTimer = Utils.StartCoroutine(PreRoundTimer(waitRemaining));
         //Utils.WaitFor(waitRemaining, () => GameManager.state = GameState.InProgress);
     }
