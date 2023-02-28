@@ -19,6 +19,7 @@ public class GameBase{
     public NotificationData spectatorNotification = new(NotificationTarget.All, "You are a spectator");
     
     public void OnStateChange(GameState state){
+        Utils.WriteLine($"Game now on state {state}!");
         switch (state){
             case GameState.Starting:
                 OnStarting();
