@@ -69,9 +69,6 @@ public class HideAndSeek : GameBase{
         string formattedString = "Seekers selected in {0:0} seconds";
         
         NotificationData preroundNotification = new(NotificationTarget.All, String.Format(formattedString, time), 1f, false);
-        foreach(var notifiable in NotificationManager.SharedInstance._notifiableElements){
-            Utils.WriteLine(notifiable.ToString());
-        }
         NotificationManager.SharedInstance.PostNotification(preroundNotification, true);
         while (time > 0){
             preroundNotification.displayMessage = String.Format(formattedString, time);
