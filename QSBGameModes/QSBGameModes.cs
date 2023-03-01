@@ -34,7 +34,7 @@ namespace QSBGameModes
                     GameModeMenu.SetupPauseButton();
                     GameModeMenu.UpdateGUI();
                     
-                    Utils.RunWhen(() => GameManager.state != GameState.Stopped, StartGameMode);
+                    Utils.RunWhen(() => QSBWorldSync.AllObjectsReady && GameManager.state != GameState.Stopped, GameManager.SetupGame);
                 });
                 //This runs every loop IF we have started Hide and Seek
                 
@@ -54,17 +54,14 @@ namespace QSBGameModes
         public static void StartGameMode(){
             if(QSBCore.IsHost)
                 new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Ready).Send();
-
+            
             GameModeMenu.UpdateGUI();
             if (GameManager.state != GameState.Stopped){
                 Utils.WriteLine("QSBGameModes :: " + "How are you starting game? The game is already started", MessageType.Debug);
                 return;
             }
-
-            Utils.RunWhen(() => QSBWorldSync.AllObjectsReady, () => {
-                Utils.WriteLine("QSBGameModes :: " + "Game is Starting", MessageType.Debug);
-                GameManager.SetupGame();
-            });
+            Utils.WriteLine("QSBGameModes :: " + "Host Started Game", MessageType.Debug);
+            GameManager.SetupGame();
         }
         
         public static void JoinGameMode(){
