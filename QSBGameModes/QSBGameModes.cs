@@ -17,11 +17,12 @@ namespace QSBGameModes
 {
     public class QSBGameModes : ModBehaviour{
         public static QSBGameModes instance;
+        private static Coroutine gameStart;
         
         private void Start(){
             instance = this;
             HarmonyLib.Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
-            Utils.WriteLine("QSBGameModes :: " + $"{nameof(QSBGameModes)} is loaded!", MessageType.Success);
+            Utils.WriteLine($"{nameof(QSBGameModes)} is loaded!", MessageType.Success);
             
             AssetBundlesLoader.LoadBundles(ModHelper);
             PlayerManager.Init();
@@ -34,9 +35,10 @@ namespace QSBGameModes
                     GameModeMenu.SetupPauseButton();
                     GameModeMenu.UpdateGUI();
                     
-                    Utils.RunWhen(() => QSBWorldSync.AllObjectsReady && GameManager.state != GameState.Stopped, GameManager.SetupGame);
+                    //This gun is loaded
+                    //for when we set GameState to not Stopped
+                    gameStart = Utils.RunWhen(() => QSBWorldSync.AllObjectsReady && GameManager.state != GameState.Stopped, GameManager.SetupGame);
                 });
-                //This runs every loop IF we have started Hide and Seek
                 
             };
         }
@@ -44,24 +46,28 @@ namespace QSBGameModes
         public static void StopGameMode(){
             
             Utils.RunWhen(() => QSBWorldSync.AllObjectsReady, () => {
-                Utils.WriteLine("QSBGameModes :: " + "Host is stopping game", MessageType.Debug);
+                Utils.WriteLine("Host is stopping game", MessageType.Debug);
                 GameManager.StopGame();
                 PlayerManager.SetAllPlayerStates(GameManagement.PlayerManagement.PlayerState.None);
                 GameModeMenu.UpdateGUI();
             });
         }
 
+        public static int numRan = 0;
         public static void StartGameMode(){
-            if(QSBCore.IsHost)
-                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Ready).Send();
-            
-            GameModeMenu.UpdateGUI();
+            Utils.WriteLine("StartGameMode has been ran " + numRan + "Times", MessageType.Error);
+            JoinGameMode();
             if (GameManager.state != GameState.Stopped){
-                Utils.WriteLine("QSBGameModes :: " + "How are you starting game? The game is already started", MessageType.Debug);
+                Utils.WriteLine("How are you starting game? The game is already started", MessageType.Debug);
                 return;
             }
-            Utils.WriteLine("QSBGameModes :: " + "Host Started Game", MessageType.Debug);
-            GameManager.SetupGame();
+            
+            Utils.StopCoroutine(gameStart);
+            Utils.RunWhen(() => QSBWorldSync.AllObjectsReady, () => {
+                Utils.WriteLine("Host Started Game", MessageType.Debug);
+                GameManager.SetupGame();
+                GameModeMenu.UpdateGUI();
+            });
         }
         
         public static void JoinGameMode(){
@@ -70,7 +76,7 @@ namespace QSBGameModes
                 return;
             }
             
-            Utils.WriteLine("QSBGameModes :: " + "Client is joining game", MessageType.Debug);
+            Utils.WriteLine("Client is joining game", MessageType.Debug);
             
             Utils.RunWhen(() => SharedSettings.receivedSettings, () => {
                 if (SharedSettings.settingsToShare.AllowJoinWhileGameInProgress){
@@ -113,33 +119,33 @@ namespace QSBGameModes
             }
 
             if (GetKey(Key.Semicolon)){
-                ModHelper.Console.WriteLine("QSBGameModes :: " + "Update UI", MessageType.Debug);
+                ModHelper.Console.WriteLine("Update UI", MessageType.Debug);
                 GameModeMenu.UpdateGUI();
             }
 
 
             if (GetKeyDown(Key.M)){
-                ModHelper.Console.WriteLine("QSBGameModes :: " + "Changing role to Hiding", MessageType.Debug);
+                ModHelper.Console.WriteLine("Changing role to Hiding", MessageType.Debug);
                 new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Hiding).Send();
             }
             
             if (GetKeyDown(Key.Comma)){
-                ModHelper.Console.WriteLine("QSBGameModes :: " + "Changing role to Seeking", MessageType.Debug);
+                ModHelper.Console.WriteLine("Changing role to Seeking", MessageType.Debug);
                 new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Seeking).Send();
             }
             
             if (GetKeyDown(Key.Period)){
-                ModHelper.Console.WriteLine("QSBGameModes :: " + "Changing role to Spectating", MessageType.Debug);
+                ModHelper.Console.WriteLine("Changing role to Spectating", MessageType.Debug);
                 new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Spectating).Send();
             }
             
             if (GetKeyDown(Key.Slash)){
-                ModHelper.Console.WriteLine("QSBGameModes :: " + "Changing role to Ready", MessageType.Debug);
+                ModHelper.Console.WriteLine("Changing role to Ready", MessageType.Debug);
                 new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Ready).Send();
             }
             
             if (GetKeyDown(Key.N)){
-                ModHelper.Console.WriteLine("QSBGameModes :: " + "Changing role to None", MessageType.Debug);
+                ModHelper.Console.WriteLine("Changing role to None", MessageType.Debug);
                 new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.None).Send();
             }            
         }

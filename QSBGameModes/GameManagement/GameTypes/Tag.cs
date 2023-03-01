@@ -19,7 +19,7 @@ public class Tag : GameBase{
         
         //This is a case that can actually happen if there are multiple IT
         if (PlayerManager.playerInfo[QSBPlayerManager.LocalPlayer].State == seekerPlayer.State){
-            Utils.WriteLine("Tag :: How are you getting caught if you are both the same team!? Ignoring");
+            Utils.WriteLine("How are you getting caught if you are both the same team!? Ignoring");
             return;
         }
         
@@ -41,7 +41,7 @@ public class Tag : GameBase{
             }
             
             Locator.GetDeathManager().KillPlayer(DeathType.Impact);
-            Utils.WriteLine("Tag :: DeathType not found for " + seekerPlayer.Info);
+            Utils.WriteLine("DeathType not found for " + seekerPlayer.Info);
         }
     }
 

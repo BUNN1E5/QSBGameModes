@@ -39,7 +39,7 @@ namespace QSBGameModes.GameManagement.RoleSelection
 
 		public override void OnReceiveRemote(){
 			if (QSBPlayerManager.PlayerExists(playerId)){
-				Utils.WriteLine("RoleChangeMessage :: " + $"Received RoleChangeMessage with role {(PlayerManagement.PlayerState)playerState} for {playerId}");
+				Utils.WriteLine($"Received RoleChangeMessage with role {(PlayerManagement.PlayerState)playerState} for {playerId}");
 				var playerInfo = QSBPlayerManager.GetPlayer(playerId);
 				PlayerManager.SetPlayerState(playerInfo, playerState);
 			}

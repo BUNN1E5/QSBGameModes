@@ -51,7 +51,7 @@ public class SharedSettingsMessage : QSBMessage{
     }
 
     public override void OnReceiveRemote(){
-        Utils.WriteLine("SharedSettingsMessage :: " + "Recieved Settings");
+        Utils.WriteLine("Recieved Settings");
         SharedSettings.settingsToShare = new SettingsPayload(){ //This looks so dumb lmao
             GameType = GameType,
             PreroundTime = preroundTime,
@@ -61,7 +61,7 @@ public class SharedSettingsMessage : QSBMessage{
             AllowJoinWhileGameInProgress = AllowJoinWhileGameInProgress,
             KillHidersOnCatch = KillHidersOnCatch
         };
-        Utils.WriteLine("SharedSettingsMessage :: " + SharedSettings.settingsToShare.ToString());
+        Utils.WriteLine(SharedSettings.settingsToShare.ToString());
         SharedSettings.UpdateSettings();
         SharedSettings.receivedSettings = true; 
         GameModeMenu.UpdateGUI();

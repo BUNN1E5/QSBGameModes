@@ -91,10 +91,10 @@ namespace QSBGameModes{
         }
 
         private void SetupPlayerSignal(){
-            Utils.WriteLine("RemoteInfo :: " + $"Adding Audio Signal to {Info}", MessageType.Success);
+            Utils.WriteLine($"Adding Audio Signal to {Info}", MessageType.Success);
             Signal = this.Info.Body.AddComponent<AudioSignal>();
 
-            Utils.WriteLine("RemoteInfo :: " + "Add the known signal for the local player", MessageType.Success);
+            Utils.WriteLine("Add the known signal for the local player", MessageType.Success);
             Signal._name = SignalName.RadioTower; //TODO :: CHANGE THIS NAME (Without losing prox chat support)
             Signal._frequency = SignalFrequency.HideAndSeek;
             Signal.gameObject.SetActive(SharedSettings.settingsToShare.AddPlayerSignals);
@@ -124,7 +124,7 @@ namespace QSBGameModes{
             Info.SetVisible(true);
 
             if(Signal != null) Signal._sourceRadius = 500; //Magic OoOOooOh (Around Timber Hearth Radius)
-            Utils.WriteLine("RemoteInfo :: " + $"Removing the Markers for {Info}", MessageType.Success);
+            Utils.WriteLine($"Removing the Markers for {Info}", MessageType.Success);
             this.Info.MapMarker.enabled = false;
             this.Info.HudMarker.enabled = false;
 
@@ -139,7 +139,7 @@ namespace QSBGameModes{
             Info.SetVisible(true);
             if(Signal != null) Signal._sourceRadius = 1;
 
-            Utils.WriteLine("RemoteInfo :: " + "Adding the HUD Marker", MessageType.Success);
+            Utils.WriteLine("Adding the HUD Marker", MessageType.Success);
             
             //Hiders shouldn't be able to see the seekers Map and Hud Markers
             bool state = PlayerManager.LocalPlayer.State == State;

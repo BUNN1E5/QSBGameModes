@@ -62,9 +62,9 @@ public class HideAndSeek : GameBase{
         //Wait X amount of time
         //then move to inProgress
         float waitRemaining = (Time.time - gameStartTime) + SharedSettings.settingsToShare.PreroundTime;
-        Utils.WriteLine(String.Format("HideAndSeek :: Waiting for {0:0.##} seconds", waitRemaining), MessageType.Info);
+        Utils.WriteLine($"Waiting for {waitRemaining:0.##} seconds", MessageType.Info);
         
-        Utils.WriteLine("HideAndSeek :: Ran OnWaiting " + ++runCount + " times", MessageType.Error);
+        Utils.WriteLine("Ran OnWaiting " + ++runCount + " times", MessageType.Error);
         if(preroundTimer == null)
             preroundTimer = Utils.StartCoroutine(PreRoundTimer(waitRemaining));
         //Utils.WaitFor(waitRemaining, () => GameManager.state = GameState.InProgress);
@@ -79,7 +79,7 @@ public class HideAndSeek : GameBase{
         NotificationManager.SharedInstance.PostNotification(timeNotification);
         while (time > 0){
             timeNotification.displayMessage = "" + time;
-            Utils.WriteLine("HideAndSeek :: Seekers selected in " + time, MessageType.Info);
+            Utils.WriteLine("Seekers selected in " + time, MessageType.Info);
             NotificationManager.SharedInstance.RepostNotifcation(timeNotification);
             yield return new WaitForSeconds(1);
             time -= 1;
