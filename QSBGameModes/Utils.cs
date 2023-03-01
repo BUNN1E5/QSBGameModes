@@ -18,20 +18,18 @@ namespace QSBGameModes{
             get{ return QSBGameModes.instance.ModHelper; }
         }
         public static void WriteLine(string s, MessageType t, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] long callerLineNumber = 0, [CallerMemberName] string callerMember= ""){
-            if (Utils.ModHelper.OwmlConfig.DebugMode){
-                s = $"({Path.GetFileName(callerFilePath)}::{callerMember}:{callerLineNumber}) {s}";
-                if (PlayerManager.LocalPlayer != null)
-                    s = $"{PlayerManager.LocalPlayer.Info.PlayerId}@{s}";
-
+            if (Utils.ModHelper.OwmlConfig.DebugMode)
+            {
+                int id = (PlayerManager.LocalPlayer == null)? -1 : (int)PlayerManager.LocalPlayer.Info.PlayerId;
+                s = $"{id} ({Path.GetFileName(callerFilePath)}::{callerMember}:{callerLineNumber}) {s}";
             }
             QSBGameModes.instance.ModHelper.Console.WriteLine(s, t);
         }
         
         public static void WriteLine(string s, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] long callerLineNumber = 0, [CallerMemberName] string callerMember= ""){
             if (Utils.ModHelper.OwmlConfig.DebugMode){
-                s = $"({Path.GetFileName(callerFilePath)}::{callerMember}:{callerLineNumber}) {s}";
-                if (PlayerManager.LocalPlayer != null)
-                    s = $"{PlayerManager.LocalPlayer.Info.PlayerId}@{s}";
+                int id = (PlayerManager.LocalPlayer == null)? -1 : (int)PlayerManager.LocalPlayer.Info.PlayerId;
+                s = $"{id} ({Path.GetFileName(callerFilePath)}::{callerMember}:{callerLineNumber}) {s}";
             }
             QSBGameModes.instance.ModHelper.Console.WriteLine(s, MessageType.Info);
         }
