@@ -16,9 +16,9 @@
 
     "GameType": {
       "type": "selector",
-      "value": "HIDE AND SEEK",
+      "value": "INFECTION",
       "options": [
-        "HIDE AND SEEK",
+        "INFECTION",
         "TAG"
       ]
     },

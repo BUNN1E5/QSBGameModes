@@ -25,7 +25,13 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
             };
             
             QSBPlayerManager.OnRemovePlayer += RemovePlayer;
+        }
 
+        public static void Reset(){
+            playerInfo.Clear();
+            hiders.Clear();
+            seekers.Clear();
+            spectators.Clear();
         }
 
         public static void RemovePlayer(PlayerInfo playerInfo){

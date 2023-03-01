@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using Mirror;
 using OWML.Common;
 using QSB.Player;
+using QSBGameModes.GameManagement;
 using QSBGameModes.GameManagement.PlayerManagement;
 using UnityEngine;
 // ReSharper disable All
@@ -41,7 +42,20 @@ namespace QSBGameModes{
 
         public static Coroutine RunWhen(Func<bool> predicate, Action action) => 
             QSBGameModes.instance.StartCoroutine(WaitUntil(predicate, action));
+
+        public static Coroutine RunWhenState(GameState state, Func<bool> predicate, Action action) =>
+            Utils.RunWhen(() => GameManager.state == state, action);
+
+        public static Coroutine RunWhenNotState(GameState state, Func<bool> predicate, Action action) =>
+            Utils.RunWhen(() => GameManager.state != state, action);
+
+        public static Coroutine RunWhenState(GameState state, Action action) =>
+            RunWhenState(state, () => true, action);
+        public static Coroutine RunWhenNotState(GameState state, Action action) =>
+            RunWhenNotState(state, () => true, action);
         
+
+
         public static Coroutine WaitFor(float time, Action action) => 
             QSBGameModes.instance.StartCoroutine(WaitUntil(time, action));
 

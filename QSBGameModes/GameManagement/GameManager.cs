@@ -37,15 +37,18 @@ namespace QSBGameModes.GameManagement{
 
         public static void Init(){
             if(QSBCore.IsHost)
-                QSBPlayerManager.OnAddPlayer += (PlayerInfo info) => { new GameStateMessage(state){To = info.PlayerId}.Send(); };
+                QSBPlayerManager.OnAddPlayer += (PlayerInfo info) => {
+                    Utils.RunWhenNotState(GameState.Stopped, () => new GameStateMessage(state){To = info.PlayerId}.Send());
+                };
         }
 
-        private static int timeRan = 0;
-        
         public static void SetupGame(){
-            GameManager.state = GameState.Starting;
-            Utils.WriteLine("SetupGame ran " + ++timeRan + " times", MessageType.Error);
+            
+            Utils.WriteLine("Clearing Player Manager", MessageType.Debug);
+            PlayerManager.Reset();
 
+            GameManager.state = GameState.Starting;
+            
             Utils.WriteLine("Setting Up Game", MessageType.Info);
 
             Utils.WriteLine("Resetting All Player States");

@@ -1,3 +1,4 @@
+using System;
 using OWML.Common;
 using QSB;
 using QSB.Messaging;
@@ -14,6 +15,11 @@ namespace QSBGameModes.GameManagement{
         public bool ActivateAllReturnPlatforms;
         public bool AllowJoinWhileGameInProgress;
         public bool KillHidersOnCatch;
+    }
+
+    public struct Setting{
+        private Type type;
+        private Object o;
     }
 
     public static class SharedSettings{
@@ -82,13 +88,13 @@ namespace QSBGameModes.GameManagement{
         }
 
         public static void UpdateSettings(){
-            Utils.ModHelper.Config.Settings["GameType"] = settingsToShare.GameType;
-            Utils.ModHelper.Config.Settings["Pre-Round Time"] = (object)settingsToShare.PreroundTime;
-            Utils.ModHelper.Config.Settings["Players Have Signals"] = (object)settingsToShare.AddPlayerSignals;
-            Utils.ModHelper.Config.Settings["Disable 6th Location"] = (object)settingsToShare.Disable6thLocation;
-            Utils.ModHelper.Config.Settings["Activate All Return Platforms"] = (object)settingsToShare.ActivateAllReturnPlatforms;
-            Utils.ModHelper.Config.Settings["Allow Join While Game in Progress"] = (object)settingsToShare.AllowJoinWhileGameInProgress;
-            Utils.ModHelper.Config.Settings["Kill Hiders on Catch"] = (object)settingsToShare.KillHidersOnCatch;
+            Utils.ModHelper.Config.SetSettingsValue("GameType", settingsToShare.GameType);
+            Utils.ModHelper.Config.SetSettingsValue("Pre-Round Time",settingsToShare.PreroundTime);
+            Utils.ModHelper.Config.SetSettingsValue("Players Have Signals",settingsToShare.AddPlayerSignals);
+            Utils.ModHelper.Config.SetSettingsValue("Disable 6th Location",settingsToShare.Disable6thLocation);
+            Utils.ModHelper.Config.SetSettingsValue("Activate All Return Platforms",settingsToShare.ActivateAllReturnPlatforms);
+            Utils.ModHelper.Config.SetSettingsValue("Allow Join While Game in Progress",settingsToShare.AllowJoinWhileGameInProgress);
+            Utils.ModHelper.Config.SetSettingsValue("Kill Hiders on Catch",settingsToShare.KillHidersOnCatch);
         }
     }
 }
