@@ -33,7 +33,6 @@ namespace QSBGameModes
                 if (loadScene != OWScene.SolarSystem) return;
                 Utils.ModHelper.Events.Unity.FireOnNextUpdate(() => {
                     GameModeMenu.SetupPauseButton();
-                    GameModeMenu.UpdateGUI();
                     
                     //This gun is loaded
                     //for when we set GameState to not Stopped
@@ -49,25 +48,22 @@ namespace QSBGameModes
                 Utils.WriteLine("Host is stopping game", MessageType.Debug);
                 GameManager.StopGame();
                 PlayerManager.SetAllPlayerStates(GameManagement.PlayerManagement.PlayerState.None);
-                GameModeMenu.UpdateGUI();
             });
         }
 
         public static int numRan = 0;
         public static void StartGameMode(){
-            Utils.WriteLine("StartGameMode has been ran " + numRan + "Times", MessageType.Error);
+            Utils.WriteLine("StartGameMode has been ran " + ++numRan + "Times", MessageType.Error);
+            Utils.StopCoroutine(gameStart);
             JoinGameMode();
+            
             if (GameManager.state != GameState.Stopped){
                 Utils.WriteLine("How are you starting game? The game is already started", MessageType.Debug);
                 return;
             }
             
-            Utils.StopCoroutine(gameStart);
-            Utils.RunWhen(() => QSBWorldSync.AllObjectsReady, () => {
-                Utils.WriteLine("Host Started Game", MessageType.Debug);
-                GameManager.SetupGame();
-                GameModeMenu.UpdateGUI();
-            });
+            Utils.WriteLine("Host Started Game", MessageType.Debug);
+            gameStart = Utils.RunWhen(() => QSBWorldSync.AllObjectsReady, GameManager.SetupGame);
         }
         
         public static void JoinGameMode(){
@@ -102,7 +98,6 @@ namespace QSBGameModes
 
         public static void LeaveGameMode() {
             new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Spectating).Send();
-            GameModeMenu.UpdateGUI();
         }
 
         //TODO :: CONFIRM THAT THIS WORKS
@@ -119,33 +114,33 @@ namespace QSBGameModes
             }
 
             if (GetKey(Key.Semicolon)){
-                ModHelper.Console.WriteLine("Update UI", MessageType.Debug);
+                Utils.WriteLine("Update UI", MessageType.Debug);
                 GameModeMenu.UpdateGUI();
             }
 
 
             if (GetKeyDown(Key.M)){
-                ModHelper.Console.WriteLine("Changing role to Hiding", MessageType.Debug);
+                Utils.WriteLine("Changing role to Hiding", MessageType.Debug);
                 new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Hiding).Send();
             }
             
             if (GetKeyDown(Key.Comma)){
-                ModHelper.Console.WriteLine("Changing role to Seeking", MessageType.Debug);
+                Utils.WriteLine("Changing role to Seeking", MessageType.Debug);
                 new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Seeking).Send();
             }
             
             if (GetKeyDown(Key.Period)){
-                ModHelper.Console.WriteLine("Changing role to Spectating", MessageType.Debug);
+                Utils.WriteLine("Changing role to Spectating", MessageType.Debug);
                 new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Spectating).Send();
             }
             
             if (GetKeyDown(Key.Slash)){
-                ModHelper.Console.WriteLine("Changing role to Ready", MessageType.Debug);
+                Utils.WriteLine("Changing role to Ready", MessageType.Debug);
                 new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Ready).Send();
             }
             
             if (GetKeyDown(Key.N)){
-                ModHelper.Console.WriteLine("Changing role to None", MessageType.Debug);
+                Utils.WriteLine("Changing role to None", MessageType.Debug);
                 new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.None).Send();
             }            
         }

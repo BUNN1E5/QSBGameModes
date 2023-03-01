@@ -18,14 +18,14 @@ namespace QSBGameModes{
         }
         public static void WriteLine(string s, MessageType t, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] long callerLineNumber = 0, [CallerMemberName] string callerMember= ""){
             if (Utils.ModHelper.OwmlConfig.DebugMode){
-                s = $"{Path.GetFileName(callerFilePath)}::{callerMember}:{callerLineNumber} || {s}";
+                s = $"({Path.GetFileName(callerFilePath)}::{callerMember}:{callerLineNumber}) {s}";
             }
             QSBGameModes.instance.ModHelper.Console.WriteLine(s, t);
         }
         
         public static void WriteLine(string s, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] long callerLineNumber = 0, [CallerMemberName] string callerMember= ""){
             if (Utils.ModHelper.OwmlConfig.DebugMode){
-                s = $"{Path.GetFileName(callerFilePath)}::{callerMember}:{callerLineNumber} || {s}";
+                s = $"({Path.GetFileName(callerFilePath)}::{callerMember}:{callerLineNumber}) {s}";
             }
             QSBGameModes.instance.ModHelper.Console.WriteLine(s, MessageType.Info);
         }

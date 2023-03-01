@@ -16,7 +16,7 @@ public static class GameModeMenu{
     public static Text spectateText;
 
     public static void SetupPauseButton(){
-        Utils.WriteLine("GameModeMenu :: " + "Adding button to menu", MessageType.Info);
+        Utils.WriteLine("Adding button to menu", MessageType.Info);
         //Setup the Host button 
         //TODO :: MAKE BETTER GUI FOR SETTING UP GAME
         if (QSBCore.IsHost){ //TODO :: CHANGE ORDER OF HIDE AND SEEK INTERACT BUTTON
@@ -28,10 +28,14 @@ public static class GameModeMenu{
             menuText = menuButton.GetComponentInChildren<Text>();
             SetPauseButtonAction(QSBGameModes.JoinGameMode);
         }
+
+        UpdateGUI();
     }
 
     //TODO :: SETUP THE FUNCTIONALITY FOR THE SMART BUTTON
     public static void UpdateGUI(){
+        Utils.WriteLine("Updating GUI");
+        
         if (QSBCore.IsHost){
             if (GameManager.state == GameState.Stopped){
                 menuText.text = "START " + SharedSettings.settingsToShare.GameType;
@@ -74,6 +78,8 @@ public static class GameModeMenu{
             clickedEvent = new Button.ButtonClickedEvent();
             menuButton.onClick = clickedEvent;
         }
+        clickedEvent.RemoveAllListeners();
         clickedEvent.AddListener(action);
+        clickedEvent.AddListener(UpdateGUI);
     }
 }
