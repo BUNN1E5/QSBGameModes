@@ -61,7 +61,7 @@ public class HideAndSeek : GameBase{
     public override void OnWaiting(){
         //Wait X amount of time
         //then move to inProgress
-        float waitRemaining = (Time.time - gameStartTime) + SharedSettings.settingsToShare.PreroundTime;
+        float waitRemaining = (Time.time - stateTime) + SharedSettings.settingsToShare.PreroundTime;
         Utils.WriteLine($"Waiting for {waitRemaining:0.##} seconds", MessageType.Info);
         
         Utils.WriteLine("Ran OnWaiting " + ++runCount + " times", MessageType.Error);

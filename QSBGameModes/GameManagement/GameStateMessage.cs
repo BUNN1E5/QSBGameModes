@@ -14,18 +14,18 @@ namespace QSBGameModes.GameManagement{
             
             public GameStateMessage(GameState newState){
                 this.newState = newState;
-                GameManager.gameMode.gameStartTime = Time.time;
+                GameManager.gameMode.stateTime = System.DateTime.Now.Millisecond / 1000f;
             }
 
             public override void Serialize(NetworkWriter writer){
                 base.Serialize(writer);
-                writer.WriteFloat(GameManager.gameMode.gameStartTime);
+                writer.WriteFloat(GameManager.gameMode.stateTime);
                 writer.WriteInt((int)newState);
             }
 
             public override void Deserialize(NetworkReader reader){
                 base.Deserialize(reader);
-                GameManager.gameMode.gameStartTime = reader.ReadFloat();
+                GameManager.gameMode.stateTime = reader.ReadFloat();
                 newState = (GameState)reader.ReadInt();
             }
 
@@ -33,8 +33,8 @@ namespace QSBGameModes.GameManagement{
 
             public override void OnReceiveRemote(){
                 _state = newState;
-                Utils.WriteLine(String.Format("Start time set to {0:0.##}", GameManager.gameMode.gameStartTime), MessageType.Debug);
-                Utils.WriteLine(String.Format("Current time is {0:0.##}", Time.time), MessageType.Debug);
+                Utils.WriteLine($"Start time set to {GameManager.gameMode.stateTime:0.##}", MessageType.Debug);
+                Utils.WriteLine($"Current time is {Time.time:0.##}", MessageType.Debug);
                 Utils.WriteLine("Game State set to " + _state, MessageType.Debug);
                 GameManager.gameMode.OnStateChange(newState);
                 GameModeMenu.UpdateGUI();

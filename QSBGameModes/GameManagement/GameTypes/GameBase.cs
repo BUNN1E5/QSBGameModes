@@ -9,7 +9,7 @@ namespace QSBGameModes.GameManagement;
 
 public class GameBase{
 
-    public float gameStartTime = 0f;
+    public float stateTime = 0f;
 
     public virtual PlayerManagement.PlayerState StateOnJoinLate() => PlayerManagement.PlayerState.None;
     public virtual PlayerManagement.PlayerState StateOnJoinEarly() => PlayerManagement.PlayerState.None;
