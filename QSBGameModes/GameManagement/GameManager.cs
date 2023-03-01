@@ -43,9 +43,6 @@ namespace QSBGameModes.GameManagement{
         }
 
         public static void SetupGame(){
-            
-            Utils.WriteLine("Clearing Player Manager", MessageType.Debug);
-            PlayerManager.Reset();
 
             GameManager.state = GameState.Starting;
             
