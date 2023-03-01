@@ -41,4 +41,7 @@
   <ItemGroup>
     <Content Include="QSBGameModes.csproj.user" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="GameManagement\RoleSelection\RolesSelectedMessage.cs" />
+  </ItemGroup>
 </Project>

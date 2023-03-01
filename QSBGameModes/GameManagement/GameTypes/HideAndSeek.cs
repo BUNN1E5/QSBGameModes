@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using OWML.Common;
 using QSB.Messaging;
@@ -92,7 +93,9 @@ public class HideAndSeek : GameBase{
     public override void OnInProgress(){
         base.OnInProgress();
         GameManager.SelectRoles();
-        endGameCheck = Utils.RunWhen(() => PlayerManager.hiders.Count == 0, () => { GameManager.state = GameState.Ending; });
+        endGameCheck = Utils.RunWhen(() => PlayerManager.hiders.Count == 0 
+                                           && PlayerManager.playerInfo.Values.All(info=>info.State != PlayerManagement.PlayerState.Ready),
+            () => { GameManager.state = GameState.InProgress; });
     }
 
     public override void OnEnding(){

@@ -8,30 +8,21 @@ using QSB.Player;
 namespace QSBGameModes.GameManagement.RoleSelection
 {
 	//For when the roles are selected, before the match begins
-    public class RolesSelectionMessage : QSBMessage
+    public class RolesSelecedMessage : QSBMessage
     {
-		private List<uint> seekers;
-		private List<uint> hiders;
-		private List<uint> spectators;
-
-		public RolesSelectionMessage(uint[] seekers, uint[] hiders, uint[] spectators){
-			this.seekers = seekers.ToList();
-			this.hiders = hiders.ToList();
-			this.spectators = spectators.ToList();
+	    private bool isSelected;
+		public RolesSelecedMessage(bool isSelected)
+		{
+			this.isSelected = isSelected;
 		}
 
 		public override void Serialize(NetworkWriter writer){
 			base.Serialize(writer);
-			writer.WriteArray(seekers.ToArray());
-			writer.WriteArray(hiders.ToArray());
-			writer.WriteArray(spectators.ToArray());
+			writer.WriteBool(isSelected);
 		}
 
 		public override void Deserialize(NetworkReader reader){
 			base.Deserialize(reader);
-			seekers = reader.ReadArray<uint>().ToList();
-			hiders = reader.ReadArray<uint>().ToList();
-			spectators = reader.ReadArray<uint>().ToList();
 		}
 		
 		public override void OnReceiveLocal() => OnReceiveRemote();
