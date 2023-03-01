@@ -95,7 +95,7 @@ public class HideAndSeek : GameBase{
         GameManager.SelectRoles();
         endGameCheck = Utils.RunWhen(() => PlayerManager.hiders.Count == 0 
                                            && PlayerManager.playerInfo.Values.All(info=>info.State != PlayerManagement.PlayerState.Ready),
-            () => { GameManager.state = GameState.InProgress; });
+            () => { GameManager.state = GameState.Ending; });
     }
 
     public override void OnEnding(){
