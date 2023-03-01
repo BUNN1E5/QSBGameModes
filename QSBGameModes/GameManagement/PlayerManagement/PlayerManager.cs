@@ -16,7 +16,7 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
         public static Dictionary<PlayerInfo, DeathType> PlayerDeathTypes = new(); //This gets setup by the HideAndSeekInfo
 
         public static GameModeInfo LocalPlayer{get{return playerInfo[QSBPlayerManager.LocalPlayer];}}
-
+        
         public static void Init(){
             QSBPlayerManager.OnAddPlayer += (PlayerInfo info) => {
                 SetupPlayer(info);
@@ -90,7 +90,7 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
 
         //This should run once every loop to initialize everything needed for Hide and Seek
         public static void SetupPlayer(PlayerInfo playerInfo, PlayerState state = PlayerState.None){
-            QSBGameModes.instance.ModHelper.Events.Unity.RunWhen(() => playerInfo.Body != null, () => {
+            Utils.RunWhen(() => playerInfo.Body != null, () => {
                 Utils.WriteLine($"Setting up {playerInfo.Name}({playerInfo.PlayerId}):", MessageType.Debug);
                 
                 if (!PlayerManager.playerInfo.ContainsKey(playerInfo)){

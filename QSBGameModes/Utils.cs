@@ -20,7 +20,7 @@ namespace QSBGameModes{
         public static void WriteLine(string s, MessageType t, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] long callerLineNumber = 0, [CallerMemberName] string callerMember= ""){
             if (Utils.ModHelper.OwmlConfig.DebugMode)
             {
-                int id = (PlayerManager.LocalPlayer == null)? -1 : (int)PlayerManager.LocalPlayer.Info.PlayerId;
+                int id = (QSBPlayerManager.LocalPlayer == null)? -1 : (int)QSBPlayerManager.LocalPlayer.PlayerId;
                 s = $"{id} ({Path.GetFileName(callerFilePath)}::{callerMember}:{callerLineNumber}) {s}";
             }
             QSBGameModes.instance.ModHelper.Console.WriteLine(s, t);
@@ -28,7 +28,7 @@ namespace QSBGameModes{
         
         public static void WriteLine(string s, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] long callerLineNumber = 0, [CallerMemberName] string callerMember= ""){
             if (Utils.ModHelper.OwmlConfig.DebugMode){
-                int id = (PlayerManager.LocalPlayer == null)? -1 : (int)PlayerManager.LocalPlayer.Info.PlayerId;
+                int id = (QSBPlayerManager.LocalPlayer == null)? -1 : (int)QSBPlayerManager.LocalPlayer.PlayerId;
                 s = $"{id} ({Path.GetFileName(callerFilePath)}::{callerMember}:{callerLineNumber}) {s}";
             }
             QSBGameModes.instance.ModHelper.Console.WriteLine(s, MessageType.Info);
