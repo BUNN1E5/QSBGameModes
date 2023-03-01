@@ -32,7 +32,7 @@ public static class GameModeMenu{
         UpdateGUI();
     }
 
-    private static GameState lastState = GameManager.state;
+    private static GameState lastState = GameState.Starting;
     public static void UpdateGUI(){
         Utils.ModHelper.Events.Unity.RunWhen(() => lastState != GameManager.state, UpdateGUI_);
     }
