@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using Mirror;
 using OWML.Common;
 using QSB.Player;
+using QSBGameModes.GameManagement.PlayerManagement;
 using UnityEngine;
 // ReSharper disable All
 
@@ -19,6 +20,9 @@ namespace QSBGameModes{
         public static void WriteLine(string s, MessageType t, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] long callerLineNumber = 0, [CallerMemberName] string callerMember= ""){
             if (Utils.ModHelper.OwmlConfig.DebugMode){
                 s = $"({Path.GetFileName(callerFilePath)}::{callerMember}:{callerLineNumber}) {s}";
+                if (PlayerManager.LocalPlayer != null)
+                    s = $"{PlayerManager.LocalPlayer.Info.PlayerId}@{s}";
+
             }
             QSBGameModes.instance.ModHelper.Console.WriteLine(s, t);
         }
@@ -26,6 +30,8 @@ namespace QSBGameModes{
         public static void WriteLine(string s, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] long callerLineNumber = 0, [CallerMemberName] string callerMember= ""){
             if (Utils.ModHelper.OwmlConfig.DebugMode){
                 s = $"({Path.GetFileName(callerFilePath)}::{callerMember}:{callerLineNumber}) {s}";
+                if (PlayerManager.LocalPlayer != null)
+                    s = $"{PlayerManager.LocalPlayer.Info.PlayerId}@{s}";
             }
             QSBGameModes.instance.ModHelper.Console.WriteLine(s, MessageType.Info);
         }
