@@ -10,12 +10,19 @@ namespace QSBGameModes{
         public GameManagement.PlayerManagement.PlayerState State;
         private Coroutine waitCoroutine;
 
+        private GameObject _isSetup = null;
+
+        public bool isSetup(){
+            return isSetup == null;
+        }
+
         private bool isReady{
             get { return Info.Body != null; }
         }
 
         public virtual bool SetupInfo(PlayerInfo playerInfo){
             this.Info = playerInfo;
+            _isSetup = playerInfo._body; //So we know if we got setup this loop
             State = GameManagement.PlayerManagement.PlayerState.None;
             if (!EnumUtils.IsDefined<DeathType>(playerInfo.Name)){
                 PlayerManager.PlayerDeathTypes.Add(this.Info, EnumUtils.Create<DeathType>(playerInfo.Name));

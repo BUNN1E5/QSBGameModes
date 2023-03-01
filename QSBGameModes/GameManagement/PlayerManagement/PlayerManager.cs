@@ -103,7 +103,10 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
                     GameModeInfo info = playerInfo.IsLocalPlayer ? new LocalInfo() : new RemoteInfo();
                     PlayerManager.playerInfo[playerInfo] = info;
                 }
-                PlayerManager.playerInfo[playerInfo].SetupInfo(playerInfo);
+                
+                if (!PlayerManager.playerInfo[playerInfo].isSetup())
+                    PlayerManager.playerInfo[playerInfo].SetupInfo(playerInfo);
+                
                 SetPlayerState(playerInfo, state);
             });
         }

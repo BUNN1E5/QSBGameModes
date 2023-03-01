@@ -34,7 +34,7 @@ namespace QSBGameModes.GameManagement{
             public override void OnReceiveRemote(){
                 _state = newState;
                 Utils.WriteLine($"Start time set to {GameManager.gameMode.stateTime:0.##}", MessageType.Debug);
-                Utils.WriteLine($"Current time is {Time.time:0.##}", MessageType.Debug);
+                Utils.WriteLine($"Current time is {System.DateTime.Now.Millisecond / 1000f:0.##}", MessageType.Debug);
                 Utils.WriteLine("Game State set to " + _state, MessageType.Debug);
                 GameManager.gameMode.OnStateChange(newState);
                 GameModeMenu.UpdateGUI();

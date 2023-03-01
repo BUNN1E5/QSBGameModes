@@ -29,17 +29,15 @@ public static class GameModeMenu{
             SetPauseButtonAction(QSBGameModes.JoinGameMode);
         }
 
-        UpdateGUI();
+        
     }
 
-    private static GameState lastState = GameState.Starting;
     public static void UpdateGUI(){
-        Utils.ModHelper.Events.Unity.RunWhen(() => lastState != GameManager.state, UpdateGUI_);
+        Utils.ModHelper.Events.Unity.FireInNUpdates(UpdateGUI, 10);
     }
 
     //TODO :: SETUP THE FUNCTIONALITY FOR THE SMART BUTTON
     private static void UpdateGUI_(){
-        lastState = GameManager.state;
         Utils.WriteLine("Updating GUI");
         
         if (QSBCore.IsHost){
