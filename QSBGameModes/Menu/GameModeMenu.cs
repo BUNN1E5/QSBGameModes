@@ -32,8 +32,12 @@ public static class GameModeMenu{
         UpdateGUI();
     }
 
-    //TODO :: SETUP THE FUNCTIONALITY FOR THE SMART BUTTON
     public static void UpdateGUI(){
+        Utils.ModHelper.Events.Unity.FireOnNextUpdate(UpdateGUI_);
+    }
+
+    //TODO :: SETUP THE FUNCTIONALITY FOR THE SMART BUTTON
+    private static void UpdateGUI_(){
         Utils.WriteLine("Updating GUI");
         
         if (QSBCore.IsHost){
