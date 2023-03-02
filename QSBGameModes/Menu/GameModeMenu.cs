@@ -39,7 +39,7 @@ public static class GameModeMenu{
         Utils.WriteLine("Updating GUI");
         
         if (QSBCore.IsHost){
-            if (GameState.Stopped == GameState.Stopped){
+            if (GameManager.state == GameState.Stopped){
                 menuText.text = "START " + SharedSettings.settingsToShare.GameType;
                 SetPauseButtonAction(QSBGameModes.StartGameMode);
             } else{
