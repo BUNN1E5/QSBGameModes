@@ -107,6 +107,9 @@ namespace QSBGameModes
         #region DEBUG
 
         private void Update(){
+            if (!Utils.DebugMode)
+                return;
+            
             if (GetKey(Key.Quote)){
                 new SharedSettingsMessage(SharedSettings.settingsToShare);
             }

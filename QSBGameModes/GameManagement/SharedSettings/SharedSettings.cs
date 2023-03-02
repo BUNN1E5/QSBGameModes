@@ -56,6 +56,7 @@ namespace QSBGameModes.GameManagement{
             };
 
             QSBPlayerManager.OnAddPlayer += SendSettings; //Make sure new people get sent the settings
+            LoadSettings();
         }
 
         public static void LoadSettings(){

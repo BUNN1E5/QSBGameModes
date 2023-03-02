@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 using OWML.Common;
 using QSB.Messaging;
 using QSB.Player;
@@ -8,7 +9,6 @@ using QSBGameModes.GameManagement.PlayerManagement;
 using QSBGameModes.GameManagement.RoleSelection;
 using QSBGameModes.Messages;
 using UnityEngine;
-using UnityEngine.Playables;
 
 namespace QSBGameModes.GameManagement.GameTypes;
 
@@ -62,7 +62,7 @@ public class HideAndSeek : GameBase{
         //Wait X amount of time
         //then move to inProgress
         float waitRemaining = (System.DateTime.Now.Millisecond / 1000f - stateTime) + SharedSettings.settingsToShare.PreroundTime;
-        Utils.WriteLine($"Waiting for {waitRemaining:0.##} seconds", MessageType.Info);
+        Utils.WriteLine($"Waiting for {waitRemaining:0.00} seconds", MessageType.Info);
         
         if(preroundTimer == null)
             preroundTimer = Utils.StartCoroutine(PreRoundTimer(waitRemaining));
@@ -70,18 +70,27 @@ public class HideAndSeek : GameBase{
     }
 
     public IEnumerator PreRoundTimer(float time){
-        string formattedString = "Seekers selected in";
+        string formattedString = "Seekers selected in ";
         
-        NotificationData preroundNotification = new(NotificationTarget.All, formattedString, 1f, false);
-        NotificationData timeNotification = new(NotificationTarget.All, "" + time, 1f, false);
+        var preroundNotification = new NotificationData(NotificationTarget.All, formattedString + $"{time:0.0}");
         NotificationManager.SharedInstance.PostNotification(preroundNotification, true);
-        NotificationManager.SharedInstance.PostNotification(timeNotification);
+
+        //Get all the strings for the notification
+        var datas = new List<NotificationDisplay.NotificationDisplayData>();
+        foreach (NotificationDisplay display in NotificationManager.SharedInstance._notifiableElements){
+            foreach (var notificationData in display._listDisplayData){
+                if (notificationData.Data == preroundNotification){
+                    datas.Add(notificationData);
+                }
+            }
+        }
+        
         while (time > 0){
-            timeNotification.displayMessage = "" + time;
-            Utils.WriteLine("Seekers selected in " + time, MessageType.Info);
-            NotificationManager.SharedInstance.RepostNotifcation(timeNotification);
-            yield return new WaitForSeconds(1);
-            time -= 1;
+            datas.ForEach((display) => display.TextDisplay.text = formattedString + $"{time:0.0}");
+            if(time % 1 <= (float.Epsilon * 100))
+                Utils.WriteLine(formattedString + $"{time:0}", MessageType.Info);
+            yield return new WaitForEndOfFrame();
+            time -= Time.deltaTime;
         }
         NotificationManager.SharedInstance.UnpinNotification(preroundNotification);
         GameManager.state = GameState.InProgress;
