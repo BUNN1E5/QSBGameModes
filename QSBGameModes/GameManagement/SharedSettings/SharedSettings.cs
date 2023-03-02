@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using OWML.Common;
 using QSB;
 using QSB.Messaging;
@@ -18,14 +19,21 @@ namespace QSBGameModes.GameManagement{
     }
 
     public struct Setting{
-        private Type type;
-        private Object o;
+        public Setting(Type type, Object o){
+            this.type = type;
+            this.o = o;
+        }
+
+        public Type type;
+        public Object o;
     }
 
     public static class SharedSettings{
 
         public static bool receivedSettings = false; //Gets set to true the first time settings have changed
-        
+
+        public static Dictionary<String, Setting> sharedSettings = new(){ };
+
         public static SettingsPayload settingsToShare = new(){
             GameType = "INFECTION",
             PreroundTime = 30,
@@ -67,6 +75,8 @@ namespace QSBGameModes.GameManagement{
                 ActivateAllReturnPlatforms = Utils.ModHelper.Config.GetSettingsValue<bool>("Activate All Return Platforms"),
                 KillHidersOnCatch = Utils.ModHelper.Config.GetSettingsValue<bool>("Kill Hiders on Catch")
             };
+            
+            
         }
 
         public static void SendSettings(PlayerInfo info) {

@@ -57,7 +57,6 @@ public class HideAndSeek : GameBase{
     }
 
     private Coroutine preroundTimer;
-    private int runCount = 0;
     
     public override void OnWaiting(){
         //Wait X amount of time
@@ -65,7 +64,6 @@ public class HideAndSeek : GameBase{
         float waitRemaining = (System.DateTime.Now.Millisecond / 1000f - stateTime) + SharedSettings.settingsToShare.PreroundTime;
         Utils.WriteLine($"Waiting for {waitRemaining:0.##} seconds", MessageType.Info);
         
-        Utils.WriteLine("Ran OnWaiting " + ++runCount + " times", MessageType.Error);
         if(preroundTimer == null)
             preroundTimer = Utils.StartCoroutine(PreRoundTimer(waitRemaining));
         //Utils.WaitFor(waitRemaining, () => GameManager.state = GameState.InProgress);

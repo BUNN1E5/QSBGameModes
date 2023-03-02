@@ -53,8 +53,6 @@ namespace QSBGameModes{
             RunWhenState(state, () => true, action);
         public static Coroutine RunWhenNotState(GameState state, Action action) =>
             RunWhenNotState(state, () => true, action);
-        
-
 
         public static Coroutine WaitFor(float time, Action action) => 
             QSBGameModes.instance.StartCoroutine(WaitUntil(time, action));

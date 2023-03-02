@@ -28,12 +28,10 @@ public static class GameModeMenu{
             menuText = menuButton.GetComponentInChildren<Text>();
             SetPauseButtonAction(QSBGameModes.JoinGameMode);
         }
-
-        
     }
 
     public static void UpdateGUI(){
-        Utils.ModHelper.Events.Unity.FireInNUpdates(UpdateGUI, 10);
+        Utils.ModHelper.Events.Unity.FireInNUpdates(UpdateGUI_, 10);
     }
 
     //TODO :: SETUP THE FUNCTIONALITY FOR THE SMART BUTTON
@@ -41,7 +39,7 @@ public static class GameModeMenu{
         Utils.WriteLine("Updating GUI");
         
         if (QSBCore.IsHost){
-            if (GameManager.state == GameState.Stopped){
+            if (GameState.Stopped == GameState.Stopped){
                 menuText.text = "START " + SharedSettings.settingsToShare.GameType;
                 SetPauseButtonAction(QSBGameModes.StartGameMode);
             } else{
