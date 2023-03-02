@@ -76,14 +76,7 @@ public class HideAndSeek : GameBase{
         NotificationManager.SharedInstance.PostNotification(preroundNotification, true);
 
         //Get all the strings for the notification
-        var datas = new List<NotificationDisplay.NotificationDisplayData>();
-        foreach (NotificationDisplay display in NotificationManager.SharedInstance._notifiableElements){
-            foreach (var notificationData in display._listDisplayData){
-                if (notificationData.Data == preroundNotification){
-                    datas.Add(notificationData);
-                }
-            }
-        }
+        var datas = Utils.getNotificationDisplayData(preroundNotification);
         
         while (time > 0){
             datas.ForEach((display) => display.TextDisplay.text = formattedString + $"{time:0.0}");

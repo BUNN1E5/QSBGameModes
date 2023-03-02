@@ -77,5 +77,17 @@ namespace QSBGameModes{
             yield return new WaitUntil(predicate);
             action();
         }
+
+        public static List<NotificationDisplay.NotificationDisplayData> getNotificationDisplayData(NotificationData data){
+            var datas = new List<NotificationDisplay.NotificationDisplayData>();
+            foreach (NotificationDisplay display in NotificationManager.SharedInstance._notifiableElements){
+                foreach (var notificationData in display._listDisplayData){
+                    if (notificationData.Data == data){
+                        datas.Add(notificationData);
+                    }
+                }
+            }
+            return datas;
+        }
     }
 }
