@@ -26,7 +26,7 @@ public class HideAndSeek : GameBase{
             return;
 
         if (PlayerManager.playerInfo[QSBPlayerManager.LocalPlayer].State == seekerPlayer.State){
-            Utils.WriteLine("HideAndSeek :: How are you getting caught if you are both the same team!? Ignoring");
+            Utils.WriteLine("How are you getting caught if you are both the same team!? Ignoring");
             return;
         }
         new RoleChangeMessage(QSBPlayerManager.LocalPlayer, GameManagement.PlayerManagement.PlayerState.Seeking).Send();
@@ -40,7 +40,7 @@ public class HideAndSeek : GameBase{
             }
             
             Locator.GetDeathManager().KillPlayer(DeathType.Impact);
-            Utils.WriteLine("HideAndSeek :: DeathType not found for " + seekerPlayer.Info);
+            Utils.WriteLine("DeathType not found for " + seekerPlayer.Info);
         }
     }
     
@@ -101,7 +101,6 @@ public class HideAndSeek : GameBase{
     public override void OnEnding(){
         //TODO :: DO SOMETHING HERE
         base.OnEnding();
-        
     }
 
     public override void OnStopped(){

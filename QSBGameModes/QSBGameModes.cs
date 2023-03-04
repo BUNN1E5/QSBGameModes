@@ -34,14 +34,16 @@ namespace QSBGameModes
                     
                     //This gun is loaded
                     //for when we set GameState to not Stopped
-                    gameStart = Utils.RunWhen(() => QSBWorldSync.AllObjectsReady && GameManager.state != GameState.Stopped, GameManager.SetupGame);
+                    //or if the game ended on the previous loop
+                    gameStart = Utils.RunWhen(
+                        () => QSBWorldSync.AllObjectsReady && GameManager.state is not (GameState.Stopped or GameState.Ending),
+                        GameManager.SetupGame);
                 });
                 
             };
         }
 
         public static void StopGameMode(){
-            
             Utils.RunWhen(() => QSBWorldSync.AllObjectsReady, () => {
                 Utils.WriteLine("Host is stopping game", MessageType.Debug);
                 GameManager.StopGame();
@@ -51,7 +53,7 @@ namespace QSBGameModes
 
         public static int numRan = 0;
         public static void StartGameMode(){
-            Utils.WriteLine("StartGameMode has been ran " + ++numRan + "Times", MessageType.Error);
+            Utils.WriteLine($"StartGameMode has been ran {++numRan} Times", MessageType.Error);
             Utils.StopCoroutine(gameStart);
             JoinGameMode();
             
