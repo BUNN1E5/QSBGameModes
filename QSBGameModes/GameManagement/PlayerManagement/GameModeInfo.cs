@@ -13,6 +13,7 @@ namespace QSBGameModes{
         private GameObject playerBody = null;
 
         public bool isSetup(){
+            Utils.WriteLine($"Is null {playerBody == null}");
             return playerBody != null;
         }
 
@@ -40,7 +41,7 @@ namespace QSBGameModes{
         public virtual bool Reset(){
             if (!isReady){
                 waitCoroutine = Utils.RunWhen(() => isReady, () => Reset(), waitCoroutine);
-                Utils.WriteLine("GameModeInfo :: Player not ready, Waiting", MessageType.Debug);
+                Utils.WriteLine("Player not ready, Waiting", MessageType.Debug);
                 return false;
             }
             Utils.WriteLine("Resetting Player", MessageType.Debug);

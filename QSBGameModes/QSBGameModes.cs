@@ -36,7 +36,7 @@ namespace QSBGameModes
                     //for when we set GameState to not Stopped
                     //or if the game ended on the previous loop
                     gameStart = Utils.RunWhen(
-                        () => QSBWorldSync.AllObjectsReady && GameManager.state is not (GameState.Stopped or GameState.Ending),
+                        () => QSBWorldSync.AllObjectsReady && GameManager.state != GameState.Stopped,
                         GameManager.SetupGame);
                 });
                 
