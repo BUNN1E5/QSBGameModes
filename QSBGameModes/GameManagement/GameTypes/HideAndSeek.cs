@@ -3,8 +3,10 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using OWML.Common;
+using QSB.ClientServerStateSync;
 using QSB.Messaging;
 using QSB.Player;
+using QSB.Utility;
 using QSBGameModes.GameManagement.PlayerManagement;
 using QSBGameModes.GameManagement.RoleSelection;
 using QSBGameModes.Messages;
@@ -53,6 +55,8 @@ public class HideAndSeek : GameBase{
 
     public override void OnStarting(){
         base.OnStarting();
+        
+        //TODO :: Make sure all player's eyes are open
         GameManager.state = GameState.Waiting;
     }
 
@@ -64,8 +68,10 @@ public class HideAndSeek : GameBase{
         float waitRemaining = (System.DateTime.Now.Millisecond / 1000f - stateTime) + SharedSettings.settingsToShare.PreroundTime;
         Utils.WriteLine($"Waiting for {waitRemaining:0.00} seconds", MessageType.Info);
         
-        if(preroundTimer == null)
-            preroundTimer = Utils.StartCoroutine(PreRoundTimer(waitRemaining));
+        if(preroundTimer != null)
+            Utils.StopCoroutine(preroundTimer);
+        
+        preroundTimer = Utils.StartCoroutine(PreRoundTimer(waitRemaining));
         //Utils.WaitFor(waitRemaining, () => GameManager.state = GameState.InProgress);
     }
 

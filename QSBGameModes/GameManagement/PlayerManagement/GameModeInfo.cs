@@ -13,7 +13,7 @@ namespace QSBGameModes{
         private GameObject playerBody = null;
 
         public bool isSetup(){
-            Utils.WriteLine($"Is {Info} Setup? {playerBody == null}");
+            Utils.WriteLine($"Has {Info} been Setup? {playerBody != null}");
             return playerBody != null;
         }
 

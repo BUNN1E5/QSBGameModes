@@ -42,7 +42,7 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
             PlayerManager.spectators.Remove(playerInfo);
         }
 
-        public static void ResetAllPlayerStates() {
+        public static void ResetAllPlayers() {
             foreach (var info in playerInfo.Values) {
                 info.Reset();
             }
@@ -61,7 +61,7 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
         }
 
         public static void SetPlayerState(PlayerInfo playerInfo, PlayerState state){
-            Utils.WriteLine($"Chaging player {playerInfo} state to {state.ToString()} [Client ID: {QSBPlayerManager.LocalPlayerId}]");
+            Utils.WriteLine($"Chaging player {playerInfo} state to {state.ToString()} [Client ID: {QSBPlayerManager.LocalPlayerId}]", MessageType.Success);
             switch (state){
                 case PlayerState.Hiding:
                     hiders.Add(playerInfo);
@@ -82,7 +82,6 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
                     SetupSpectator(PlayerManager.playerInfo[playerInfo]);
                     break;
                 case PlayerState.None:
-                    Utils.WriteLine("Player state is None", MessageType.Error);
                     hiders.Remove(playerInfo);
                     seekers.Remove(playerInfo);
                     spectators.Remove(playerInfo);

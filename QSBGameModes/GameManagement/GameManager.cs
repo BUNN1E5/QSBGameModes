@@ -56,11 +56,11 @@ namespace QSBGameModes.GameManagement{
             
             Utils.WriteLine("Setting Up Game", MessageType.Info);
 
-            Utils.WriteLine("Resetting All Player States");
-            PlayerManager.ResetAllPlayerStates();
-            
             Utils.WriteLine("Setting Up All Players");
             PlayerManager.SetupAllPlayers();
+            
+            Utils.WriteLine("Resetting All Player States");
+            PlayerManager.ResetAllPlayers();
 
 
             if (SharedSettings.settingsToShare.AddPlayerSignals){
@@ -114,8 +114,7 @@ namespace QSBGameModes.GameManagement{
                 HashSet<uint> spectators = new();
                 
                 foreach (GameModeInfo info in PlayerManager.playerInfo.Values){
-                    if (info.State is PlayerManagement.PlayerState.None 
-                                    or PlayerManagement.PlayerState.Spectating){
+                    if (info.State is PlayerManagement.PlayerState.None or PlayerManagement.PlayerState.Spectating){
                         new RoleChangeMessage(info.Info, PlayerManagement.PlayerState.Spectating).Send();
                         spectators.Add(info.Info.PlayerId);
                         continue;
@@ -133,7 +132,7 @@ namespace QSBGameModes.GameManagement{
         
         private static void SendSelectedRoles(HashSet<uint> seekers, HashSet<uint> hiders, HashSet<uint> spectators){
             Utils.WriteLine("Sending Roles!");
-            Utils.WriteLine($"Seekers: {seekers.Count}");
+            Utils.WriteLine($"Seekers Count: {seekers.Count}");
             foreach (uint seeker in seekers){
                 Utils.WriteLine($"Seeker: {seeker}");
                 if (QSBPlayerManager.PlayerExists(seeker))
