@@ -17,7 +17,7 @@ using UnityEngine.UI;
 namespace QSBGameModes.GameManagement{
     public static partial class GameManager{
 
-        public static GameBase gameMode = new HideAndSeek();
+        public static GameBase gameMode = new Infection();
         
         private static GameState _state = GameState.Stopped;
         public static GameState state
@@ -124,7 +124,7 @@ namespace QSBGameModes.GameManagement{
                     hiders.Add(info.Info.PlayerId);
                 }
                 
-                var seekers = RoleSelector.SelectRoles(players, 1);
+                var seekers = RoleSelector.SelectRoles(players, SharedSettings.settingsToShare.StartingSeekers);
                 hiders.ExceptWith(seekers);
                 SendSelectedRoles(seekers, hiders, spectators);
             });

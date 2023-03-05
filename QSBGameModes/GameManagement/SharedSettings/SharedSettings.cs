@@ -10,6 +10,7 @@ namespace QSBGameModes.GameManagement{
     //Things in the config.json
     public struct SettingsPayload{
         public string GameType;
+        public int StartingSeekers;
         public float PreroundTime;
         public bool AddPlayerSignals;
         public bool Disable6thLocation;
@@ -36,6 +37,7 @@ namespace QSBGameModes.GameManagement{
 
         public static SettingsPayload settingsToShare = new(){
             GameType = "INFECTION",
+            StartingSeekers = 1,
             PreroundTime = 30,
             AddPlayerSignals = true,
             Disable6thLocation = true,
@@ -47,6 +49,7 @@ namespace QSBGameModes.GameManagement{
         public static void Init(){
             settingsToShare = new SettingsPayload(){
                 GameType = Utils.ModHelper.Config.GetSettingsValue<string>("GameType"),
+                StartingSeekers = Utils.ModHelper.Config.GetSettingsValue<int>("Starting Seekers"),
                 PreroundTime = Utils.ModHelper.Config.GetSettingsValue<float>("Pre-Round Time"),
                 AddPlayerSignals =  Utils.ModHelper.Config.GetSettingsValue<bool>("Players Have Signals"),
                 AllowJoinWhileGameInProgress = Utils.ModHelper.Config.GetSettingsValue<bool>("Allow Join While Game in Progress"),
@@ -69,6 +72,7 @@ namespace QSBGameModes.GameManagement{
             //Put the shared settings here
             settingsToShare = new SettingsPayload(){
                 GameType = Utils.ModHelper.Config.GetSettingsValue<string>("GameType"),
+                StartingSeekers = Utils.ModHelper.Config.GetSettingsValue<int>("Starting Seekers"),
                 PreroundTime = Utils.ModHelper.Config.GetSettingsValue<float>("Pre-Round Time"),
                 AddPlayerSignals =  Utils.ModHelper.Config.GetSettingsValue<bool>("Players Have Signals"),
                 AllowJoinWhileGameInProgress = Utils.ModHelper.Config.GetSettingsValue<bool>("Allow Join While Game in Progress"),
@@ -100,6 +104,7 @@ namespace QSBGameModes.GameManagement{
 
         public static void UpdateSettings(){
             Utils.ModHelper.Config.SetSettingsValue("GameType", settingsToShare.GameType);
+            Utils.ModHelper.Config.SetSettingsValue("PreroundTime", settingsToShare.PreroundTime);
             Utils.ModHelper.Config.SetSettingsValue("Pre-Round Time",settingsToShare.PreroundTime);
             Utils.ModHelper.Config.SetSettingsValue("Players Have Signals",settingsToShare.AddPlayerSignals);
             Utils.ModHelper.Config.SetSettingsValue("Disable 6th Location",settingsToShare.Disable6thLocation);

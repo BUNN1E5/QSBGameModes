@@ -14,8 +14,8 @@ using UnityEngine;
 
 namespace QSBGameModes.GameManagement.GameTypes;
 
-public class HideAndSeek : GameBase{
-    public HideAndSeek(){ 
+public class Infection : GameBase{
+    public Infection(){ 
         catcheeNotification = new(NotificationTarget.All, "HIDER", 0, false);
         catcherNotification = new(NotificationTarget.All, "SEEKER", 0, false);
         spectatorNotification = new(NotificationTarget.All, "SPECTATOR",0, false);
@@ -57,7 +57,7 @@ public class HideAndSeek : GameBase{
         base.OnStarting();
         
         //TODO :: Make sure all player's eyes are open
-        GameManager.state = GameState.Waiting;
+        Utils.RunWhen(() => PlayerManager.playerInfo.Values.All(info => info.Info.SuitedUp), () => GameManager.state = GameState.Waiting);
     }
 
     private Coroutine preroundTimer;
