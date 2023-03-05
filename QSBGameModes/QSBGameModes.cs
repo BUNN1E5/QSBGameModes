@@ -31,6 +31,7 @@ namespace QSBGameModes
                 if (loadScene != OWScene.SolarSystem) return;
                 Utils.ModHelper.Events.Unity.FireOnNextUpdate(() => {
                     GameModeMenu.SetupPauseButton();
+                    GameModeMenu.UpdateGUI();
                     
                     //This gun is loaded
                     //for when we set GameState to not Stopped
@@ -39,7 +40,6 @@ namespace QSBGameModes
                         () => QSBWorldSync.AllObjectsReady && GameManager.state != GameState.Stopped,
                         GameManager.SetupGame);
                 });
-                
             };
         }
 
@@ -50,10 +50,8 @@ namespace QSBGameModes
                 PlayerManager.SetAllPlayerStates(GameManagement.PlayerManagement.PlayerState.None);
             });
         }
-
-        public static int numRan = 0;
+        
         public static void StartGameMode(){
-            Utils.WriteLine($"StartGameMode has been ran {++numRan} Times", MessageType.Error);
             Utils.StopCoroutine(gameStart);
             JoinGameMode();
             

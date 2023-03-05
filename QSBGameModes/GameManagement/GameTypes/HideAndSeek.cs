@@ -80,7 +80,7 @@ public class HideAndSeek : GameBase{
         
         while (time > 0){
             datas.ForEach((display) => display.TextDisplay.text = formattedString + $"{time:0.0}");
-            if(time % 1 <= (float.Epsilon * 100))
+            if(time % 1 <= (float.Epsilon * 100))//Debug only on the whole numbers, dont wanna spam too much
                 Utils.WriteLine(formattedString + $"{time:0}", MessageType.Info);
             yield return new WaitForEndOfFrame();
             time -= Time.deltaTime;
