@@ -24,6 +24,10 @@ namespace QSBGameModes.GameManagement{
         {
             get => _state;
             set{
+                //Hey if we are not in multiplayer then we can assume we are the "host"
+                if (!QSBCore.IsInMultiplayer)
+                    _state = value;
+
                 if (QSBCore.IsHost){ //So that when the host changes the game state a message gets sent
                     new GameStateMessage(value).Send();
                     Utils.WriteLine($"Current State {value}", MessageType.Debug);
@@ -33,6 +37,10 @@ namespace QSBGameModes.GameManagement{
                 }
                 //We dont want the non hosts from changing the gamestate at any point
             }
+        }
+
+        public static void Reset(){
+            state = GameState.Stopped;
         }
 
         public static void Init(){

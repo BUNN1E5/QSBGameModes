@@ -46,6 +46,8 @@ public class SharedSettingsMessage : QSBMessage{
         KillHidersOnCatch = reader.Read<bool>();
     }
 
+    public override void OnReceiveLocal() => OnReceiveRemote();
+
     public override void OnReceiveRemote(){
         Utils.WriteLine("Recieved Settings");
         SharedSettings.settingsToShare = new SettingsPayload(){ //This looks so dumb lmao

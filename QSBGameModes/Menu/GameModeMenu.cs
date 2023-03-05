@@ -12,9 +12,6 @@ public static class GameModeMenu{
     public static Text menuText;
     public static Button.ButtonClickedEvent clickedEvent;
 
-    public static Button spectateButton;
-    public static Text spectateText;
-
     public static void SetupPauseButton(){
         Utils.WriteLine("Adding button to menu", MessageType.Info);
         //Setup the Host button 
@@ -52,7 +49,7 @@ public static class GameModeMenu{
                     case GameManagement.PlayerManagement.PlayerState.Seeking:
                     case GameManagement.PlayerManagement.PlayerState.Ready:
                     case GameManagement.PlayerManagement.PlayerState.Hiding:
-                        menuText.text = "LEAVE " + SharedSettings.settingsToShare.GameType;
+                        menuText.text = "SPECTATE " + SharedSettings.settingsToShare.GameType;
                         SetPauseButtonAction(QSBGameModes.LeaveGameMode);
                         break;
                     

@@ -7,7 +7,7 @@ using UnityEngine;
 namespace QSBGameModes{
     public class GameModeInfo{
         public PlayerInfo Info;
-        public GameManagement.PlayerManagement.PlayerState State;
+        public GameManagement.PlayerManagement.PlayerState State = GameManagement.PlayerManagement.PlayerState.None;
         private Coroutine waitCoroutine;
 
         private GameObject playerBody = null;
@@ -24,12 +24,9 @@ namespace QSBGameModes{
         public virtual bool SetupInfo(PlayerInfo playerInfo){
             this.Info = playerInfo;
             playerBody = playerInfo._body; //So we know if we got setup this loop
-            State = GameManagement.PlayerManagement.PlayerState.None;
             if (!EnumUtils.IsDefined<DeathType>(playerInfo.Name)){
                 PlayerManager.PlayerDeathTypes.Add(this.Info, EnumUtils.Create<DeathType>(playerInfo.Name));
             }
-            
-            
             return true;
         }
 

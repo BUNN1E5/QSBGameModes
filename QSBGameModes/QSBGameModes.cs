@@ -28,18 +28,29 @@ namespace QSBGameModes
             SharedSettings.Init();
             
             LoadManager.OnCompleteSceneLoad += (scene, loadScene) => {
-                if (loadScene != OWScene.SolarSystem) return;
-                Utils.ModHelper.Events.Unity.FireOnNextUpdate(() => {
-                    GameModeMenu.SetupPauseButton();
-                    GameModeMenu.UpdateGUI();
+                switch (loadScene){
+                    case OWScene.TitleScreen:
+                        PlayerManager.Reset();
+                        GameManager.Reset();
+                        SharedSettings.LoadSettings();
+                        break;
+                    case OWScene.SolarSystem:
+                        Utils.ModHelper.Events.Unity.FireOnNextUpdate(() => {
+                            GameModeMenu.SetupPauseButton();
+                            GameModeMenu.UpdateGUI();
                     
-                    //This gun is loaded
-                    //for when we set GameState to not Stopped
-                    //or if the game ended on the previous loop
-                    gameStart = Utils.RunWhen(
-                        () => QSBWorldSync.AllObjectsReady && GameManager.state != GameState.Stopped,
-                        GameManager.SetupGame);
-                });
+                            //This gun is loaded
+                            //for when we set GameState to not Stopped
+                            //or if the game ended on the previous loop
+                            gameStart = Utils.RunWhen(
+                                () => QSBWorldSync.AllObjectsReady && GameManager.state != GameState.Stopped,
+                                GameManager.SetupGame);
+                        });
+                        break;
+                    
+                }
+
+                
             };
         }
 
@@ -97,17 +108,15 @@ namespace QSBGameModes
         public static void LeaveGameMode() {
             new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Spectating).Send();
         }
-
-        //TODO :: CONFIRM THAT THIS WORKS
-        //Ambiguous on if the settings are changed before or after this function
+        
         public override void Configure(IModConfig config){
-            SharedSettings.SendSettings(); //This only sends if host of session
+            SharedSettings.SendSettings();
         }
 
         #region DEBUG
 
         private void Update(){
-            if (!Utils.DebugMode)
+            if (!Utils.DebugMode) //Disable the debug keys if we are not in debug mode
                 return;
             
             if (GetKey(Key.Quote)){
