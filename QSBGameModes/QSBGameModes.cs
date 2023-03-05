@@ -34,7 +34,6 @@ namespace QSBGameModes
                     
                     //This gun is loaded
                     //for when we set GameState to not Stopped
-                    //or if the game ended on the previous loop
                     gameStart = Utils.RunWhen(
                         () => QSBWorldSync.AllObjectsReady && GameManager.state != GameState.Stopped,
                         GameManager.SetupGame);
