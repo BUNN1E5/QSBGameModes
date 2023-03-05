@@ -25,7 +25,9 @@ namespace QSBGameModes{
             if (Utils.DebugMode)
             {
                 int id = (QSBPlayerManager.LocalPlayer == null)? -1 : (int)QSBPlayerManager.LocalPlayer.PlayerId;
-                s = $"{id} ({Path.GetFileName(callerFilePath)}::{callerMember}:{callerLineNumber}) {s}";
+                string filename = Path.GetFileName(callerFilePath);
+                filename = filename.Remove(filename.Length - 3);
+                s = $"{id} ({filename}::{callerMember}:{callerLineNumber}) {s}";
             }
             QSBGameModes.instance.ModHelper.Console.WriteLine(s, t);
         }
@@ -33,7 +35,9 @@ namespace QSBGameModes{
         public static void WriteLine(string s, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] long callerLineNumber = 0, [CallerMemberName] string callerMember= ""){
             if (Utils.DebugMode){
                 int id = (QSBPlayerManager.LocalPlayer == null)? -1 : (int)QSBPlayerManager.LocalPlayer.PlayerId;
-                s = $"{id} ({Path.GetFileName(callerFilePath)}::{callerMember}:{callerLineNumber}) {s}";
+                string filename = Path.GetFileName(callerFilePath);
+                filename = filename.Remove(filename.Length - 3);
+                s = $"{id} ({filename}::{callerMember}:{callerLineNumber}) {s}";
             }
             QSBGameModes.instance.ModHelper.Console.WriteLine(s, MessageType.Info);
         }
