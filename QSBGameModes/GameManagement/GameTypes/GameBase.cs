@@ -14,7 +14,7 @@ public class GameBase{
     public NotificationData catcheeNotification = new(NotificationTarget.All, "You are a catchee");
     public NotificationData catcherNotification = new(NotificationTarget.All, "You are a catcher");
     public NotificationData spectatorNotification = new(NotificationTarget.All, "You are a spectator");
-    
+
     public void OnStateChange(GameState state){
         Utils.WriteLine($"Game now on state {state}!");
         switch (state){

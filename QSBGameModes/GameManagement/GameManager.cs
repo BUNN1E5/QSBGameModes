@@ -17,13 +17,17 @@ using UnityEngine.UI;
 namespace QSBGameModes.GameManagement{
     public static partial class GameManager{
 
-        public static GameBase gameMode = new HideAndSeek();
+        public static GameBase gameMode = new Infection();
         
         private static GameState _state = GameState.Stopped;
         public static GameState state
         {
             get => _state;
             set{
+                //Hey if we are not in multiplayer then we can assume we are the "host"
+                if (!QSBCore.IsInMultiplayer)
+                    _state = value;
+
                 if (QSBCore.IsHost){ //So that when the host changes the game state a message gets sent
                     new GameStateMessage(value).Send();
                     Utils.WriteLine($"Current State {value}", MessageType.Debug);
@@ -33,6 +37,10 @@ namespace QSBGameModes.GameManagement{
                 }
                 //We dont want the non hosts from changing the gamestate at any point
             }
+        }
+
+        public static void Reset(){
+            state = GameState.Stopped;
         }
 
         public static void Init(){
@@ -48,11 +56,11 @@ namespace QSBGameModes.GameManagement{
             
             Utils.WriteLine("Setting Up Game", MessageType.Info);
 
-            Utils.WriteLine("Resetting All Player States");
-            PlayerManager.ResetAllPlayerStates();
-            
             Utils.WriteLine("Setting Up All Players");
             PlayerManager.SetupAllPlayers();
+            
+            Utils.WriteLine("Resetting All Player States");
+            PlayerManager.ResetAllPlayers();
 
 
             if (SharedSettings.settingsToShare.AddPlayerSignals){
@@ -106,8 +114,7 @@ namespace QSBGameModes.GameManagement{
                 HashSet<uint> spectators = new();
                 
                 foreach (GameModeInfo info in PlayerManager.playerInfo.Values){
-                    if (info.State is PlayerManagement.PlayerState.None 
-                                    or PlayerManagement.PlayerState.Spectating){
+                    if (info.State is PlayerManagement.PlayerState.None or PlayerManagement.PlayerState.Spectating){
                         new RoleChangeMessage(info.Info, PlayerManagement.PlayerState.Spectating).Send();
                         spectators.Add(info.Info.PlayerId);
                         continue;
@@ -117,7 +124,7 @@ namespace QSBGameModes.GameManagement{
                     hiders.Add(info.Info.PlayerId);
                 }
                 
-                var seekers = RoleSelector.SelectRoles(players, 1);
+                var seekers = RoleSelector.SelectRoles(players, SharedSettings.settingsToShare.StartingSeekers);
                 hiders.ExceptWith(seekers);
                 SendSelectedRoles(seekers, hiders, spectators);
             });
@@ -125,7 +132,7 @@ namespace QSBGameModes.GameManagement{
         
         private static void SendSelectedRoles(HashSet<uint> seekers, HashSet<uint> hiders, HashSet<uint> spectators){
             Utils.WriteLine("Sending Roles!");
-            Utils.WriteLine($"Seekers: {seekers.Count}");
+            Utils.WriteLine($"Seekers Count: {seekers.Count}");
             foreach (uint seeker in seekers){
                 Utils.WriteLine($"Seeker: {seeker}");
                 if (QSBPlayerManager.PlayerExists(seeker))

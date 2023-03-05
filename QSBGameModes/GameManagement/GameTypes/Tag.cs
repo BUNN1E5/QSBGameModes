@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Linq;
+using OWML.Common;
 using QSB.Messaging;
 using QSB.Player;
 using QSBGameModes.GameManagement.PlayerManagement;
@@ -11,30 +13,28 @@ namespace QSBGameModes.GameManagement.GameTypes;
 public class Tag : GameBase{
     private ImmunePlayer immuneFromPlayer;
     private float immunityCooldown = 30f; //30 seconds
+    
+    public Tag(){ 
+        catcheeNotification = new(NotificationTarget.All, "NOT IT", 0, false);
+        catcherNotification = new(NotificationTarget.All, "YOU ARE IT", 0, false);
+        spectatorNotification = new(NotificationTarget.All, "SPECTATOR",0, false);
+    }
 
     public override void OnCatch(GameModeInfo seekerPlayer){
-        //We only run if we are a not "IT" and we got hit by someone who is "IT"
+        //We only run if we are a hider and we hit a seeker
         if (PlayerManager.playerInfo[QSBPlayerManager.LocalPlayer].State != GameManagement.PlayerManagement.PlayerState.Hiding)
             return;
-        
-        //This is a case that can actually happen if there are multiple IT
+
         if (PlayerManager.playerInfo[QSBPlayerManager.LocalPlayer].State == seekerPlayer.State){
             Utils.WriteLine("How are you getting caught if you are both the same team!? Ignoring");
             return;
         }
-        
-        //TODO :: Implement Immunity
-        //if this function is running that means the local player got caught
-        //which means in order for the other player to know that they caught someone a message must be sent
-
         new RoleChangeMessage(QSBPlayerManager.LocalPlayer, GameManagement.PlayerManagement.PlayerState.Seeking).Send();
-        new RoleChangeMessage(seekerPlayer.Info, GameManagement.PlayerManagement.PlayerState.Hiding).Send();
-        ImmunityCooldown(seekerPlayer, immunityCooldown); //This is handled locally
+        
 
         if (SharedSettings.settingsToShare.KillHidersOnCatch){
             Locator.GetPlayerAudioController().PlayOneShotInternal(AudioType.Death_Instant);
             Utils.StartCoroutine(AutoRespawnWithDelay(5f));
-            
             if (PlayerManager.PlayerDeathTypes.ContainsKey(seekerPlayer.Info)){
                 Locator.GetDeathManager().KillPlayer(PlayerManager.PlayerDeathTypes[seekerPlayer.Info]);
                 return;
@@ -66,5 +66,59 @@ public class Tag : GameBase{
         }
         public GameModeInfo info{ get; set; }
         public float immunityTimeLeft{ get; set; }
+    }
+    
+     public override void OnStarting(){
+        base.OnStarting();
+        
+        
+        //TODO :: Make sure all player's eyes are open
+        Utils.RunWhen(() => PlayerManager.playerInfo.Values.All(info => info.Info.SuitedUp), () => GameManager.state = GameState.Waiting);
+    }
+
+    private Coroutine preroundTimer;
+    
+    public override void OnWaiting(){
+        //Wait X amount of time
+        //then move to inProgress
+        float waitRemaining = (System.DateTime.Now.Millisecond / 1000f - stateTime) + SharedSettings.settingsToShare.PreroundTime;
+        Utils.WriteLine($"Waiting for {waitRemaining:0.00} seconds", MessageType.Info);
+        
+        if(preroundTimer != null)
+            Utils.StopCoroutine(preroundTimer);
+        
+        preroundTimer = Utils.StartCoroutine(PreRoundTimer(waitRemaining));
+        //Utils.WaitFor(waitRemaining, () => GameManager.state = GameState.InProgress);
+    }
+
+    public IEnumerator PreRoundTimer(float time){
+        string formattedString = "Seekers selected in ";
+        
+        var preroundNotification = new NotificationData(NotificationTarget.All, formattedString + $"{time:0.0}");
+        NotificationManager.SharedInstance.PostNotification(preroundNotification, true);
+
+        //Get all the strings for the notification
+        var datas = Utils.getNotificationDisplayData(preroundNotification);
+        
+        while (time > 0){
+            datas.ForEach((display) => display.TextDisplay.text = formattedString + $"{time:0.0}");
+            if(time % 1 <= Time.deltaTime)//Debug only on the whole numbers, dont wanna spam too much
+                Utils.WriteLine(formattedString + $"{time:0}", MessageType.Info);
+            yield return new WaitForEndOfFrame();
+            time -= Time.deltaTime;
+        }
+        NotificationManager.SharedInstance.UnpinNotification(preroundNotification);
+        GameManager.state = GameState.InProgress;
+    }
+    
+    public override void OnInProgress(){
+        base.OnInProgress();
+        GameManager.SelectRoles();
+        //We do not need an End Game Check I guess?
+    }
+    
+    public override void OnStopped(){
+        base.OnStopped();
+        Utils.StopCoroutine(preroundTimer);
     }
 }

@@ -3,8 +3,10 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using OWML.Common;
+using QSB.ClientServerStateSync;
 using QSB.Messaging;
 using QSB.Player;
+using QSB.Utility;
 using QSBGameModes.GameManagement.PlayerManagement;
 using QSBGameModes.GameManagement.RoleSelection;
 using QSBGameModes.Messages;
@@ -12,8 +14,8 @@ using UnityEngine;
 
 namespace QSBGameModes.GameManagement.GameTypes;
 
-public class HideAndSeek : GameBase{
-    public HideAndSeek(){ 
+public class Infection : GameBase{
+    public Infection(){ 
         catcheeNotification = new(NotificationTarget.All, "HIDER", 0, false);
         catcherNotification = new(NotificationTarget.All, "SEEKER", 0, false);
         spectatorNotification = new(NotificationTarget.All, "SPECTATOR",0, false);
@@ -53,7 +55,9 @@ public class HideAndSeek : GameBase{
 
     public override void OnStarting(){
         base.OnStarting();
-        GameManager.state = GameState.Waiting;
+        
+        //TODO :: Make sure all player's eyes are open
+        Utils.RunWhen(() => PlayerManager.playerInfo.Values.All(info => info.Info.SuitedUp), () => GameManager.state = GameState.Waiting);
     }
 
     private Coroutine preroundTimer;
@@ -64,8 +68,10 @@ public class HideAndSeek : GameBase{
         float waitRemaining = (System.DateTime.Now.Millisecond / 1000f - stateTime) + SharedSettings.settingsToShare.PreroundTime;
         Utils.WriteLine($"Waiting for {waitRemaining:0.00} seconds", MessageType.Info);
         
-        if(preroundTimer == null)
-            preroundTimer = Utils.StartCoroutine(PreRoundTimer(waitRemaining));
+        if(preroundTimer != null)
+            Utils.StopCoroutine(preroundTimer);
+        
+        preroundTimer = Utils.StartCoroutine(PreRoundTimer(waitRemaining));
         //Utils.WaitFor(waitRemaining, () => GameManager.state = GameState.InProgress);
     }
 
@@ -80,7 +86,7 @@ public class HideAndSeek : GameBase{
         
         while (time > 0){
             datas.ForEach((display) => display.TextDisplay.text = formattedString + $"{time:0.0}");
-            if(time % 1 <= (float.Epsilon * 100))
+            if(time % 1 <= Time.deltaTime)//Debug only on the whole numbers, dont wanna spam too much
                 Utils.WriteLine(formattedString + $"{time:0}", MessageType.Info);
             yield return new WaitForEndOfFrame();
             time -= Time.deltaTime;
