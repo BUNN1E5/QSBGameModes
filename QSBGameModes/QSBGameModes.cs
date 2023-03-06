@@ -103,7 +103,10 @@ namespace QSBGameModes
         }
 
         public static void LeaveGameMode() {
-            new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Spectating).Send();
+            if(GameManager.state != GameState.Stopped)
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.Spectating).Send();
+            else 
+                new RoleChangeMessage(QSBPlayerManager.LocalPlayer.PlayerId, GameManagement.PlayerManagement.PlayerState.None).Send();
         }
         
         public override void Configure(IModConfig config){
