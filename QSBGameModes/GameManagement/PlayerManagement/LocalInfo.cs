@@ -16,7 +16,7 @@ namespace QSBGameModes{
                 return false;
             NotificationManager.SharedInstance.UnpinNotification(GameManager.gameMode.catcherNotification);
             NotificationManager.SharedInstance.UnpinNotification(GameManager.gameMode.spectatorNotification);
-            NotificationManager.SharedInstance.PostNotification(GameManager.gameMode.catcheeNotification);
+            NotificationManager.SharedInstance.UnpinNotification(GameManager.gameMode.catcheeNotification);
             return true;
         }
 

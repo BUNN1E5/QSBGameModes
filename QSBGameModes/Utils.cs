@@ -6,6 +6,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using Mirror;
 using OWML.Common;
+using QSB;
 using QSB.Player;
 using QSBGameModes.GameManagement;
 using QSBGameModes.GameManagement.PlayerManagement;
@@ -24,7 +25,7 @@ namespace QSBGameModes{
         public static void WriteLine(string s, MessageType t, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] long callerLineNumber = 0, [CallerMemberName] string callerMember= ""){
             if (Utils.DebugMode)
             {
-                int id = (QSBPlayerManager.LocalPlayer == null)? -1 : (int)QSBPlayerManager.LocalPlayer.PlayerId;
+                int id = (!QSBCore.IsInMultiplayer) ? -1 : (int)QSBPlayerManager.LocalPlayerId;
                 string filename = Path.GetFileName(callerFilePath);
                 filename = filename.Remove(filename.Length - 3);
                 s = $"{id} ({filename}::{callerMember}:{callerLineNumber}) {s}";
@@ -34,7 +35,7 @@ namespace QSBGameModes{
         
         public static void WriteLine(string s, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] long callerLineNumber = 0, [CallerMemberName] string callerMember= ""){
             if (Utils.DebugMode){
-                int id = (QSBPlayerManager.LocalPlayer == null)? -1 : (int)QSBPlayerManager.LocalPlayer.PlayerId;
+                int id = (!QSBCore.IsInMultiplayer) ? -1 : (int)QSBPlayerManager.LocalPlayerId;
                 string filename = Path.GetFileName(callerFilePath);
                 filename = filename.Remove(filename.Length - 3);
                 s = $"{id} ({filename}::{callerMember}:{callerLineNumber}) {s}";

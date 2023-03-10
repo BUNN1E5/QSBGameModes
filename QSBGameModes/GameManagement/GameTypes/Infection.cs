@@ -17,11 +17,12 @@ namespace QSBGameModes.GameManagement.GameTypes;
 public class Infection : GameBase{
     public Infection(){ 
         catcheeNotification = new(NotificationTarget.All, "HIDER", 0, false);
-        catcherNotification = new(NotificationTarget.All, "SEEKER", 0, false);
+        catcherNotification = new(NotificationTarget.All, "YOU ARE INFECTED", 0, false);
         spectatorNotification = new(NotificationTarget.All, "SPECTATOR",0, false);
     }
+    
     public override PlayerManagement.PlayerState StateOnJoinLate() => PlayerManagement.PlayerState.Seeking;
-    public override PlayerManagement.PlayerState StateOnJoinEarly()  => PlayerManagement.PlayerState.Hiding;
+    public override PlayerManagement.PlayerState StateOnJoinEarly()  => PlayerManagement.PlayerState.Ready;
     public override void OnCatch(GameModeInfo seekerPlayer){
         //We only run if we are a hider and we hit a seeker
         if (PlayerManager.playerInfo[QSBPlayerManager.LocalPlayer].State != GameManagement.PlayerManagement.PlayerState.Hiding)
@@ -75,10 +76,11 @@ public class Infection : GameBase{
         //Utils.WaitFor(waitRemaining, () => GameManager.state = GameState.InProgress);
     }
 
+    private NotificationData preroundNotification;
     public IEnumerator PreRoundTimer(float time){
         string formattedString = "Seekers selected in ";
         
-        var preroundNotification = new NotificationData(NotificationTarget.All, formattedString + $"{time:0.0}");
+        preroundNotification = new(NotificationTarget.All, formattedString + $"{time:0.0}");
         NotificationManager.SharedInstance.PostNotification(preroundNotification, true);
 
         //Get all the strings for the notification
@@ -111,7 +113,8 @@ public class Infection : GameBase{
 
     public override void OnStopped(){
         base.OnStopped();
-        Utils.StopCoroutine(endGameCheck);
-        Utils.StopCoroutine(preroundTimer);
+        if(preroundNotification != null) NotificationManager.SharedInstance.UnpinNotification(preroundNotification);
+        if(endGameCheck != null) Utils.StopCoroutine(endGameCheck);
+        if(preroundTimer != null) Utils.StopCoroutine(preroundTimer);
     }
 }

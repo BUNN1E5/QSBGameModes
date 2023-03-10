@@ -1,5 +1,7 @@
 using OWML.Common;
+using OWML.Utils;
 using QSB;
+using QSB.WorldSync;
 using QSBGameModes.GameManagement;
 using QSBGameModes.GameManagement.PlayerManagement;
 using UnityEngine.Events;
@@ -13,8 +15,6 @@ public static class GameModeMenu{
     
     public static Text hostText;
     public static Text clientText;
-    
-    public static Button.ButtonClickedEvent clickedEvent;
 
     public static void SetupPauseButton(){
         Utils.WriteLine("Adding button to menu", MessageType.Info);
@@ -22,31 +22,37 @@ public static class GameModeMenu{
             HostButton = QSBCore.MenuApi.PauseMenu_MakeSimpleButton("READY UP"); //HIDE AND SEEK INTERACT BUTTON
             hostText = HostButton.GetComponentInChildren<Text>();
             SetPauseButtonAction(HostButton, QSBGameModes.StartGameMode);
-            return;
         }
         
         ClientButton = QSBCore.MenuApi.PauseMenu_MakeSimpleButton("JOIN"); //HIDE AND SEEK INTERACT BUTTON
         clientText = ClientButton.GetComponentInChildren<Text>();
         SetPauseButtonAction(ClientButton, QSBGameModes.JoinGameMode);
+
+        UpdateGUI();
     }
 
+    //Update GUI gets ran so often LMAO
     public static void UpdateGUI(){
-        Utils.ModHelper.Events.Unity.FireInNUpdates(UpdateGUI_, 10);
+        Utils.RunWhen(() => QSBWorldSync.AllObjectsReady,
+            () => Utils.ModHelper.Events.Unity.FireInNUpdates(UpdateGUI_, 10));
     }
 
     private static void UpdateGUI_(){
-        Utils.WriteLine("Updating GUI");
+        Utils.WriteLine($"Updating GUI, Current State is {GameManager.state.GetName()}");
+        Utils.WriteLine($"Current Player state is {PlayerManager.LocalPlayer.State}");
+
         
         if (QSBCore.IsHost){
+            Utils.WriteLine($"We are host!");
             if (GameManager.state == GameState.Stopped){
                 hostText.text = "START " + SharedSettings.settingsToShare.GameType;
                 SetPauseButtonAction(HostButton, QSBGameModes.StartGameMode);
+                Utils.WriteLine($"Setting StartGameMode to Start");
             } else{
                 hostText.text = "STOP " + SharedSettings.settingsToShare.GameType;
                 SetPauseButtonAction(HostButton, QSBGameModes.StopGameMode);
+                Utils.WriteLine($"Setting StartGameMode to Stop");
             }
-
-            return;
         }
         
         if (GameManager.state != GameState.Stopped){
@@ -56,37 +62,41 @@ public static class GameModeMenu{
                 case GameManagement.PlayerManagement.PlayerState.Hiding:
                     clientText.text = "SPECTATE " + SharedSettings.settingsToShare.GameType;
                     SetPauseButtonAction(ClientButton, QSBGameModes.LeaveGameMode);
+                    Utils.WriteLine($"Setting Leave Button");
                     break;
                 
                 case GameManagement.PlayerManagement.PlayerState.None:
                 case GameManagement.PlayerManagement.PlayerState.Spectating:
                     clientText.text = "JOIN " + SharedSettings.settingsToShare.GameType;
                     SetPauseButtonAction(ClientButton, QSBGameModes.JoinGameMode);
+                    Utils.WriteLine($"Setting Join Button");
                     break;
             }
         } else {
-            if (PlayerManager.LocalPlayer.State == GameManagement.PlayerManagement.PlayerState.None){
+            if (PlayerManager.LocalPlayer.State == GameManagement.PlayerManagement.PlayerState.None ||
+                PlayerManager.LocalPlayer.State == GameManagement.PlayerManagement.PlayerState.Spectating){
                 clientText.text =
                     "READY UP FOR " +
                     SharedSettings.settingsToShare.GameType; // + SharedSettings.settingsToShare.GameType;
                 SetPauseButtonAction(ClientButton, QSBGameModes.JoinGameMode);
-            }
-            else{
+                Utils.WriteLine($"Setting Ready Up Button");
+
+            } else {
                 clientText.text =
                     "UNREADY UP FOR " +
                     SharedSettings.settingsToShare.GameType; // + SharedSettings.settingsToShare.GameType;
                 SetPauseButtonAction(ClientButton, QSBGameModes.LeaveGameMode);
+                Utils.WriteLine($"Setting Unready Up Button");
             }
         }
     }
 
     public static void SetPauseButtonAction(Button button, UnityAction action){
-        if (clickedEvent == null){
-            clickedEvent = new Button.ButtonClickedEvent();
-            button.onClick = clickedEvent;
+        if (button.onClick == null){
+            button.onClick = new Button.ButtonClickedEvent();;
         }
-        clickedEvent.RemoveAllListeners();
-        clickedEvent.AddListener(action);
-        clickedEvent.AddListener(UpdateGUI);
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(action);
+        button.onClick.AddListener(UpdateGUI);
     }
 }

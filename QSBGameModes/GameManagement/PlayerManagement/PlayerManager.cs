@@ -15,7 +15,7 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
         public static Dictionary<PlayerInfo, GameModeInfo> playerInfo = new(); //All HideAndSeekInfos have playerInfo
         public static Dictionary<PlayerInfo, DeathType> PlayerDeathTypes = new(); //This gets setup by the HideAndSeekInfo
 
-        public static GameModeInfo LocalPlayer{get{return playerInfo[QSBPlayerManager.LocalPlayer];}}
+        public static GameModeInfo LocalPlayer{ get{ return playerInfo[QSBPlayerManager.LocalPlayer]; }}
         
         public static void Init(){
             QSBPlayerManager.OnAddPlayer += (PlayerInfo info) => {
@@ -85,6 +85,7 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
                     hiders.Remove(playerInfo);
                     seekers.Remove(playerInfo);
                     spectators.Remove(playerInfo);
+                    PlayerManager.playerInfo[playerInfo].State = PlayerState.None;
                     Reset(PlayerManager.playerInfo[playerInfo]);
                     break;
                 case PlayerState.Ready:
@@ -94,7 +95,7 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
         }
 
         //This should run once every loop to initialize everything needed for Hide and Seek
-        public static void SetupPlayer(PlayerInfo playerInfo, PlayerState state = PlayerState.None){
+        public static void SetupPlayer(PlayerInfo playerInfo, PlayerState state){
             Utils.RunWhen(() => playerInfo.Body != null, () => {
                 Utils.WriteLine($"Setting up {playerInfo.Name}({playerInfo.PlayerId}):", MessageType.Debug);
                 
@@ -108,6 +109,14 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
                 
                 SetPlayerState(playerInfo, state);
             });
+        }
+        
+        public static void SetupPlayer(PlayerInfo playerInfo){
+            if (PlayerManager.playerInfo.TryGetValue(playerInfo, out GameModeInfo info)){
+                SetupPlayer(playerInfo, info.State);
+                return;
+            }
+            SetupPlayer(playerInfo, PlayerState.None);
         }
 
         

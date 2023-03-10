@@ -2,6 +2,7 @@
 using QSB.Messaging;
 using QSB.Player;
 using QSBGameModes.GameManagement.PlayerManagement;
+using QSBGameModes.Menu;
 
 namespace QSBGameModes.GameManagement.RoleSelection
 {
@@ -42,6 +43,7 @@ namespace QSBGameModes.GameManagement.RoleSelection
 				Utils.WriteLine($"Received RoleChangeMessage with role {(PlayerManagement.PlayerState)playerState} for {playerId}");
 				var playerInfo = QSBPlayerManager.GetPlayer(playerId);
 				PlayerManager.SetPlayerState(playerInfo, playerState);
+				GameModeMenu.UpdateGUI();
 			}
 		}
 	}

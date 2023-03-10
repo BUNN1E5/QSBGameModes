@@ -25,7 +25,7 @@
     "Starting Seekers": 1,
     "Players Have Signals": true,
     "Kill Hiders on Catch": false,
-    "Allow Join While Game in Progress": false,
+    "Allow Join While Game in Progress": true,
     "Disable 6th Location": true,
     "Activate All Return Platforms": true
   }
