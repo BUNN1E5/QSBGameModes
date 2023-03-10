@@ -56,7 +56,7 @@ namespace QSBGameModes
             Utils.RunWhen(() => QSBWorldSync.AllObjectsReady, () => {
                 Utils.WriteLine("Host is stopping game", MessageType.Debug);
                 GameManager.StopGame();
-                PlayerManager.SetAllPlayerStates(GameManagement.PlayerManagement.PlayerState.None);
+                //PlayerManager.SetAllPlayerStates(GameManagement.PlayerManagement.PlayerState.None);
             });
         }
         

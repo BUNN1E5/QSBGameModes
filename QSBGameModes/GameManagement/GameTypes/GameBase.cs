@@ -1,4 +1,5 @@
 ﻿using QSB.Messaging;
+using QSB.Player;
 using QSB.Utility.Messages;
 using QSBGameModes.GameManagement.PlayerManagement;
 
@@ -49,7 +50,13 @@ public class GameBase{
     }
 
     public virtual void OnStopped(){
-        PlayerManager.SetAllPlayerStates(PlayerManagement.PlayerState.None);
+        //PlayerManager.SetAllPlayerStates(PlayerManagement.PlayerState.None);
+        foreach (var (playerInfo,gameModeInfo) in PlayerManager.playerInfo){
+            if (gameModeInfo.State != PlayerManagement.PlayerState.Ready){
+                PlayerManager.SetPlayerState(playerInfo, PlayerManagement.PlayerState.None);
+            }
+        }
+        
         if (currentState == GameState.InProgress){
             new DebugTriggerSupernovaMessage().Send();
         }
