@@ -44,7 +44,7 @@ namespace QSBGameModes{
         }
 
         public static Coroutine RunWhen(Func<bool> predicate, Action action, Coroutine c){
-            QSBGameModes.instance.StopCoroutine(c);
+            if(c != null) QSBGameModes.instance.StopCoroutine(c);
             return RunWhen(predicate, action);
         }
 
