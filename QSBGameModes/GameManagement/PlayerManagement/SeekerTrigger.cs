@@ -33,7 +33,7 @@ namespace QSBGameModes{
         }
 
         private void OnDestroy(){
-            triggerVolume.OnEntry -= ShapeTrigger_OnEntry;
+            if(triggerVolume != null) triggerVolume.OnEntry -= ShapeTrigger_OnEntry;
         }
 
     }
