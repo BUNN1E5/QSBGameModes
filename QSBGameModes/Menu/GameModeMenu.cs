@@ -37,9 +37,15 @@ public static class GameModeMenu{
             () => Utils.ModHelper.Events.Unity.FireInNUpdates(UpdateGUI_, 10));
     }
 
-    private static void UpdateGUI_(){
+    private static void UpdateGUI_()
+    {
+
+        var currentPlayerState = PlayerManager.LocalPlayer == null
+            ? GameManagement.PlayerManagement.PlayerState.None
+            : PlayerManager.LocalPlayer.State;
+        
         Utils.WriteLine($"Updating GUI, Current State is {GameManager.state.GetName()}");
-        Utils.WriteLine($"Current Player state is {PlayerManager.LocalPlayer.State}");
+        Utils.WriteLine($"Current Player state is {currentPlayerState}");
 
         
         if (QSBCore.IsHost){
@@ -56,7 +62,7 @@ public static class GameModeMenu{
         }
         
         if (GameManager.state != GameState.Stopped){
-            switch (PlayerManager.LocalPlayer.State){
+            switch (currentPlayerState){
                 case GameManagement.PlayerManagement.PlayerState.Seeking:
                 case GameManagement.PlayerManagement.PlayerState.Ready:
                 case GameManagement.PlayerManagement.PlayerState.Hiding:
@@ -73,8 +79,8 @@ public static class GameModeMenu{
                     break;
             }
         } else {
-            if (PlayerManager.LocalPlayer.State == GameManagement.PlayerManagement.PlayerState.None ||
-                PlayerManager.LocalPlayer.State == GameManagement.PlayerManagement.PlayerState.Spectating){
+            if (currentPlayerState is GameManagement.PlayerManagement.PlayerState.None 
+                or GameManagement.PlayerManagement.PlayerState.Spectating){
                 clientText.text =
                     "READY UP FOR " +
                     SharedSettings.settingsToShare.GameType; // + SharedSettings.settingsToShare.GameType;

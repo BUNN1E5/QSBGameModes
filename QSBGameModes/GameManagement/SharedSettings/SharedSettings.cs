@@ -33,8 +33,17 @@ namespace QSBGameModes.GameManagement{
 
         public static bool receivedSettings = false; //Gets set to true the first time settings have changed
 
-        public static Dictionary<String, Setting> sharedSettings = new(){ };
+        public static Dictionary<string, Setting> sharedSettings = new(){ };
 
+        private const string GameTypeKey = "GameType";
+        private const string StartingSeekersKey = "Starting Seekers";
+        private const string PreRoundTimeKey = "Pre-Round Time";
+        private const string AddPlayerSignalsKey =  "Players Have Signals";
+        private const string AllowJoinWhileGameInProgressKey = "Allow Join While Game in Progress";
+        private const string Disable6ThLocationKey = "Disable 6th Location";
+        private const string ActivateAllReturnPlatformsKey = "Activate All Return Platforms";
+        private const string KillHidersOnCatchKey = "Kill Hiders on Catch";
+            
         public static SettingsPayload settingsToShare = new(){
             GameType = "INFECTION",
             StartingSeekers = 1,
@@ -48,14 +57,14 @@ namespace QSBGameModes.GameManagement{
 
         public static void Init(){
             settingsToShare = new SettingsPayload(){
-                GameType = Utils.ModHelper.Config.GetSettingsValue<string>("GameType"),
-                StartingSeekers = Utils.ModHelper.Config.GetSettingsValue<int>("Starting Seekers"),
-                PreroundTime = Utils.ModHelper.Config.GetSettingsValue<float>("Pre-Round Time"),
-                AddPlayerSignals =  Utils.ModHelper.Config.GetSettingsValue<bool>("Players Have Signals"),
-                AllowJoinWhileGameInProgress = Utils.ModHelper.Config.GetSettingsValue<bool>("Allow Join While Game in Progress"),
-                Disable6thLocation = Utils.ModHelper.Config.GetSettingsValue<bool>("Disable 6th Location"),
-                ActivateAllReturnPlatforms = Utils.ModHelper.Config.GetSettingsValue<bool>("Activate All Return Platforms"),
-                KillHidersOnCatch = Utils.ModHelper.Config.GetSettingsValue<bool>("Kill Hiders on Catch")
+                GameType = Utils.ModHelper.Config.GetSettingsValue<string>(GameTypeKey),
+                StartingSeekers = Utils.ModHelper.Config.GetSettingsValue<int>(StartingSeekersKey),
+                PreroundTime = Utils.ModHelper.Config.GetSettingsValue<float>(PreRoundTimeKey),
+                AddPlayerSignals =  Utils.ModHelper.Config.GetSettingsValue<bool>(AddPlayerSignalsKey),
+                AllowJoinWhileGameInProgress = Utils.ModHelper.Config.GetSettingsValue<bool>(AllowJoinWhileGameInProgressKey),
+                Disable6thLocation = Utils.ModHelper.Config.GetSettingsValue<bool>(Disable6ThLocationKey),
+                ActivateAllReturnPlatforms = Utils.ModHelper.Config.GetSettingsValue<bool>(ActivateAllReturnPlatformsKey),
+                KillHidersOnCatch = Utils.ModHelper.Config.GetSettingsValue<bool>(KillHidersOnCatchKey)
             };
 
             QSBPlayerManager.OnAddPlayer += SendSettings; //Make sure new people get sent the settings
@@ -71,14 +80,14 @@ namespace QSBGameModes.GameManagement{
             
             //Put the shared settings here
             settingsToShare = new SettingsPayload(){
-                GameType = Utils.ModHelper.Config.GetSettingsValue<string>("GameType"),
-                StartingSeekers = Utils.ModHelper.Config.GetSettingsValue<int>("Starting Seekers"),
-                PreroundTime = Utils.ModHelper.Config.GetSettingsValue<float>("Pre-Round Time"),
-                AddPlayerSignals =  Utils.ModHelper.Config.GetSettingsValue<bool>("Players Have Signals"),
-                AllowJoinWhileGameInProgress = Utils.ModHelper.Config.GetSettingsValue<bool>("Allow Join While Game in Progress"),
-                Disable6thLocation = Utils.ModHelper.Config.GetSettingsValue<bool>("Disable 6th Location"),
-                ActivateAllReturnPlatforms = Utils.ModHelper.Config.GetSettingsValue<bool>("Activate All Return Platforms"),
-                KillHidersOnCatch = Utils.ModHelper.Config.GetSettingsValue<bool>("Kill Hiders on Catch")
+                GameType = Utils.ModHelper.Config.GetSettingsValue<string>(GameTypeKey),
+                StartingSeekers = Utils.ModHelper.Config.GetSettingsValue<int>(StartingSeekersKey),
+                PreroundTime = Utils.ModHelper.Config.GetSettingsValue<float>(PreRoundTimeKey),
+                AddPlayerSignals =  Utils.ModHelper.Config.GetSettingsValue<bool>(AddPlayerSignalsKey),
+                AllowJoinWhileGameInProgress = Utils.ModHelper.Config.GetSettingsValue<bool>(AllowJoinWhileGameInProgressKey),
+                Disable6thLocation = Utils.ModHelper.Config.GetSettingsValue<bool>(Disable6ThLocationKey),
+                ActivateAllReturnPlatforms = Utils.ModHelper.Config.GetSettingsValue<bool>(ActivateAllReturnPlatformsKey),
+                KillHidersOnCatch = Utils.ModHelper.Config.GetSettingsValue<bool>(KillHidersOnCatchKey)
             };
             
             
@@ -88,7 +97,7 @@ namespace QSBGameModes.GameManagement{
             if (QSBCore.IsInMultiplayer){
                 if (QSBCore.IsHost){
                     LoadSettings();
-                    new SharedSettingsMessage(SharedSettings.settingsToShare){To = info.PlayerId}.Send();
+                    new SharedSettingsMessage(settingsToShare){To = info.PlayerId}.Send();
                 }
             }
         }
@@ -97,20 +106,20 @@ namespace QSBGameModes.GameManagement{
             if (QSBCore.IsInMultiplayer){
                 if (QSBCore.IsHost){
                     LoadSettings();
-                    new SharedSettingsMessage(SharedSettings.settingsToShare).Send();
+                    new SharedSettingsMessage(settingsToShare).Send();
                 }
             }
         }
 
         public static void UpdateSettings(){
-            Utils.ModHelper.Config.SetSettingsValue("GameType", settingsToShare.GameType);
-            Utils.ModHelper.Config.SetSettingsValue("PreroundTime", settingsToShare.PreroundTime);
-            Utils.ModHelper.Config.SetSettingsValue("Pre-Round Time",settingsToShare.PreroundTime);
-            Utils.ModHelper.Config.SetSettingsValue("Players Have Signals",settingsToShare.AddPlayerSignals);
-            Utils.ModHelper.Config.SetSettingsValue("Disable 6th Location",settingsToShare.Disable6thLocation);
-            Utils.ModHelper.Config.SetSettingsValue("Activate All Return Platforms",settingsToShare.ActivateAllReturnPlatforms);
-            Utils.ModHelper.Config.SetSettingsValue("Allow Join While Game in Progress",settingsToShare.AllowJoinWhileGameInProgress);
-            Utils.ModHelper.Config.SetSettingsValue("Kill Hiders on Catch",settingsToShare.KillHidersOnCatch);
+            Utils.ModHelper.Config.SetSettingsValue(GameTypeKey, settingsToShare.GameType);
+            Utils.ModHelper.Config.SetSettingsValue(StartingSeekersKey, settingsToShare.StartingSeekers);
+            Utils.ModHelper.Config.SetSettingsValue(PreRoundTimeKey, settingsToShare.PreroundTime);
+            Utils.ModHelper.Config.SetSettingsValue(AddPlayerSignalsKey,settingsToShare.AddPlayerSignals);
+            Utils.ModHelper.Config.SetSettingsValue(Disable6ThLocationKey,settingsToShare.Disable6thLocation);
+            Utils.ModHelper.Config.SetSettingsValue(ActivateAllReturnPlatformsKey,settingsToShare.ActivateAllReturnPlatforms);
+            Utils.ModHelper.Config.SetSettingsValue(AllowJoinWhileGameInProgressKey,settingsToShare.AllowJoinWhileGameInProgress);
+            Utils.ModHelper.Config.SetSettingsValue(KillHidersOnCatchKey,settingsToShare.KillHidersOnCatch);
         }
     }
 }

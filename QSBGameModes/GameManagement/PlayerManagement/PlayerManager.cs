@@ -15,8 +15,8 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
         public static Dictionary<PlayerInfo, GameModeInfo> playerInfo = new(); //All HideAndSeekInfos have playerInfo
         public static Dictionary<PlayerInfo, DeathType> PlayerDeathTypes = new(); //This gets setup by the HideAndSeekInfo
 
-        public static GameModeInfo LocalPlayer{ get{ return playerInfo[QSBPlayerManager.LocalPlayer]; }}
-        
+        public static GameModeInfo LocalPlayer => QSBPlayerManager.LocalPlayer == null ? null : playerInfo[QSBPlayerManager.LocalPlayer];
+
         public static void Init(){
             QSBPlayerManager.OnAddPlayer += (PlayerInfo info) => {
                 SetupPlayer(info);
