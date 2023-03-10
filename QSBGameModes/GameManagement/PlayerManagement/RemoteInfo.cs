@@ -21,8 +21,8 @@ namespace QSBGameModes{
                 return false;
             Info.MapMarker.enabled = true;
             Info.HudMarker.enabled = true;
-            SeekerVisual.SetActive(false);
-            SeekerVolume.SetActive(false);
+            if(SeekerVisual != null) SeekerVisual.SetActive(false);
+            if(SeekerVolume != null) SeekerVolume.SetActive(false);
             ReturnToDefaultVisual();
             return true;
         }
@@ -80,6 +80,7 @@ namespace QSBGameModes{
         }
         
         private void ReturnToDefaultVisual(){
+            if(SuitVisual == null || HeartianVisual == null) return;
             if (Info.SuitedUp){
                 SuitVisual.SetActive(true);
                 HeartianVisual.SetActive(false);
