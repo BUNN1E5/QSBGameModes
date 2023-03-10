@@ -39,7 +39,7 @@ namespace QSBGameModes{
         }
 
         public override void OnSettingChange(){
-            Signal.gameObject.SetActive(SharedSettings.settingsToShare.AddPlayerSignals);
+            if(Signal != null) Signal.gameObject.SetActive(SharedSettings.settingsToShare.AddPlayerSignals);
         }
 
         public override bool SetupInfo(PlayerInfo playerInfo){
