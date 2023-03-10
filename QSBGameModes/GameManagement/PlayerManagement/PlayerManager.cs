@@ -142,7 +142,7 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
 
         public static void OnSettingsChange(){
             QSBPlayerManager.PlayerList.ForEach((playerInfo) => {
-                PlayerManager.playerInfo[playerInfo].OnSettingChange();
+                if (PlayerManager.playerInfo.TryGetValue(playerInfo, out var info)) info.OnSettingChange();
             });
         }
 
