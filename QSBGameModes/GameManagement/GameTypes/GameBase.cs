@@ -7,6 +7,7 @@ namespace QSBGameModes.GameManagement;
 public class GameBase{
 
     public float stateTime = 0f;
+    protected GameState currentState = GameState.Stopped;
 
     public virtual PlayerManagement.PlayerState StateOnJoinLate() => PlayerManagement.PlayerState.None;
     public virtual PlayerManagement.PlayerState StateOnJoinEarly() => PlayerManagement.PlayerState.None;
@@ -34,6 +35,7 @@ public class GameBase{
                 OnStopped();
                 break;
         }
+        currentState = state;
     }
     
     public virtual void Init(){ }
@@ -48,7 +50,9 @@ public class GameBase{
 
     public virtual void OnStopped(){
         PlayerManager.SetAllPlayerStates(PlayerManagement.PlayerState.None);
-        new DebugTriggerSupernovaMessage().Send();
+        if (currentState == GameState.InProgress){
+            new DebugTriggerSupernovaMessage().Send();
+        }
     }
     public virtual void OnWaiting(){}
 
