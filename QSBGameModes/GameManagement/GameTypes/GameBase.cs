@@ -62,7 +62,7 @@ public class GameBase{
             PlayerManager.SetAllPlayerStates(PlayerManagement.PlayerState.None);
         }
 
-        if (currentState == GameState.InProgress){
+        if (currentState == GameState.InProgress && PlayerManager.hiders.Count == 0 && PlayerManager.seekers.Count == 0){
             new DebugTriggerSupernovaMessage().Send();
         }
     }
