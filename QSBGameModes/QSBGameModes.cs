@@ -82,32 +82,29 @@ namespace QSBGameModes
             Utils.WriteLine("Client is joining game", MessageType.Debug);
             
             Utils.RunWhen(() => SharedSettings.receivedSettings, () => {
-                
+                if (PlayerManager.LocalPlayer.State == GameManagement.PlayerManagement.PlayerState.Ready){
+                    Utils.WriteLine($"Player is already Ready!", MessageType.Debug);
+                }
                 switch (GameManager.state){
                     case GameState.Starting:
                     case GameState.Waiting:
                         Utils.WriteLine($"Setting State to {GameManager.gameMode.StateOnJoinEarly()}", MessageType.Debug);
                         new RoleChangeMessage(PlayerManager.LocalPlayer.Info, GameManager.gameMode.StateOnJoinEarly()).Send();
-                        break;
+                        return;
                     case GameState.InProgress:
-                        if (!SharedSettings.settingsToShare.AllowJoinWhileGameInProgress)
-                            break;
+                        if (!SharedSettings.settingsToShare.AllowJoinWhileGameInProgress){
+                            Utils.WriteLine($"Allow Join While Game In Progress is False", MessageType.Debug);
+                            new RoleChangeMessage(PlayerManager.LocalPlayer.Info, GameManagement.PlayerManagement.PlayerState.Spectating).Send();
+                            return;
+                        }
                         Utils.WriteLine($"Setting State to {GameManager.gameMode.StateOnJoinLate()}", MessageType.Debug);
                         new RoleChangeMessage(PlayerManager.LocalPlayer.Info, GameManager.gameMode.StateOnJoinLate()).Send();
-                        break;
+                        return;
                     case GameState.Ending:
                         //What state should be here?
                         new RoleChangeMessage(PlayerManager.LocalPlayer.Info, GameManagement.PlayerManagement.PlayerState.Ready).Send();
-                        break;
+                        return;
                 }
-
-                if (PlayerManager.LocalPlayer.State == GameManagement.PlayerManagement.PlayerState.Ready){
-                    Utils.WriteLine($"Player is already Ready", MessageType.Debug);
-                    return;
-                }
-
-                Utils.WriteLine($"Allow Join While Game In Progress is False", MessageType.Debug);
-                new RoleChangeMessage(PlayerManager.LocalPlayer.Info, GameManagement.PlayerManagement.PlayerState.Spectating).Send();
             });
             
         }
