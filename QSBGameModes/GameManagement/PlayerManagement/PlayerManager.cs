@@ -111,7 +111,7 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
         
         public static void SetupPlayer(PlayerInfo playerInfo){
             if (PlayerManager.PlayerInfos.TryGetValue(playerInfo, out GameModeInfo info)){
-                SetupPlayer(playerInfo, info.State);
+                SetupPlayer(playerInfo, info.State == PlayerState.None? PlayerState.None : PlayerState.Ready);
                 return;
             }
             SetupPlayer(playerInfo, PlayerState.None);
