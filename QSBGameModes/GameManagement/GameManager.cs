@@ -56,9 +56,9 @@ namespace QSBGameModes.GameManagement{
 
             GameManager.state = GameState.Starting;
 
-            if (!TimeLoop._isTimeFlowing){
+            if (!TimeLoop.IsTimeFlowing()){
+                new LaunchCodesMessage().Send();
                 TimeLoop.SetTimeLoopEnabled(true);
-                PlayerData.LearnLaunchCodes();
             }
 
             Utils.WriteLine("Setting Up Game", MessageType.Info);

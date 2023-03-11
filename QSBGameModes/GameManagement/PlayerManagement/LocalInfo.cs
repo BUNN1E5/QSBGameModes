@@ -14,6 +14,7 @@ namespace QSBGameModes{
         public override bool Reset(){
             if (!base.Reset()) //If the base func snagged out
                 return false;
+            ShipManager.Instance.CockpitController._interactVolume.EnableInteraction();
             NotificationManager.SharedInstance.UnpinNotification(GameManager.gameMode.catcherNotification);
             NotificationManager.SharedInstance.UnpinNotification(GameManager.gameMode.spectatorNotification);
             NotificationManager.SharedInstance.UnpinNotification(GameManager.gameMode.catcheeNotification);
@@ -31,7 +32,6 @@ namespace QSBGameModes{
                 }
             });
             
-
             return true;
         }
 
