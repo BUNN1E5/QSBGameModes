@@ -11,6 +11,9 @@ namespace QSBGameModes.GameManagement{
     public struct SettingsPayload{
         public string GameType;
         public int StartingSeekers;
+        public float SeekerVolumeHeight;
+        public float SeekerVolumeRadius;
+        public bool AllowRepeatSeekers;
         public float PreroundTime;
         public bool AddPlayerSignals;
         public bool Disable6thLocation;
@@ -37,6 +40,9 @@ namespace QSBGameModes.GameManagement{
 
         private const string GameTypeKey = "GameType";
         private const string StartingSeekersKey = "Starting Seekers";
+        private const string SeekerVolumeHeightKey = "Seeker Volume Height";
+        private const string SeekerVolumeRadiusKey = "Seeker Volume Radius";
+        private const string AllowRepeatSeekersKey = "Allow Repeat Seekers";
         private const string PreRoundTimeKey = "Pre-Round Time";
         private const string AddPlayerSignalsKey =  "Players Have Signals";
         private const string AllowJoinWhileGameInProgressKey = "Allow Join While Game in Progress";
@@ -47,6 +53,9 @@ namespace QSBGameModes.GameManagement{
         public static SettingsPayload settingsToShare = new(){
             GameType = "INFECTION",
             StartingSeekers = 1,
+            SeekerVolumeHeight = 2,
+            SeekerVolumeRadius = 1,
+            AllowRepeatSeekers = true,
             PreroundTime = 30,
             AddPlayerSignals = true,
             Disable6thLocation = true,
@@ -59,6 +68,9 @@ namespace QSBGameModes.GameManagement{
             settingsToShare = new SettingsPayload(){
                 GameType = Utils.ModHelper.Config.GetSettingsValue<string>(GameTypeKey),
                 StartingSeekers = Utils.ModHelper.Config.GetSettingsValue<int>(StartingSeekersKey),
+                SeekerVolumeHeight = Utils.ModHelper.Config.GetSettingsValue<int>(SeekerVolumeHeightKey),
+                SeekerVolumeRadius = Utils.ModHelper.Config.GetSettingsValue<int>(SeekerVolumeRadiusKey),
+                AllowRepeatSeekers = Utils.ModHelper.Config.GetSettingsValue<bool>(AllowRepeatSeekersKey),
                 PreroundTime = Utils.ModHelper.Config.GetSettingsValue<float>(PreRoundTimeKey),
                 AddPlayerSignals =  Utils.ModHelper.Config.GetSettingsValue<bool>(AddPlayerSignalsKey),
                 AllowJoinWhileGameInProgress = Utils.ModHelper.Config.GetSettingsValue<bool>(AllowJoinWhileGameInProgressKey),
@@ -82,6 +94,9 @@ namespace QSBGameModes.GameManagement{
             settingsToShare = new SettingsPayload(){
                 GameType = Utils.ModHelper.Config.GetSettingsValue<string>(GameTypeKey),
                 StartingSeekers = Utils.ModHelper.Config.GetSettingsValue<int>(StartingSeekersKey),
+                SeekerVolumeHeight = Utils.ModHelper.Config.GetSettingsValue<int>(SeekerVolumeHeightKey),
+                SeekerVolumeRadius = Utils.ModHelper.Config.GetSettingsValue<int>(SeekerVolumeRadiusKey),
+                AllowRepeatSeekers = Utils.ModHelper.Config.GetSettingsValue<bool>(AllowRepeatSeekersKey),
                 PreroundTime = Utils.ModHelper.Config.GetSettingsValue<float>(PreRoundTimeKey),
                 AddPlayerSignals =  Utils.ModHelper.Config.GetSettingsValue<bool>(AddPlayerSignalsKey),
                 AllowJoinWhileGameInProgress = Utils.ModHelper.Config.GetSettingsValue<bool>(AllowJoinWhileGameInProgressKey),
@@ -114,12 +129,16 @@ namespace QSBGameModes.GameManagement{
         public static void UpdateSettings(){
             Utils.ModHelper.Config.SetSettingsValue(GameTypeKey, settingsToShare.GameType);
             Utils.ModHelper.Config.SetSettingsValue(StartingSeekersKey, settingsToShare.StartingSeekers);
+            Utils.ModHelper.Config.SetSettingsValue(SeekerVolumeHeightKey, settingsToShare.SeekerVolumeHeight);
+            Utils.ModHelper.Config.SetSettingsValue(SeekerVolumeRadiusKey, settingsToShare.SeekerVolumeRadius);
+            Utils.ModHelper.Config.SetSettingsValue(AllowRepeatSeekersKey, settingsToShare.AllowRepeatSeekers);
             Utils.ModHelper.Config.SetSettingsValue(PreRoundTimeKey, settingsToShare.PreroundTime);
             Utils.ModHelper.Config.SetSettingsValue(AddPlayerSignalsKey,settingsToShare.AddPlayerSignals);
             Utils.ModHelper.Config.SetSettingsValue(Disable6ThLocationKey,settingsToShare.Disable6thLocation);
             Utils.ModHelper.Config.SetSettingsValue(ActivateAllReturnPlatformsKey,settingsToShare.ActivateAllReturnPlatforms);
             Utils.ModHelper.Config.SetSettingsValue(AllowJoinWhileGameInProgressKey,settingsToShare.AllowJoinWhileGameInProgress);
             Utils.ModHelper.Config.SetSettingsValue(KillHidersOnCatchKey,settingsToShare.KillHidersOnCatch);
+            Utils.ModHelper.Menus.ModsMenu.GetModMenu(QSBGameModes.instance).UpdateUIValues();
         }
     }
 }

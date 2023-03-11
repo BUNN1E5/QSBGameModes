@@ -131,7 +131,7 @@ namespace QSBGameModes.GameManagement{
                     hiders.Add(info.Info.PlayerId);
                 }
                 
-                var seekers = RoleSelector.SelectRoles(players, SharedSettings.settingsToShare.StartingSeekers);
+                var seekers = RoleSelector.SelectRoles(players, SharedSettings.settingsToShare.StartingSeekers, -1, !SharedSettings.settingsToShare.AllowRepeatSeekers);
                 hiders.ExceptWith(seekers);
                 SendSelectedRoles(seekers, hiders, spectators);
             });

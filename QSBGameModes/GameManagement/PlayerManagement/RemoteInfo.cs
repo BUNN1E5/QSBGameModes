@@ -96,7 +96,8 @@ namespace QSBGameModes{
             Signal = this.Info.Body.AddComponent<AudioSignal>();
 
             Utils.WriteLine("Add the known signal for the local player", MessageType.Success);
-            Signal._name = SignalName.RadioTower; //TODO :: CHANGE THIS NAME (Without losing prox chat support)
+            Signal._name = (SignalName)PlayerManager.LocalPlayer.Info.PlayerId + 101; //TODO :: CHANGE THIS NAME (Without losing prox chat support)
+            Signal.name = Info.Name;
             Signal._frequency = SignalFrequency.HideAndSeek;
             Signal.gameObject.SetActive(SharedSettings.settingsToShare.AddPlayerSignals);
         }
@@ -157,7 +158,10 @@ namespace QSBGameModes{
                 return false;
             
             //The visibility of the player should be the same as the lcoal Player if they are spectator already
-            bool state = PlayerManager.LocalPlayer.State == State;
+            bool state = PlayerManager.LocalPlayer.State is 
+                GameManagement.PlayerManagement.PlayerState.Spectating or 
+                GameManagement.PlayerManagement.PlayerState.None;
+            
             Info.SetVisible(state);
             Info.HudMarker.enabled = state;
             Info.MapMarker.enabled = state;

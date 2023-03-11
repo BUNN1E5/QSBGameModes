@@ -24,15 +24,10 @@ namespace QSBGameModes.Patches{
         [HarmonyPrefix]
         [HarmonyPatch(typeof(AudioSignal), nameof(AudioSignal.SignalNameToString))]
         public static bool SignalNameToStringPatch(SignalName name, ref string __result){
-            bool rval = true;
-            string result = "";
-            PlayerManager.PlayerInfos.DoIf((kvp) => 
-                kvp.Value.GetType() == typeof(RemoteInfo), (kvp) => {
-                result = kvp.Value.Info.Name;
-                rval = false;
-            });
-            __result = result;
-            return rval; // This cause dumb
+           if ((int)name < 101) //If we are larger than 101 we are out of the normal range so we are doing player name
+                return true;
+           __result = QSBPlayerManager.GetPlayer((uint) name + 101).Name;
+           return false;
         }
     }
 }

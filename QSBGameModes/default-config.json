@@ -23,6 +23,8 @@
       ]
     },
     "Starting Seekers": 1,
+    "Seeker Volume Height": 2,
+    "Seeker Volume Radius": 1,
     "Players Have Signals": true,
     "Kill Hiders on Catch": false,
     "Allow Join While Game in Progress": true,
