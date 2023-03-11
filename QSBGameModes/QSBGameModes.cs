@@ -82,8 +82,9 @@ namespace QSBGameModes
             Utils.WriteLine("Client is joining game", MessageType.Debug);
             
             Utils.RunWhen(() => SharedSettings.receivedSettings, () => {
-                if (PlayerManager.LocalPlayer.State == GameManagement.PlayerManagement.PlayerState.Ready){
+                if (PlayerManager.LocalPlayer.State is not (GameManagement.PlayerManagement.PlayerState.Ready or GameManagement.PlayerManagement.PlayerState.None)){
                     Utils.WriteLine($"Player is already Ready!", MessageType.Debug);
+                    return;
                 }
                 switch (GameManager.state){
                     case GameState.Starting:
