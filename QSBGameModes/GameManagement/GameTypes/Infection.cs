@@ -103,7 +103,11 @@ public class Infection : GameBase{
         GameManager.SelectRoles();
         endGameCheck = Utils.RunWhen(() => PlayerManager.hiders.Count == 0 
         && PlayerManager.PlayerInfos.Values.All(info=>info.State != PlayerManagement.PlayerState.Ready), 
-        () => GameManager.state = GameState.Ending);
+        () =>
+        {
+            GameManager.state = PlayerManager.hiders.Count == 0 && PlayerManager.seekers.Count == 0 ?
+                GameState.Stopped : GameState.Ending;
+        });
     }
 
     public override void OnEnding(){
