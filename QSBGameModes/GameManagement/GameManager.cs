@@ -53,7 +53,11 @@ namespace QSBGameModes.GameManagement{
         public static void SetupGame(){
 
             GameManager.state = GameState.Starting;
-            
+
+            if (TimeLoop._isTimeFlowing){
+                TimeLoop.SetTimeLoopEnabled(true);
+            }
+
             Utils.WriteLine("Setting Up Game", MessageType.Info);
 
             Utils.WriteLine("Setting Up All Players");
