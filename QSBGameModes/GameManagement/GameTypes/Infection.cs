@@ -25,10 +25,10 @@ public class Infection : GameBase{
     public override PlayerManagement.PlayerState StateOnJoinEarly()  => PlayerManagement.PlayerState.Ready;
     public override void OnCatch(GameModeInfo seekerPlayer){
         //We only run if we are a hider and we hit a seeker
-        if (PlayerManager.playerInfo[QSBPlayerManager.LocalPlayer].State != GameManagement.PlayerManagement.PlayerState.Hiding)
+        if (PlayerManager.PlayerInfos[QSBPlayerManager.LocalPlayer].State != GameManagement.PlayerManagement.PlayerState.Hiding)
             return;
 
-        if (PlayerManager.playerInfo[QSBPlayerManager.LocalPlayer].State == seekerPlayer.State){
+        if (PlayerManager.PlayerInfos[QSBPlayerManager.LocalPlayer].State == seekerPlayer.State){
             Utils.WriteLine("How are you getting caught if you are both the same team!? Ignoring");
             return;
         }
@@ -58,7 +58,7 @@ public class Infection : GameBase{
         base.OnStarting();
         
         //TODO :: Make sure all player's eyes are open
-        Utils.RunWhen(() => PlayerManager.playerInfo.Values.All(info => info.Info.SuitedUp), () => GameManager.state = GameState.Waiting);
+        Utils.RunWhen(() => PlayerManager.PlayerInfos.Values.All(info => info.Info.SuitedUp), () => GameManager.state = GameState.Waiting);
     }
 
     private Coroutine preroundTimer;
@@ -102,7 +102,7 @@ public class Infection : GameBase{
         base.OnInProgress();
         GameManager.SelectRoles();
         endGameCheck = Utils.RunWhen(() => PlayerManager.hiders.Count == 0 
-        && PlayerManager.playerInfo.Values.All(info=>info.State != PlayerManagement.PlayerState.Ready), 
+        && PlayerManager.PlayerInfos.Values.All(info=>info.State != PlayerManagement.PlayerState.Ready), 
         () => GameManager.state = GameState.Ending);
     }
 

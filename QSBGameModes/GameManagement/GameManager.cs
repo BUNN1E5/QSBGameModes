@@ -113,7 +113,7 @@ namespace QSBGameModes.GameManagement{
                 HashSet<uint> hiders = new();
                 HashSet<uint> spectators = new();
                 
-                foreach (GameModeInfo info in PlayerManager.playerInfo.Values){
+                foreach (GameModeInfo info in PlayerManager.PlayerInfos.Values){
                     if (info.State is PlayerManagement.PlayerState.None or PlayerManagement.PlayerState.Spectating){
                         new RoleChangeMessage(info.Info, PlayerManagement.PlayerState.Spectating).Send();
                         spectators.Add(info.Info.PlayerId);

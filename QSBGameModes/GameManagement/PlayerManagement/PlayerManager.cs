@@ -12,46 +12,44 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
         public static HashSet<PlayerInfo> seekers = new();
         public static HashSet<PlayerInfo> spectators = new();
 
-        public static Dictionary<PlayerInfo, GameModeInfo> playerInfo = new(); //All HideAndSeekInfos have playerInfo
+        public static Dictionary<PlayerInfo, GameModeInfo> PlayerInfos = new(); //All HideAndSeekInfos have playerInfo
         public static Dictionary<PlayerInfo, DeathType> PlayerDeathTypes = new(); //This gets setup by the HideAndSeekInfo
 
-        public static GameModeInfo LocalPlayer => QSBPlayerManager.LocalPlayer == null ? null : playerInfo[QSBPlayerManager.LocalPlayer];
+        public static GameModeInfo LocalPlayer => QSBPlayerManager.LocalPlayer == null ? null : PlayerInfos[QSBPlayerManager.LocalPlayer];
 
         public static void Init(){
             QSBPlayerManager.OnAddPlayer += (PlayerInfo info) => {
                 SetupPlayer(info);
                 if(QSBCore.IsHost)
-                    new  PlayerManagerUpdateMessage(playerInfo.Values.ToArray()){To = info.PlayerId}.Send();
+                    new  PlayerManagerUpdateMessage(PlayerInfos.Values.ToArray()){To = info.PlayerId}.Send();
             };
             
             QSBPlayerManager.OnRemovePlayer += RemovePlayer;
         }
 
         public static void Reset(){
-            playerInfo.Clear();
+            PlayerInfos.Clear();
             hiders.Clear();
             seekers.Clear();
             spectators.Clear();
         }
 
         public static void RemovePlayer(PlayerInfo playerInfo){
-            PlayerManager.CleanUpPlayer(PlayerManager.playerInfo[playerInfo]);
-            PlayerManager.playerInfo.Remove(playerInfo);
+            PlayerManager.CleanUpPlayer(PlayerManager.PlayerInfos[playerInfo]);
+            PlayerManager.PlayerInfos.Remove(playerInfo);
             PlayerManager.hiders.Remove(playerInfo);
             PlayerManager.seekers.Remove(playerInfo);
             PlayerManager.spectators.Remove(playerInfo);
         }
 
         public static void ResetAllPlayers() {
-            foreach (var info in playerInfo.Values) {
+            foreach (var info in PlayerInfos.Values) {
                 info.Reset();
             }
         }
 
         public static void SetupAllPlayers(){
-            QSBPlayerManager.PlayerList.ForEach((playerInfo) => {
-                PlayerManager.SetupPlayer(playerInfo);
-            });
+            QSBPlayerManager.PlayerList.ForEach(PlayerManager.SetupPlayer);
         }
 
         public static void SetAllPlayerStates(PlayerState state){
@@ -61,35 +59,35 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
         }
 
         public static void SetPlayerState(PlayerInfo playerInfo, PlayerState state){
-            Utils.WriteLine($"Chaging player {playerInfo} state to {state.ToString()} [Client ID: {QSBPlayerManager.LocalPlayerId}]", MessageType.Success);
+            Utils.WriteLine($"Changing player {playerInfo} state to {state.ToString()} [Client ID: {QSBPlayerManager.LocalPlayerId}]", MessageType.Success);
             switch (state){
                 case PlayerState.Hiding:
                     hiders.Add(playerInfo);
                     seekers.Remove(playerInfo);
                     spectators.Remove(playerInfo);
-                    SetupHider(PlayerManager.playerInfo[playerInfo]);
+                    SetupHider(PlayerManager.PlayerInfos[playerInfo]);
                     break;
                 case PlayerState.Seeking:
                     hiders.Remove(playerInfo);
                     seekers.Add(playerInfo);
                     spectators.Remove(playerInfo);
-                    SetupSeeker(PlayerManager.playerInfo[playerInfo]);
+                    SetupSeeker(PlayerManager.PlayerInfos[playerInfo]);
                     break;
                 case  PlayerState.Spectating:
                     hiders.Remove(playerInfo);
                     seekers.Remove(playerInfo);
                     spectators.Add(playerInfo);
-                    SetupSpectator(PlayerManager.playerInfo[playerInfo]);
+                    SetupSpectator(PlayerManager.PlayerInfos[playerInfo]);
                     break;
                 case PlayerState.None:
                     hiders.Remove(playerInfo);
                     seekers.Remove(playerInfo);
                     spectators.Remove(playerInfo);
-                    PlayerManager.playerInfo[playerInfo].State = PlayerState.None;
-                    Reset(PlayerManager.playerInfo[playerInfo]);
+                    PlayerManager.PlayerInfos[playerInfo].State = PlayerState.None;
+                    Reset(PlayerManager.PlayerInfos[playerInfo]);
                     break;
                 case PlayerState.Ready:
-                    PlayerManager.playerInfo[playerInfo].State = PlayerState.Ready;
+                    PlayerManager.PlayerInfos[playerInfo].State = PlayerState.Ready;
                     break;
             }
         }
@@ -99,20 +97,20 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
             Utils.RunWhen(() => playerInfo.Body != null, () => {
                 Utils.WriteLine($"Setting up {playerInfo.Name}({playerInfo.PlayerId}):", MessageType.Debug);
                 
-                if (!PlayerManager.playerInfo.ContainsKey(playerInfo)){
+                if (!PlayerManager.PlayerInfos.ContainsKey(playerInfo)){
                     GameModeInfo info = playerInfo.IsLocalPlayer ? new LocalInfo() : new RemoteInfo();
-                    PlayerManager.playerInfo[playerInfo] = info;
+                    PlayerManager.PlayerInfos[playerInfo] = info;
                 }
                 
-                if (!PlayerManager.playerInfo[playerInfo].isSetup())
-                    PlayerManager.playerInfo[playerInfo].SetupInfo(playerInfo);
+                if (!PlayerManager.PlayerInfos[playerInfo].isSetup())
+                    PlayerManager.PlayerInfos[playerInfo].SetupInfo(playerInfo);
                 
                 SetPlayerState(playerInfo, state);
             });
         }
         
         public static void SetupPlayer(PlayerInfo playerInfo){
-            if (PlayerManager.playerInfo.TryGetValue(playerInfo, out GameModeInfo info)){
+            if (PlayerManager.PlayerInfos.TryGetValue(playerInfo, out GameModeInfo info)){
                 SetupPlayer(playerInfo, info.State);
                 return;
             }
@@ -142,7 +140,7 @@ namespace QSBGameModes.GameManagement.PlayerManagement{
 
         public static void OnSettingsChange(){
             QSBPlayerManager.PlayerList.ForEach((playerInfo) => {
-                if (PlayerManager.playerInfo.TryGetValue(playerInfo, out var info)) info.OnSettingChange();
+                if (PlayerManager.PlayerInfos.TryGetValue(playerInfo, out var info)) info.OnSettingChange();
             });
         }
 

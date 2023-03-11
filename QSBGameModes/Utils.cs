@@ -50,6 +50,9 @@ namespace QSBGameModes{
 
         public static Coroutine RunWhen(Func<bool> predicate, Action action) => 
             QSBGameModes.instance.StartCoroutine(WaitUntil(predicate, action));
+        
+        public static Coroutine DelayedRunWhen(Func<bool> predicate, float responseDelay, Action action) => 
+            QSBGameModes.instance.StartCoroutine(DelayedWaitUntil(predicate, responseDelay, action));
 
         public static Coroutine RunWhenState(GameState state, Func<bool> predicate, Action action) =>
             Utils.RunWhen(() => GameManager.state == state, action);
@@ -80,6 +83,12 @@ namespace QSBGameModes{
 
         private static IEnumerator WaitUntil(Func<bool> predicate, Action action){
             yield return new WaitUntil(predicate);
+            action();
+        }
+        
+        private static IEnumerator DelayedWaitUntil(Func<bool> predicate, float responseDelay, Action action){
+            yield return new WaitUntil(predicate);
+            yield return new WaitForSeconds(responseDelay);
             action();
         }
 

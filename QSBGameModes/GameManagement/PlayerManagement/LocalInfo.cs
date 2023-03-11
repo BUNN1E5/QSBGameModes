@@ -41,7 +41,7 @@ namespace QSBGameModes{
 
             Utils.WriteLine($"Local Player Is Now Hider ({Info.PlayerId})", MessageType.Info);
             Utils.WriteLine("Removing the All Markers", MessageType.Success);
-            foreach (PlayerInfo info in PlayerManager.playerInfo.Keys) {
+            foreach (PlayerInfo info in PlayerManager.PlayerInfos.Keys) {
                 if (info.IsLocalPlayer) continue;
                 if (info.Body == null) continue;
 
@@ -86,7 +86,7 @@ namespace QSBGameModes{
             Utils.WriteLine($"Local Player Is Now Seeker ({Info.PlayerId})", MessageType.Info);
             
             Utils.WriteLine("Removing the Hider Markers", MessageType.Success);
-            foreach (PlayerInfo info in PlayerManager.playerInfo.Keys) {
+            foreach (PlayerInfo info in PlayerManager.PlayerInfos.Keys) {
                 if (info.IsLocalPlayer) continue;
                 if (info.Body == null) continue;
 
@@ -132,7 +132,7 @@ namespace QSBGameModes{
             Utils.WriteLine($"Local Player Is now Spectator ({Info.PlayerId})", MessageType.Info);
 
             //For now make spectators able to see all
-            foreach (PlayerInfo info in PlayerManager.playerInfo.Keys) {
+            foreach (PlayerInfo info in PlayerManager.PlayerInfos.Keys) {
                 if (info.IsLocalPlayer)
                     continue;
                 
