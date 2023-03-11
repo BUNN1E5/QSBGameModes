@@ -7,11 +7,13 @@ using OWML.ModHelper;
 using QSB;
 using QSB.Messaging;
 using QSB.Player;
+using QSB.Player.Messages;
 using QSB.SaveSync.Messages;
 using QSB.WorldSync;
 using QSBGameModes.GameManagement.GameTypes;
 using QSBGameModes.GameManagement.PlayerManagement;
 using QSBGameModes.GameManagement.RoleSelection;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace QSBGameModes.GameManagement{
@@ -56,6 +58,7 @@ namespace QSBGameModes.GameManagement{
 
             if (TimeLoop._isTimeFlowing){
                 TimeLoop.SetTimeLoopEnabled(true);
+                PlayerData.LearnLaunchCodes();
             }
 
             Utils.WriteLine("Setting Up Game", MessageType.Info);
