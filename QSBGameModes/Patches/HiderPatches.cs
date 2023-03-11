@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using HarmonyLib;
 using OWML.Common;
 using QSB.DeathSync;
@@ -10,7 +11,7 @@ namespace QSBGameModes.Patches{
     
     [HarmonyPatch]
     public static class HiderPatches{
-        [Harmony]
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(Necronomicon), nameof(Necronomicon.GetPhrase))]
         public static bool PlayerCaughtDeathMessage(DeathType deathType, int index, ref string __result){
             if (PlayerManager.PlayerDeathTypes.ContainsValue(deathType)){
@@ -18,6 +19,20 @@ namespace QSBGameModes.Patches{
                 return false;
             }
             return true;
+        }
+        
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(AudioSignal), nameof(AudioSignal.SignalNameToString))]
+        public static bool SignalNameToStringPatch(SignalName name, ref string __result){
+            bool rval = true;
+            string result = "";
+            PlayerManager.PlayerInfos.DoIf((kvp) => 
+                kvp.Value.GetType() == typeof(RemoteInfo), (kvp) => {
+                result = kvp.Value.Info.Name;
+                rval = false;
+            });
+            __result = result;
+            return rval; // This cause dumb
         }
     }
 }

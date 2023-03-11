@@ -58,7 +58,7 @@ namespace QSBGameModes.GameManagement{
 
             if (!TimeLoop.IsTimeFlowing()){
                 new LaunchCodesMessage().Send();
-                TimeLoop.SetTimeLoopEnabled(true);
+                TimeLoop.SetTimeLoopEnabled(true); //Just in case lol
             }
 
             Utils.WriteLine("Setting Up Game", MessageType.Info);
