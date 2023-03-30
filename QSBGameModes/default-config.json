@@ -18,8 +18,7 @@
       "type": "selector",
       "value": "INFECTION",
       "options": [
-        "INFECTION",
-        "TAG"
+        "INFECTION"
       ]
     },
     "Starting Seekers": 1,
