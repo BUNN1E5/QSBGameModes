@@ -23,7 +23,7 @@ namespace QSBGameModes{
 
         public virtual bool SetupInfo(PlayerInfo playerInfo){
             this.Info = playerInfo;
-            playerBody = playerInfo._body; //So we know if we got setup this loop
+            playerBody = playerInfo.Body; //So we know if we got setup this loop
             if (!EnumUtils.IsDefined<DeathType>(playerInfo.Name)){
                 PlayerManager.PlayerDeathTypes.Add(this.Info, EnumUtils.Create<DeathType>(playerInfo.Name));
             }
