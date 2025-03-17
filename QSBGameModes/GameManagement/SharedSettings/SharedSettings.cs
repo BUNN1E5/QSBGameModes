@@ -138,7 +138,9 @@ namespace QSBGameModes.GameManagement{
             Utils.ModHelper.Config.SetSettingsValue(ActivateAllReturnPlatformsKey,settingsToShare.ActivateAllReturnPlatforms);
             Utils.ModHelper.Config.SetSettingsValue(AllowJoinWhileGameInProgressKey,settingsToShare.AllowJoinWhileGameInProgress);
             Utils.ModHelper.Config.SetSettingsValue(KillHidersOnCatchKey,settingsToShare.KillHidersOnCatch);
-            Utils.ModHelper.Menus.ModsMenu.GetModMenu(QSBGameModes.instance).UpdateUIValues();
+            
+            // Not needed?
+            // Utils.ModHelper.Menus.ModsMenu.GetModMenu(QSBGameModes.instance).UpdateUIValues();
         }
     }
 }
