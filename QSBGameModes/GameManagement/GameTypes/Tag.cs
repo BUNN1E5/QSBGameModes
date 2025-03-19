@@ -13,7 +13,6 @@ namespace QSBGameModes.GameManagement.GameTypes;
 public class Tag : GameBase
 {
     private ImmunePlayer immuneFromPlayer;
-    private float immunityCooldown = 30f; //30 seconds
 
     public Tag()
     {
