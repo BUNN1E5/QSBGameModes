@@ -4,47 +4,57 @@ using QSB.Player;
 using QSBGameModes.GameManagement.PlayerManagement;
 using UnityEngine;
 
-namespace QSBGameModes{
-    public class GameModeInfo{
+namespace QSBGameModes
+{
+    public class GameModeInfo
+    {
         public PlayerInfo Info;
         public GameManagement.PlayerManagement.PlayerState State = GameManagement.PlayerManagement.PlayerState.None;
         private Coroutine waitCoroutine;
 
         private GameObject playerBody = null;
 
-        public bool isSetup(){
+        public bool isSetup()
+        {
             Utils.WriteLine($"Has {Info} been Setup? {playerBody != null}");
             return playerBody != null;
         }
 
-        private bool isReady{
+        private bool isReady
+        {
             get { return Info.Body != null; }
         }
 
-        public virtual bool SetupInfo(PlayerInfo playerInfo){
+        public virtual bool SetupInfo(PlayerInfo playerInfo)
+        {
             this.Info = playerInfo;
             playerBody = playerInfo.Body; //So we know if we got setup this loop
-            if (!EnumUtils.IsDefined<DeathType>(playerInfo.Name)){
+            if (!EnumUtils.IsDefined<DeathType>(playerInfo.Name))
+            {
                 PlayerManager.PlayerDeathTypes.Add(this.Info, EnumUtils.Create<DeathType>(playerInfo.Name));
             }
             return true;
         }
 
-        public virtual bool CleanUp(){
+        public virtual bool CleanUp()
+        {
             EnumUtils.Remove<DeathType>(this.Info.Name);
             return false;
         }
 
-        public virtual bool Reset(){
-            if (!isReady){
+        public virtual bool Reset()
+        {
+            if (!isReady)
+            {
                 waitCoroutine = Utils.RunWhen(() => isReady, () => Reset(), waitCoroutine);
                 Utils.WriteLine("Player not ready, Waiting", MessageType.Debug);
                 return false;
             }
             Utils.WriteLine("Resetting Player", MessageType.Debug);
-            
-            if (State is GameManagement.PlayerManagement.PlayerState.None 
-                or GameManagement.PlayerManagement.PlayerState.Spectating){
+
+            if (State is GameManagement.PlayerManagement.PlayerState.None
+                or GameManagement.PlayerManagement.PlayerState.Spectating)
+            {
                 return true;
             }
 
@@ -52,15 +62,18 @@ namespace QSBGameModes{
             return true;
         }
 
-        public virtual void OnSettingChange(){}
+        public virtual void OnSettingChange() { }
 
-        public virtual bool SetupHider(){
-            if (!isReady){
+        public virtual bool SetupHider()
+        {
+            if (!isReady)
+            {
                 waitCoroutine = Utils.RunWhen(() => isReady, () => SetupHider(), waitCoroutine);
                 return false;
             }
 
-            if (this.State == GameManagement.PlayerManagement.PlayerState.Hiding){
+            if (this.State == GameManagement.PlayerManagement.PlayerState.Hiding)
+            {
                 Utils.WriteLine(this.Info + " is already a Hider", MessageType.Info);
                 return false;
             }
@@ -70,13 +83,16 @@ namespace QSBGameModes{
             return true;
         }
 
-        public virtual bool SetupSeeker(){
-            if (!isReady){
+        public virtual bool SetupSeeker()
+        {
+            if (!isReady)
+            {
                 waitCoroutine = Utils.RunWhen(() => isReady, () => SetupSeeker(), waitCoroutine);
                 return false;
             }
 
-            if (this.State == GameManagement.PlayerManagement.PlayerState.Seeking){
+            if (this.State == GameManagement.PlayerManagement.PlayerState.Seeking)
+            {
                 Utils.WriteLine(this.Info + " is already a Seeker", MessageType.Info);
                 return false;
             }
@@ -87,17 +103,20 @@ namespace QSBGameModes{
             return true;
         }
 
-        public virtual bool SetupSpectator(){
-            if (!isReady){
+        public virtual bool SetupSpectator()
+        {
+            if (!isReady)
+            {
                 waitCoroutine = Utils.RunWhen(() => isReady, () => SetupSpectator(), waitCoroutine);
                 return false;
             }
 
-            if (this.State == GameManagement.PlayerManagement.PlayerState.Spectating){
+            if (this.State == GameManagement.PlayerManagement.PlayerState.Spectating)
+            {
                 Utils.WriteLine(this.Info + " is already a Spectator", MessageType.Info);
                 return false;
             }
-            
+
             Reset();
             State = GameManagement.PlayerManagement.PlayerState.Spectating;
 

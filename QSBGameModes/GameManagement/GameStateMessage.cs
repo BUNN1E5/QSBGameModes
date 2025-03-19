@@ -4,23 +4,29 @@ using OWML.Common;
 using QSB.Messaging;
 using QSBGameModes.Menu;
 
-namespace QSBGameModes.GameManagement{
-    public static partial class GameManager{
-        public class GameStateMessage : QSBMessage{
+namespace QSBGameModes.GameManagement
+{
+    public static partial class GameManager
+    {
+        public class GameStateMessage : QSBMessage
+        {
             private GameState newState;
-            
-            public GameStateMessage(GameState newState){
+
+            public GameStateMessage(GameState newState)
+            {
                 this.newState = newState;
                 GameManager.gameMode.stateTime = System.DateTime.Now.Millisecond / 1000f;
             }
 
-            public override void Serialize(NetworkWriter writer){
+            public override void Serialize(NetworkWriter writer)
+            {
                 base.Serialize(writer);
                 writer.WriteFloat(GameManager.gameMode.stateTime);
                 writer.WriteInt((int)newState);
             }
 
-            public override void Deserialize(NetworkReader reader){
+            public override void Deserialize(NetworkReader reader)
+            {
                 base.Deserialize(reader);
                 GameManager.gameMode.stateTime = reader.ReadFloat();
                 newState = (GameState)reader.ReadInt();
@@ -28,7 +34,8 @@ namespace QSBGameModes.GameManagement{
 
             public override void OnReceiveLocal() => OnReceiveRemote();
 
-            public override void OnReceiveRemote(){
+            public override void OnReceiveRemote()
+            {
                 _state = newState;
                 Utils.WriteLine($"Start time set to {GameManager.gameMode.stateTime:0.##}", MessageType.Debug);
                 Utils.WriteLine($"Current time is {System.DateTime.Now.Millisecond / 1000f:0.##}", MessageType.Debug);

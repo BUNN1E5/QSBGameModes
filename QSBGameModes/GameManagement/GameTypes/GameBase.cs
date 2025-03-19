@@ -5,21 +5,24 @@ using QSBGameModes.GameManagement.PlayerManagement;
 
 namespace QSBGameModes.GameManagement;
 
-public class GameBase{
+public class GameBase
+{
 
     public float stateTime = 0f;
     protected GameState currentState = GameState.Stopped;
 
     public virtual PlayerManagement.PlayerState StateOnJoinLate() => PlayerManagement.PlayerState.None;
     public virtual PlayerManagement.PlayerState StateOnJoinEarly() => PlayerManagement.PlayerState.None;
-    
+
     public NotificationData catcheeNotification = new(NotificationTarget.All, "You are a catchee");
     public NotificationData catcherNotification = new(NotificationTarget.All, "You are a catcher");
     public NotificationData spectatorNotification = new(NotificationTarget.All, "You are a spectator");
 
-    public void OnStateChange(GameState state){
+    public void OnStateChange(GameState state)
+    {
         Utils.WriteLine($"Game now on state {state}!");
-        switch (state){
+        switch (state)
+        {
             case GameState.Starting:
                 OnStarting();
                 break;
@@ -38,35 +41,42 @@ public class GameBase{
         }
         currentState = state;
     }
-    
-    public virtual void Init(){ }
 
-    public virtual void OnCatch(GameModeInfo seekerPlayer){}
-    public virtual void OnStarting(){}
-    public virtual void OnInProgress(){}
+    public virtual void Init() { }
 
-    public virtual void OnEnding(){
+    public virtual void OnCatch(GameModeInfo seekerPlayer) { }
+    public virtual void OnStarting() { }
+    public virtual void OnInProgress() { }
+
+    public virtual void OnEnding()
+    {
         new DebugTriggerSupernovaMessage().Send();
     }
 
-    public virtual void OnStopped(){
+    public virtual void OnStopped()
+    {
         //PlayerManager.SetAllPlayerStates(PlayerManagement.PlayerState.None);
-        if (currentState == GameState.Waiting){
-            foreach (var (playerInfo, gameModeInfo) in PlayerManager.PlayerInfos){
-                if (gameModeInfo.State != PlayerManagement.PlayerState.Ready){
+        if (currentState == GameState.Waiting)
+        {
+            foreach (var (playerInfo, gameModeInfo) in PlayerManager.PlayerInfos)
+            {
+                if (gameModeInfo.State != PlayerManagement.PlayerState.Ready)
+                {
                     PlayerManager.SetPlayerState(playerInfo, PlayerManagement.PlayerState.None);
                 }
             }
         }
-        else{
+        else
+        {
             PlayerManager.SetAllPlayerStates(PlayerManagement.PlayerState.None);
         }
 
-        if (currentState == GameState.InProgress && (PlayerManager.hiders.Count != 0 || PlayerManager.seekers.Count != 0)){
+        if (currentState == GameState.InProgress && (PlayerManager.hiders.Count != 0 || PlayerManager.seekers.Count != 0))
+        {
             new DebugTriggerSupernovaMessage().Send();
         }
     }
-    public virtual void OnWaiting(){}
+    public virtual void OnWaiting() { }
 
-    public virtual void OnJoin(){}
+    public virtual void OnJoin() { }
 }
