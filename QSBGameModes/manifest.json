@@ -3,7 +3,7 @@
   "author": "BUNN1E5, Locochoco",
   "name": "QSB Game Modes",
   "uniqueName": "BUNN1E5.QSBGameModes",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "owmlVersion": "2.7.3",
 
   "dependencies": [ "Raicuparta.QuantumSpaceBuddies"]
